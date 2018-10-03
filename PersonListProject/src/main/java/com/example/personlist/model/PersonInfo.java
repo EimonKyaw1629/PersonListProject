@@ -1,7 +1,6 @@
 package com.example.personlist.model;
 
 public class PersonInfo {
-//PersonID,FullName,FirstName,LastName,ClassName,Grade
 	private int PersonID;
 	private String FullName;
 	private String FirstName;
