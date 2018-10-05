@@ -1,5 +1,7 @@
 package com.example.personlist.model;
 
+import javax.validation.constraints.NotNull;
+
 public class PersonInfo {
 	private int PersonID;
 	private String FullName;

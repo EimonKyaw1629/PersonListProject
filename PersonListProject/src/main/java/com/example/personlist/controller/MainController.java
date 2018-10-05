@@ -62,13 +62,4 @@ public class MainController {
 		return "redirect:/personList";
 	}
 	
-	
-	/*@RequestMapping(value="/insert",method = RequestMethod.POST)
-	public String insertPersonInfo(Model m, PersonInfo insertInfo)
-	{
-		//PersonInfo info = new PersonInfo(FullName,FirstName,LastName,ClassName,Grade);
-		System.out.println(insertInfo);
-		dao.insertInfo(insertInfo);
-		return "redirect:/personList";
-	}*/
 }
