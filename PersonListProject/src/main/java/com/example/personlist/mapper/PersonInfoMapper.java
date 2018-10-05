@@ -10,6 +10,9 @@ import com.example.personlist.model.PersonInfo;
 public class PersonInfoMapper implements RowMapper<PersonInfo>{
 
 	public static final String  BASE_SQL ="Select PersonID,FullName,FirstName,LastName,ClassName,Grade from Tb_Person";
+	public static final String  INSERT_SQL ="insert into Tb_Person(FullName,FirstName,LastName,ClassName,Grade) values(?,?,?,?,?)";
+	public static final String  DELETE_SQL ="DELETE FROM Tb_Person WHERE PersonID = ?";
+	
 	@Override
 	public PersonInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 		// TODO Auto-generated method stub

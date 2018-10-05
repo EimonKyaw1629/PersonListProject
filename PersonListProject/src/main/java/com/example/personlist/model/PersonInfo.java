@@ -8,10 +8,29 @@ public class PersonInfo {
 	private String ClassName;
 	private String Grade;
 	
+	
+	
+	@Override
+	public String toString() {
+		return "PersonInfo [PersonID=" + PersonID + ", FullName=" + FullName + ", FirstName=" + FirstName
+				+ ", LastName=" + LastName + ", ClassName=" + ClassName + ", Grade=" + Grade + "]";
+	}
+	
+	
 	public PersonInfo(int personid,String fullname,String firstname,String lastname,String classname,String grade)
 	{
 		super();
 		this.PersonID =personid;
+		this.FullName = fullname;
+		this.FirstName = firstname;
+		this.LastName = lastname;
+		this.ClassName = classname;
+		this.Grade = grade;
+	}
+	
+	public PersonInfo(String fullname,String firstname,String lastname,String classname,String grade)
+	{
+		super();
 		this.FullName = fullname;
 		this.FirstName = firstname;
 		this.LastName = lastname;

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.personlist.mapper.PersonInfoMapper;
 import com.example.personlist.model.PersonInfo;
 
+
 @Repository
 @Transactional
 public class PersonInfoDAO extends JdbcDaoSupport{
@@ -48,4 +49,32 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 			return null;
 		}
 	}
+	
+	/*public PersonInfo insertInfo() {
+		String sql = PersonInfoMapper.INSERT_SQL;
+		
+	}*/
+	
+	public void deleteInfo(int pid) {
+		String sql = PersonInfoMapper.DELETE_SQL;
+		
+		Object[] params = new Object[] {pid};
+		
+		getJdbcTemplate().update(sql, params);
+	
+	}
+	
+	public void insertInfo(PersonInfo info) {
+		String sql = PersonInfoMapper.INSERT_SQL;
+		Object[] params = new Object[] {info.getFullName(),info.getFirstName(),info.getLastName(),info.getClassName(),info.getGrade()};
+		getJdbcTemplate().update(sql, params);
+	
+	}
+	
+	/*public void insertInfo(InsertPersonInfo info) {
+	String sql = PersonInfoMapper.INSERT_SQL;
+	Object[] params = new Object[] {info};
+	getJdbcTemplate().update(sql, params);
+	
+	}*/
 }
