@@ -15,13 +15,26 @@ th, td {
 <h1>Person Info</h1>
     <!-- Include _menu.html -->
    <form action="searchInfo" method ="POSt">
- <div>
- 	FullName : <input type="text"  name="fullname">
- 	<br>
- 	ClassName: <input type="text"  name="classname">
- 	<br/><br/>
- 	<button type="submit" >Submit</button>
- </div>
+ 
+  <table >
+   <tr>
+    <th>FullName</th>
+    <th><input type="text"  name="fullname"></th> 
+    
+  </tr>
+   <tr>
+    <th>ClassName</th>
+    <th><input type="text"  name="classname"></th> 
+    
+  </tr>
+  <tr>
+  	<th colspan="2"><button type="submit" >Submit</button></th>
+  </tr>
+  </table>
+  
+ 
+ 	
+ 
  	
     <h2>Person List</h2>
  
@@ -37,7 +50,7 @@ th, td {
             <td th:utext="${person.PersonID}">..</td>
             <td th:utext="${person.FullName}">..</td>
             <td th:utext="${person.ClassName}">..</td>
-            <td><a th:href="@{/Edit}">Edit</a></td>
+            <td><a th:href="${'/edit/pid='+person.PersonID}">Edit</a></td>
             <td><a th:href="${'/delete/pid='+person.PersonID}">Delete</a></td>
 
             

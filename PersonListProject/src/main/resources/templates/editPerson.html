@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Person Info Edit</title>
+</head>
+<body>
+<h2>Person Info Edit</h2>
+	<form  action="/edit" method="post" th:object="${person}" > 
+	  <input type="hidden" th:value="${person.PersonID}" name="pid" />
+	   <table >
+   <tr>
+    <th>FullName</th>
+    <th><input type="text"  th:value="${person.FullName}" name="fu"/></th> 
+    
+  </tr>
+   <tr>
+    <th>FirstName</th>
+    <th> <input type="text"  th:value="${person.FirstName}" name="fs"/></th> 
+  </tr>
+   <tr>
+    <th>FirstName</th>
+    <th> <input type="text"  th:value="${person.FirstName}" name="fs"/></th> 
+  </tr>
+   <tr>
+    <th>LastName</th>
+    <th> <input type="text" th:value="${person.LastName}" name="ls"/></th> 
+  </tr>
+   <tr>
+    <th>ClassName</th>
+    <th><input type="text" th:value="${person.ClassName}" name="cs"/></th> 
+  </tr>
+   <tr>
+    <th>Grade</th>
+    <th><input type="text" th:value="${person.Grade}" name="g"/></th> 
+  </tr>
+  <tr>
+  	<th colspan="2"><button type="submit"   name="update">Update</button></th>
+  </tr>
+  </table>
+	 
+	</form>
+
+
+</body>
+</html>

@@ -81,6 +81,15 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		}
 	}
 	
+	public void editPersonInfo(int pid,String fullname,String firstname,String lastname,String classname,String grade)//PersonInfo info)//
+	{
+		String sql = "Update Tb_Person set FullName=?,FirstName=?,LastName=?,ClassName=?,Grade=? where PersonID=?";
+		Object[] params = new Object[]{fullname,firstname,lastname,classname,grade,pid};// {info.getFullName(),info.getFirstName(),info.getLastName(),info.getClassName(),info.getGrade(),pid}; //
+		PersonInfoMapper mapper = new PersonInfoMapper();
+		//this.getJdbcTemplate().update(sql,params,mapper);
+		getJdbcTemplate().update(sql, params);
+	}
+	
 	public void deleteInfo(int pid) {
 		String sql = PersonInfoMapper.DELETE_SQL;
 		
@@ -90,12 +99,15 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 	
 	}
 	
+	
 	public void insertInfo(PersonInfo info) {
 		String sql = PersonInfoMapper.INSERT_SQL;
 		Object[] params = new Object[] {info.getFullName(),info.getFirstName(),info.getLastName(),info.getClassName(),info.getGrade()};
 		getJdbcTemplate().update(sql, params);
 	
 	}
+	
+	
 
 	/*public void insertInfo(InsertPersonInfo info) {
 	String sql = PersonInfoMapper.INSERT_SQL;
