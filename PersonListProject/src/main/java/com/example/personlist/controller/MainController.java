@@ -30,7 +30,7 @@ public class MainController {
 		return "personList";
 	}
 	
-	@RequestMapping(value="/searchInfo",method = RequestMethod.POST)
+	@RequestMapping(value="/searchInfo",method = RequestMethod.POST) 
 	public String searchPersonInfo(Model m,PersonInfo info)
 	{
 		PersonInfo pinfo = dao.findPersonInfo(info.getPersonID());

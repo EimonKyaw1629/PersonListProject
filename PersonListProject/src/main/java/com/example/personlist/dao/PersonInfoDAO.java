@@ -70,7 +70,7 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		getJdbcTemplate().update(sql, params);
 	
 	}
-	
+
 	/*public void insertInfo(InsertPersonInfo info) {
 	String sql = PersonInfoMapper.INSERT_SQL;
 	Object[] params = new Object[] {info};
