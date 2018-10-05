@@ -31,11 +31,11 @@ public class MainController {
 	}
 	
 	@RequestMapping(value="/searchInfo",method = RequestMethod.POST) 
-	public String searchPersonInfo(Model m,PersonInfo info)
+	public String searchPersonInfo(Model m,@RequestParam("fullname") String fullname,@RequestParam("classname") String classname)
 	{
-		PersonInfo pinfo = dao.findPersonInfo(info.getPersonID());
+		List<PersonInfo> pinfo = dao.getSearchPersonInfo(fullname, classname);
 		m.addAttribute("personInfo",pinfo);
-		return "redirect:/";
+		return "personList";
 	}
 	
 	@GetMapping("/create")

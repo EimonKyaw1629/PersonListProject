@@ -35,7 +35,7 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 	
 	public PersonInfo findPersonInfo(int pid)
 	{
-		String sql = PersonInfoMapper.BASE_SQL +"where PersonID=?";
+		String sql = PersonInfoMapper.BASE_SQL +" where PersonID=?";
 		
 		Object[] params = new Object[] {pid};
 		PersonInfoMapper mapper = new PersonInfoMapper();
@@ -50,10 +50,36 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		}
 	}
 	
-	/*public PersonInfo insertInfo() {
-		String sql = PersonInfoMapper.INSERT_SQL;
-		
-	}*/
+	public List<PersonInfo> getSearchPersonInfo(String fullname,String classname)
+	{
+		String sql=null;
+		Object[] params= null;
+		PersonInfoMapper mapper = new PersonInfoMapper();
+		if(fullname !="" && classname!="")
+		{
+			sql=PersonInfoMapper.BASE_SQL +" where FullName=? and ClassName=?";
+			params= new Object[] {fullname,classname};
+		}
+		else if (fullname !="" && classname=="")
+		{
+			sql=PersonInfoMapper.BASE_SQL +" where FullName=? ";
+			params= new Object[] {fullname};
+		}
+		else if(fullname =="" && classname!="")
+		{
+			sql=PersonInfoMapper.BASE_SQL +" where  ClassName=?";
+			params= new Object[] {classname};
+		}
+		try
+		{
+			List<PersonInfo> info = this.getJdbcTemplate().query(sql, params,mapper);
+			return info;
+		}
+		catch(EmptyResultDataAccessException ex)
+		{
+			return null;
+		}
+	}
 	
 	public void deleteInfo(int pid) {
 		String sql = PersonInfoMapper.DELETE_SQL;
