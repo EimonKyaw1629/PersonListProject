@@ -50,11 +50,6 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		}
 	}
 	
-	/*public PersonInfo insertInfo() {
-		String sql = PersonInfoMapper.INSERT_SQL;
-		
-	}*/
-	
 	public void deleteInfo(int pid) {
 		String sql = PersonInfoMapper.DELETE_SQL;
 		
@@ -65,16 +60,14 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 	}
 	
 	public void insertInfo(PersonInfo info) {
-		String sql = PersonInfoMapper.INSERT_SQL;
-		Object[] params = new Object[] {info.getFullName(),info.getFirstName(),info.getLastName(),info.getClassName(),info.getGrade()};
-		getJdbcTemplate().update(sql, params);
+		String PersonSql = PersonInfoMapper.pINSERT_SQL;
+		Object[] paramsPerson = new Object[] {info.getFullName(),info.getFirstName(),info.getLastName(),info.getClassName(),info.getGrade()};
+		getJdbcTemplate().update(PersonSql, paramsPerson);
+		List<PersonInfo> list = getPersonInfo();
 	
+		String AddrSql = PersonInfoMapper.aINSERT_SQL;
+		Object[] paramsAddr = new Object[] {list.get(list.size()-1).getPersonID(),info.getAddress1(),info.getAddress2()};
+		getJdbcTemplate().update(AddrSql, paramsAddr);
+		
 	}
-
-	/*public void insertInfo(InsertPersonInfo info) {
-	String sql = PersonInfoMapper.INSERT_SQL;
-	Object[] params = new Object[] {info};
-	getJdbcTemplate().update(sql, params);
-	
-	}*/
 }

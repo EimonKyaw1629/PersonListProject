@@ -47,18 +47,17 @@ public class MainController {
 	@RequestMapping(value="/delete/pid={pid}")
 	public String deletePersonInfo(@PathVariable int pid, Model m)
 	{
-		System.out.println(pid);
 		dao.deleteInfo(pid);
 		return "redirect:/personList";
 	}
 	
 	@RequestMapping(value="/insert",method = RequestMethod.POST)
-	public String insertPersonInfo(@RequestParam String FullName, String FirstName, String LastName, String ClassName, String Grade)
+	public String insertPersonInfo(@RequestParam String FullName, String FirstName, String LastName, String ClassName, String Grade, String Address1, String Address2)
 	{
-		PersonInfo info = new PersonInfo(FullName,FirstName,LastName,ClassName,Grade);
-		System.out.println(info);
+		PersonInfo personinfo = new PersonInfo(FullName,FirstName,LastName,ClassName,Grade,Address1,Address2);
+		System.out.println(personinfo);
 		
-		dao.insertInfo(info);
+		dao.insertInfo(personinfo);
 		return "redirect:/personList";
 	}
 	
