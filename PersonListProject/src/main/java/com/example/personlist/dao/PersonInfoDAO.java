@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.personlist.mapper.PersonInfoMapper;
+import com.example.personlist.model.AddressInfo;
 import com.example.personlist.model.PersonInfo;
 
 
@@ -61,14 +62,14 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 	}
 	
 	
-	public void insertInfo(PersonInfo info) {
+	public void insertInfo(PersonInfo personinfo, AddressInfo addressinfo) {
 		String sql = PersonInfoMapper.pINSERT_SQL;
-		Object[] params = new Object[] {info.getFullName(),info.getFirstName(),info.getLastName(),info.getClassName(),info.getGrade()};
+		Object[] params = new Object[] {personinfo.getFullName(),personinfo.getFirstName(),personinfo.getLastName(),personinfo.getClassName(),personinfo.getGrade()};
 		getJdbcTemplate().update(sql, params);
 		List<PersonInfo> list = getPersonInfo();
 	
 		String AddrSql = PersonInfoMapper.aINSERT_SQL;
-		Object[] paramsAddr = new Object[] {list.get(list.size()-1).getPersonID(),info.getAddress1(),info.getAddress2()};
+		Object[] paramsAddr = new Object[] {list.get(list.size()-1).getPersonID(),addressinfo.getAddress1(),addressinfo.getAddress2()};
 		getJdbcTemplate().update(AddrSql, paramsAddr);
 		
 	}

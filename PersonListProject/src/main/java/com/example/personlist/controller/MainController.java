@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.personlist.dao.PersonInfoDAO;
+import com.example.personlist.model.AddressInfo;
 import com.example.personlist.model.PersonInfo;
 
 @Controller
@@ -48,10 +49,10 @@ public class MainController {
 	@RequestMapping(value="/insert",method = RequestMethod.POST)
 	public String insertPersonInfo(@RequestParam String FullName, String FirstName, String LastName, String ClassName, String Grade, String Address1, String Address2)
 	{
-		PersonInfo personinfo = new PersonInfo(FullName,FirstName,LastName,ClassName,Grade,Address1,Address2);
-		System.out.println(personinfo);
+		PersonInfo personinfo = new PersonInfo(FullName,FirstName,LastName,ClassName,Grade);
+		AddressInfo addressinfo = new AddressInfo(Address1, Address2);
 		
-		dao.insertInfo(personinfo);
+		dao.insertInfo(personinfo, addressinfo);
 		return "redirect:/personList";
 	}
 	

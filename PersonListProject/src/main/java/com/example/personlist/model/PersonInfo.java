@@ -9,8 +9,6 @@ public class PersonInfo {
 	private String LastName;
 	private String ClassName;
 	private String Grade;
-	private String Address1;
-	private String Address2;
 	
 	
 	@Override
@@ -31,7 +29,7 @@ public class PersonInfo {
 		this.Grade = grade;
 	}
 	
-	public PersonInfo(String fullname,String firstname,String lastname,String classname,String grade, String address1, String address2)
+	public PersonInfo(String fullname,String firstname,String lastname,String classname,String grade)
 	{
 		super();
 		this.FullName = fullname;
@@ -39,29 +37,8 @@ public class PersonInfo {
 		this.LastName = lastname;
 		this.ClassName = classname;
 		this.Grade = grade;
-		this.Address1 = address1;
-		this.Address2 = address2;
 	}
 	
-	
-	public String getAddress1() {
-		return Address1;
-	}
-
-
-	public void setAddress1(String address1) {
-		Address1 = address1;
-	}
-
-
-	public String getAddress2() {
-		return Address2;
-	}
-
-
-	public void setAddress2(String address2) {
-		Address2 = address2;
-	}
 
 	public int getPersonID()
 	{
