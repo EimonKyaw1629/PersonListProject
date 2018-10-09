@@ -31,11 +31,11 @@ public class MainController {
 	}
 	
 	@RequestMapping(value="/searchInfo",method = RequestMethod.POST) 
-	public String searchPersonInfo(Model m,PersonInfo info)
+	public String searchPersonInfo(Model m,@RequestParam("fullname") String fullname,@RequestParam("classname") String classname)
 	{
-		PersonInfo pinfo = dao.findPersonInfo(info.getPersonID());
+		List<PersonInfo> pinfo = dao.getSearchPersonInfo(fullname, classname);
 		m.addAttribute("personInfo",pinfo);
-		return "redirect:/";
+		return "personList";
 	}
 	
 	@GetMapping("/create")
@@ -62,4 +62,21 @@ public class MainController {
 		return "redirect:/personList";
 	}
 	
+	@RequestMapping(value="/edit/pid={pid}")
+	public String editPersonInfo(@PathVariable int pid, Model m)
+	{
+		PersonInfo info = dao.findPersonInfo(pid);
+		
+		m.addAttribute("person",info);
+		return "editPerson";
+	}
+	
+	@RequestMapping(value="/edit",method=RequestMethod.POST)
+	public String geteditPersonInfo(@RequestParam(value="pid") String pid, Model m,@RequestParam(value="fu") String fullname,@RequestParam(value="fs") String firstname,@RequestParam(value="ls") String lastname,@RequestParam(value="cs") String classname,@RequestParam(value="g") String grade)
+	{
+			dao.editPersonInfo(Integer.valueOf(pid), fullname, firstname, lastname, classname, grade);
+			List<PersonInfo> list = dao.getPersonInfo();
+			m.addAttribute("personInfo",list);
+			return "personList";
+	}
 }
