@@ -1,11 +1,11 @@
 package com.example.personlist.model;
 
 public class AddressInfo {
-	private String AddressID;
-	private String Address1;
-	private String Address2;
+	private int AddressID;
+	public String Address1;
+	public String Address2;
 	
-	public AddressInfo(String AddressID, String address1, String address2)
+	public AddressInfo(int AddressID, String address1, String address2)
 	{
 		super();
 		this.AddressID = AddressID;
@@ -20,10 +20,10 @@ public class AddressInfo {
 		this.Address2 = address2;
 	}
 	
-	public String getAddressID() {
+	public int getAddressID() {
 		return AddressID;
 	}
-	public void setAddressID(String addressID) {
+	public void setAddressID(int addressID) {
 		AddressID = addressID;
 	}
 	public String getAddress1() {

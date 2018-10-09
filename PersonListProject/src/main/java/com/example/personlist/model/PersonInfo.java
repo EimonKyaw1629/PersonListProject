@@ -2,6 +2,7 @@ package com.example.personlist.model;
 
 import javax.validation.constraints.NotNull;
 
+
 public class PersonInfo {
 	private int PersonID;
 	private String FullName;
@@ -9,6 +10,9 @@ public class PersonInfo {
 	private String LastName;
 	private String ClassName;
 	private String Grade;
+	
+	public String address1;
+	public String address2;
 	
 	
 	@Override
@@ -27,6 +31,7 @@ public class PersonInfo {
 		this.LastName = lastname;
 		this.ClassName = classname;
 		this.Grade = grade;
+		//this.ainfo= ainfo;
 	}
 	
 	public PersonInfo(String fullname,String firstname,String lastname,String classname,String grade)
@@ -37,6 +42,20 @@ public class PersonInfo {
 		this.LastName = lastname;
 		this.ClassName = classname;
 		this.Grade = grade;
+		
+	}
+	
+	public PersonInfo(int personid,String fullname,String firstname,String lastname,String classname,String grade,String address1,String address2)
+	{
+		super();
+		this.PersonID =personid;
+		this.FullName = fullname;
+		this.FirstName = firstname;
+		this.LastName = lastname;
+		this.ClassName = classname;
+		this.Grade = grade;
+		this.address1 = address1;
+		this.address2 = address2;
 	}
 	
 
@@ -98,5 +117,24 @@ public class PersonInfo {
     public void setGrade(String g)
     {
     	this.Grade =g;
+    }
+    
+    public String  getAddress1()
+    {
+    	return address1;
+    }
+    
+    public void setAddress1(String info)
+    {
+    	this.address1 = info;
+    }
+    public String  getAddress2()
+    {
+    	return address1;
+    }
+    
+    public void setAddress2(String info)
+    {
+    	this.address2 = info;
     }
 }

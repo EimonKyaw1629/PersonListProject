@@ -35,12 +35,23 @@
     <th><input type="text" th:value="${person.Grade}" name="g"/></th> 
   </tr>
   <tr>
+    <th>Address1</th>
+    <th>
+    <input type="text" th:value="${person.address1}" name="a1"/>
+    </th> 
+  </tr>
+  <tr>
+    <th>Address2</th>
+    <th>
+    <input type="text" th:value="${person.address2}" name="a2"/>
+    </th> 
+  </tr>
+  <tr>
   	<th colspan="2"><button type="submit"   name="update">Update</button></th>
   </tr>
-  </table>
-	 
+    </table>
 	</form>
 
-
+ 
 </body>
 </html>

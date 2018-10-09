@@ -4,12 +4,15 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.apache.tomcat.jni.Address;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.example.personlist.mapper.AddressInfoMapper;
 import com.example.personlist.mapper.PersonInfoMapper;
 import com.example.personlist.model.AddressInfo;
 import com.example.personlist.model.PersonInfo;
@@ -34,6 +37,14 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		return list;
 	}
 	
+	public List<AddressInfo> getAddressInfo()
+	{
+		String sql = AddressInfoMapper.AD_SELECT_SQL;
+		Object[] params = new Object[] {};
+		AddressInfoMapper mapper = new AddressInfoMapper();
+		List<AddressInfo> list = this.getJdbcTemplate().query(sql, params,mapper);
+		return list;
+	}
 	public PersonInfo findPersonInfo(int pid)
 	{
 		String sql = PersonInfoMapper.BASE_SQL +" where PersonID=?";
@@ -50,6 +61,23 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 			return null;
 		}
 		
+	}
+	
+	public AddressInfo findAddressInfo(int aid)
+	{
+		String asql = AddressInfoMapper.AD_SELECT_SQL +" where AddressID=?";
+		
+		Object[] params = new Object[] {aid};
+		AddressInfoMapper mapper = new AddressInfoMapper();
+		try
+		{
+			AddressInfo info = this.getJdbcTemplate().queryForObject(asql, params,mapper);
+			return info;
+		}
+		catch(EmptyResultDataAccessException ex)
+		{
+			return null;
+		}
 	}
 	
 	public void deleteInfo(int pid) {
@@ -72,6 +100,58 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		Object[] paramsAddr = new Object[] {list.get(list.size()-1).getPersonID(),addressinfo.getAddress1(),addressinfo.getAddress2()};
 		getJdbcTemplate().update(AddrSql, paramsAddr);
 		
+	}
+	public List<PersonInfo> getSearchPersonInfo(String fullname,String classname)
+	{
+		String sql=null;
+		Object[] params= null;
+		PersonInfoMapper mapper = new PersonInfoMapper();
+		sql = PersonInfoMapper.BASE_SQL +" where (@a is null or  FullName=@a) and (ISNUlLL(@b) or ClassName=@b)" ;
+		if(fullname !="" && classname!="")
+		{
+			//sql=PersonInfoMapper.BASE_SQL +" where FullName=? and ClassName=?";
+			params= new Object[] {fullname,classname};
+		}
+		else if (fullname !="" && classname=="")
+		{
+			//sql=PersonInfoMapper.BASE_SQL +" where FullName=? ";
+			params= new Object[] {fullname};
+		}
+		else if(fullname =="" && classname!="")
+		{
+			//sql=PersonInfoMapper.BASE_SQL +" where  ClassName=?";
+			params= new Object[] {classname};
+		}
+		try
+		{
+			List<PersonInfo> info = this.getJdbcTemplate().query(sql, params,mapper);
+			return info;
+		}
+		catch(EmptyResultDataAccessException ex)
+		{
+			return null;
+		}
+	}
+	
+	public void editPersonInfo(PersonInfo info,AddressInfo ainfo)//int pid,String fullname,String firstname,String lastname,String classname,String grade)////
+	{
+		PersonInfo P = this.findPersonInfo(info.getPersonID());
+		AddressInfo a = this.findAddressInfo(info.getPersonID());
+		if(P!=null)
+		{
+			this.deleteInfo(P.getPersonID());
+			this.insertInfo(info, ainfo);
+		}
+		/*
+		String sql= PersonInfoMapper.UPDATE_SQL;
+		int pid = info.getPersonID();
+		Object[] params = new Object[] {info.getFullName(),info.getFirstName(),info.getLastName(),info.getClassName(),info.getGrade(),info.getPersonID()};
+		getJdbcTemplate().update(sql,params);
+		
+		String asql = AddressInfoMapper.AD_UPDATE_SQL;
+		Object[] aparams = new Object[] {ainfo.getAddress1(),ainfo.getAddress2(),pid};
+		getJdbcTemplate().update(asql,aparams);
+		*/
 	}
 	
 	
