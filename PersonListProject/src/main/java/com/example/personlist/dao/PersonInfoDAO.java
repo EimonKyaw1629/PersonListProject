@@ -48,6 +48,7 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		{
 			return null;
 		}
+		
 	}
 	
 	public void deleteInfo(int pid) {

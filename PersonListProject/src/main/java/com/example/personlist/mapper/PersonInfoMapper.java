@@ -13,6 +13,7 @@ public class PersonInfoMapper implements RowMapper<PersonInfo>{
 	public static final String  pINSERT_SQL ="insert into Tb_Person(FullName,FirstName,LastName,ClassName,Grade) values(?,?,?,?,?)";
 	public static final String  aINSERT_SQL ="insert into Tb_Address(AddressID, Address1, Address2) values(?,?,?)";
 	public static final String  DELETE_SQL ="DELETE FROM Tb_Person WHERE PersonID = ?";
+
 	 
 	@Override
 	public PersonInfo mapRow(ResultSet rs, int rowNum) throws SQLException {

@@ -63,7 +63,6 @@ public class PersonInfo {
 		Address2 = address2;
 	}
 
-
 	public int getPersonID()
 	{
 		return PersonID;

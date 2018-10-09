@@ -44,6 +44,7 @@ public class MainController {
 		return "form";
 	}
 	
+	
 	@RequestMapping(value="/delete/pid={pid}")
 	public String deletePersonInfo(@PathVariable int pid, Model m)
 	{
