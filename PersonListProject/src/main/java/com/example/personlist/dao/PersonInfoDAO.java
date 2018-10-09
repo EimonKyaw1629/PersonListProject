@@ -35,7 +35,7 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 	
 	public PersonInfo findPersonInfo(int pid)
 	{
-		String sql = PersonInfoMapper.BASE_SQL +"where PersonID=?";
+		String sql = PersonInfoMapper.BASE_SQL +" where PersonID=?";
 		
 		Object[] params = new Object[] {pid};
 		PersonInfoMapper mapper = new PersonInfoMapper();
@@ -60,10 +60,11 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 	
 	}
 	
+	
 	public void insertInfo(PersonInfo info) {
-		String PersonSql = PersonInfoMapper.pINSERT_SQL;
-		Object[] paramsPerson = new Object[] {info.getFullName(),info.getFirstName(),info.getLastName(),info.getClassName(),info.getGrade()};
-		getJdbcTemplate().update(PersonSql, paramsPerson);
+		String sql = PersonInfoMapper.pINSERT_SQL;
+		Object[] params = new Object[] {info.getFullName(),info.getFirstName(),info.getLastName(),info.getClassName(),info.getGrade()};
+		getJdbcTemplate().update(sql, params);
 		List<PersonInfo> list = getPersonInfo();
 	
 		String AddrSql = PersonInfoMapper.aINSERT_SQL;
@@ -71,4 +72,6 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		getJdbcTemplate().update(AddrSql, paramsAddr);
 		
 	}
+	
+	
 }
