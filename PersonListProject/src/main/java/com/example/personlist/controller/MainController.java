@@ -82,4 +82,13 @@ public class MainController {
 			
 			return "personList";
 	}
+	@RequestMapping(value="/searchInfo",method = RequestMethod.POST)
+	public String searchPersonInfo(Model m,@RequestParam("fullname") String fullname,@RequestParam("classname") String classname)
+	{
+		List<PersonInfo> pinfo = dao.getSearchPersonInfo(fullname, classname);
+		m.addAttribute("personInfo",pinfo);
+		return "personList";
+	}
+	
+
 }
