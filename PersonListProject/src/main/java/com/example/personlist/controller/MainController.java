@@ -76,7 +76,6 @@ public class MainController {
 		List<AddressInfo> alist = dao.getAddressInfo();
 
 		m.addAttribute("personInfo", list);
-
 		return "personList";
 	}
 	@RequestMapping(value="/searchInfo",method = RequestMethod.POST)
