@@ -23,7 +23,6 @@ public class MainController {
 	private PersonInfoDAO dao;
 	
 	
-	
 	@RequestMapping(value={ "/", "/personList" },method = RequestMethod.GET)
 	public String showPersonInfo(Model m)
 	{
@@ -33,14 +32,6 @@ public class MainController {
 
 		return "personList";
 	}
-	
-	
-	@GetMapping("/create")
-	public String create() {
-		
-		return "form";
-	}
-	
 	
 	@RequestMapping(value="/delete/pid={pid}")
 	public String deletePersonInfo(@PathVariable int pid, Model m)
@@ -52,10 +43,10 @@ public class MainController {
 	@RequestMapping(value="/insert",method = RequestMethod.POST)
 	public String insertPersonInfo(@RequestParam String FullName, String FirstName, String LastName, String ClassName, String Grade, String Address1, String Address2)
 	{
-		//PersonInfo personinfo = new PersonInfo(FullName,FirstName,LastName,ClassName,Grade);
-		//AddressInfo addressinfo = new AddressInfo(Address1, Address2);
+		PersonInfo personinfo = new PersonInfo(FullName,FirstName,LastName,ClassName,Grade);
+		AddressInfo addressinfo = new AddressInfo(Address1, Address2);
 		
-		//dao.insertInfo(personinfo, addressinfo);
+		dao.insertInfo(personinfo, addressinfo);
 		return "redirect:/personList";
 	}
 	

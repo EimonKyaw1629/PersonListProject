@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-<title>Editperson Template</title>
+<title>Bootstrap 101 Template</title>
 
 <!-- Bootstrap -->
 <link rel="stylesheet"
@@ -33,7 +33,6 @@
 				id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="/form.html">登録</a></li>
-					<li><a href="/personList">ユーザーリスト</a></li>
 				</ul>
 			</div>
 			<!-- /.navbar-collapse -->
@@ -41,76 +40,51 @@
 		<!-- /.container-fluid -->
 	</nav>
 
-	<div class="form-horizontal">
+	<div class="container">
 		<div class="col-md-6 col-md-offset-3">
-			<h2>Person Info Edit</h2>
-			<form action="/edit" method="post" th:object="${person}">
-				<input type="hidden" th:value="${person.PersonID}" name="pid" />
+			<form action="/insert" method="post">
 
 				<div class="form-group">
-					<label for="FullName" class="col-sm-2 control-label">FullName</label>
-					<div class="col-sm-7">
-						<input type="text" class="form-control" name="fu"
-							placeholder="FullName" th:value="${person.FullName}">
-					</div>
+					<label for="FullName">FullName</label> <input type="text"
+						class="form-control" name="FullName" placeholder="FullName">
 				</div>
 
 				<div class="form-group">
-					<label for="FirstName" class="col-sm-2 control-label">FirstName</label>
-					<div class="col-sm-7">
-						<input type="text" class="form-control" name="fs"
-							placeholder="FirstName" th:value="${person.FirstName}">
-					</div>
+					<label for="FirstName">FirstName</label> <input type="text"
+						class="form-control" name="FirstName" placeholder="FirstName">
 				</div>
 
 				<div class="form-group">
-					<label for="LastName" class="col-sm-2 control-label">LastName</label>
-					<div class="col-sm-7">
-						<input type="text" class="form-control" name="ls"
-							placeholder="LastName" th:value="${person.LastName}">
-					</div>
+					<label for="LastName">LastName</label> <input type="text"
+						class="form-control" name="LastName" placeholder="LastName">
 				</div>
 
 				<div class="form-group">
-					<label for="ClassName" class="col-sm-2 control-label">ClassName</label>
-					<div class="col-sm-7">
-						<input type="text" class="form-control" name="cs"
-							placeholder="ClassName" th:value="${person.ClassName}">
-					</div>
+					<label for="ClassName">ClassName</label> <input type="text"
+						class="form-control" name="ClassName" placeholder="ClassName">
 				</div>
 
 				<div class="form-group">
-					<label for="Grade" class="col-sm-2 control-label">Grade</label>
-					<div class="col-sm-7">
-						<input type="text" class="form-control" name="g"
-							placeholder="Grade" th:value="${person.Grade}">
-					</div>
+					<label for="Grade">Grade</label> <input type="text"
+						class="form-control" name="Grade" placeholder="Grade">
+				</div>
+
+				<br>
+				<div class="form-group">
+					<label for="Address1">Address1</label> <input type="text"
+						class="form-control" name="Address1" placeholder="Address1">
 				</div>
 
 				<div class="form-group">
-					<label for="address1" class="col-sm-2 control-label">Address1</label>
-					<div class="col-sm-7">
-						<input type="text" class="form-control" name="a1"
-							placeholder="address1" th:value="${person.address1}">
-					</div>
+					<label for="Address2">Address2</label> <input type="text"
+						class="form-control" name="Address2" placeholder="Address2">
 				</div>
 
-				<div class="form-group">
-					<label for="address2" class="col-sm-2 control-label">Address2</label>
-					<div class="col-sm-7">
-						<input type="text" class="form-control" name="a2"
-							placeholder="address2" th:value="${person.address2}">
-					</div>
-				</div>
-
-				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-10">
-						<button type="submit" class="btn btn-default" name="update">Update</button>
-					</div>
-				</div>
+				<button type="submit" class="btn btn-default">create</button>
 			</form>
 		</div>
 	</div>
+
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 	<script src="/webjars/jquery/3.2.1/jquery.min.js"></script>
 	<!-- Include all compiled plugins (below), or include individual files as needed -->

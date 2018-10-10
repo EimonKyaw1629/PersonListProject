@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-<title>personList Template</title>
+<title>main home page</title>
 
 <!-- Bootstrap -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <!-- <link href="/webjars/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet"/> -->
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -33,6 +32,7 @@
 				id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="/form.html">登録</a></li>
+					<li><a href="/personList">ユーザーリスト</a></li>
 				</ul>
 			</div>
 			<!-- /.navbar-collapse -->
@@ -40,44 +40,8 @@
 		<!-- /.container-fluid -->
 	</nav>
 
-	<div class="container">
-		<div class="col-md-6 col-md-offset-3">
-			<h1>Person Info</h1>
-			<!-- Include _menu.html -->
-			<form action="searchInfo" method="post">
+	<h1>Hello, world! Templates</h1>
 
-				<div class="form-group">
-					<label for="FullName">FullName</label> <input type="text"
-						class="form-control" name="fullname" placeholder="FullName">
-				</div>
-
-				<div class="form-group">
-					<label for="ClassName">ClassName</label> <input type="text"
-						class="form-control" name="classname" placeholder="ClassName">
-				</div>
-
-				<button type="submit" class="btn btn-default">create</button>
-
-				<h2>Person List</h2>			
-				<table class="table table-hover">
-					<tr>
-						<th>ID</th>
-						<th>Full Name</th>
-						<th>Class</th>
-						<th>修正</th>
-						<th>削除</th>
-					</tr>
-					<tr th:each="person : ${personInfo}">
-						<td th:utext="${person.PersonID}">..</td>
-						<td th:utext="${person.FullName}">..</td>
-						<td th:utext="${person.ClassName}">..</td>
-						<td><a th:href="${'/edit/pid='+person.PersonID}">Edit</a></td>
-						<td><a th:href="${'/delete/pid='+person.PersonID}">Delete</a></td>
-					</tr>
-				</table>
-			</form>
-		</div>
-	</div>
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 	<script src="/webjars/jquery/3.2.1/jquery.min.js"></script>
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
