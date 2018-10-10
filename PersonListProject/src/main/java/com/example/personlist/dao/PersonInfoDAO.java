@@ -106,21 +106,26 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		String sql=null;
 		Object[] params= null;
 		PersonInfoMapper mapper = new PersonInfoMapper();
-		sql = PersonInfoMapper.BASE_SQL +" where (@a is null or  FullName=@a) and (ISNUlLL(@b) or ClassName=@b)" ;
+		//sql = PersonInfoMapper.BASE_SQL +" where (@a is null or  FullName=@a) and (ISNUlLL(@b) or ClassName=@b)" ;
 		if(fullname !="" && classname!="")
 		{
-			//sql=PersonInfoMapper.BASE_SQL +" where FullName=? and ClassName=?";
+			sql=PersonInfoMapper.BASE_SQL +" where FullName=? and ClassName=?";
 			params= new Object[] {fullname,classname};
 		}
 		else if (fullname !="" && classname=="")
 		{
-			//sql=PersonInfoMapper.BASE_SQL +" where FullName=? ";
+			sql=PersonInfoMapper.BASE_SQL +" where FullName=? ";
 			params= new Object[] {fullname};
 		}
 		else if(fullname =="" && classname!="")
 		{
-			//sql=PersonInfoMapper.BASE_SQL +" where  ClassName=?";
+			sql=PersonInfoMapper.BASE_SQL +" where  ClassName=?";
 			params= new Object[] {classname};
+		}
+		else
+		{
+			sql=PersonInfoMapper.BASE_SQL ;
+			params= new Object[] {};
 		}
 		try
 		{
@@ -133,25 +138,33 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		}
 	}
 	
-	public void editPersonInfo(PersonInfo info,AddressInfo ainfo)//int pid,String fullname,String firstname,String lastname,String classname,String grade)////
+	public void editPersonInfo(PersonInfo info,AddressInfo ainfo)
 	{
 		PersonInfo P = this.findPersonInfo(info.getPersonID());
 		AddressInfo a = this.findAddressInfo(info.getPersonID());
 		if(P!=null)
 		{
-			this.deleteInfo(P.getPersonID());
+			//this.deleteInfo(P.getPersonID());
+			//this.insertInfo(info, ainfo);
+			String sql = PersonInfoMapper.UPDATE_SQL;
+			
+			Object[] params = new Object[] {info.getFullName(),info.getFirstName(),info.getLastName(),info.getClassName(),info.getGrade(),info.getPersonID()};
+			
+			getJdbcTemplate().update(sql, params);
+		}
+		if(a!=null)
+		{
+				String sql = AddressInfoMapper.AD_UPDATE_SQL;
+			
+			Object[] params = new Object[] {ainfo.getAddress1(),ainfo.getAddress2(),info.getPersonID()};
+			
+			getJdbcTemplate().update(sql, params);
+		}
+		else
+		{
 			this.insertInfo(info, ainfo);
 		}
-		/*
-		String sql= PersonInfoMapper.UPDATE_SQL;
-		int pid = info.getPersonID();
-		Object[] params = new Object[] {info.getFullName(),info.getFirstName(),info.getLastName(),info.getClassName(),info.getGrade(),info.getPersonID()};
-		getJdbcTemplate().update(sql,params);
 		
-		String asql = AddressInfoMapper.AD_UPDATE_SQL;
-		Object[] aparams = new Object[] {ainfo.getAddress1(),ainfo.getAddress2(),pid};
-		getJdbcTemplate().update(asql,aparams);
-		*/
 	}
 	
 	
