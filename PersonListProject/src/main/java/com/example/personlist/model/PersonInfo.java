@@ -58,6 +58,17 @@ public class PersonInfo {
 		this.address2 = address2;
 	}
 	
+	public PersonInfo(String fullname,String firstname,String lastname,String classname,String grade,String address1,String address2)
+	{
+		super();
+		this.FullName = fullname;
+		this.FirstName = firstname;
+		this.LastName = lastname;
+		this.ClassName = classname;
+		this.Grade = grade;
+		this.address1 = address1;
+		this.address2 = address2;
+	}
 
 	public int getPersonID()
 	{
