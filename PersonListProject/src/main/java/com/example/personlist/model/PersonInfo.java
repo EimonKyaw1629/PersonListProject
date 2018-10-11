@@ -1,5 +1,7 @@
 package com.example.personlist.model;
 
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 
 
@@ -10,10 +12,7 @@ public class PersonInfo extends AddressInfo{
 	private String LastName;
 	private String ClassName;
 	private String Grade;
-//	public AddressInfo ainfo;
-	//public String address1;
-	//public String address2;
-	
+	public List<AddressInfo> alist;
 	
 	@Override
 	public String toString() {
@@ -47,16 +46,16 @@ public class PersonInfo extends AddressInfo{
 		
 	}
 	
-	public PersonInfo(int personid,String fullname,String firstname,String lastname,String classname,String grade,int aid,String address1)
+	public PersonInfo(int personid,String fullname,String firstname,String lastname,String classname,String grade,List<AddressInfo> info)
 	{
-		super(aid,personid,address1);
+		super();
 		this.PersonID =personid;
 		this.FullName = fullname;
 		this.FirstName = firstname;
 		this.LastName = lastname;
 		this.ClassName = classname;
 		this.Grade = grade;
-		
+		this.alist = info;
 	}
 	
 
@@ -120,5 +119,12 @@ public class PersonInfo extends AddressInfo{
     {
     	this.Grade =g;
     }
+    
+    public List<AddressInfo> getAddressList()
+    {
+    	return this.alist;
+    }
+    
+  //  public void setAddressList()
   
 }

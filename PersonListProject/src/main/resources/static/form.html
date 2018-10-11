@@ -8,36 +8,93 @@
 <title>Bootstrap 101 Template</title>
 
 <!-- Bootstrap -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
-	<div>
-	<iframe  src ="main.html"></iframe>
-	</div>
+<link rel="stylesheet"	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+<script src="/webjars/jquery/3.2.1/jquery.min.js"></script>
+<script src="/webjars/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+
+    var counter = 1;
+		
+    $("#addButton").click(function () {
+				
+	if(counter>10){
+            alert("Only 10 textboxes allow");
+            return false;
+	}   
+		
+	var newTextBoxDiv = $(document.createElement('div'))
+	     .attr("id", 'TextBoxDiv' + counter);
+	
+	newTextBoxDiv.after().html('<div id="TextBoxDiv'+counter+'"><label >Address '+ counter + ' : </label>' +
+	      '<input type="text" class="form-control" name="Address' + counter + 
+	      '" id="Address' + counter + '" value="" >'+'<input type="button" value="Remove Button" id="removeButton' + counter + '" onclick="deleteControl('+counter+')"></div><br>');
+	
+	newTextBoxDiv.appendTo("#TextBoxesGroup");
+
+				
+	counter++;
+     });
+		
+     $("#getButtonValue").click(function () {
+		
+	var msg = '';
+	for(i=1; i<counter; i++){
+   	  msg += "\n Textbox #" + i + " : " + $('#textbox' + i).val();
+	}
+    	  alert(msg);
+     });
+     
+     
+     $('#insert').submit(
+    	        function(event) {
+    	        	// reference to form object
+    	        	var form = this;
+    	                // for stopping the default action of element
+    	                e.preventDefault();
+    	                // mapthat will hold form data
+    	                var formData = {}
+    	        	//iterate over form elements   
+    	                $.each(this, function(i, v){
+    	        	    var input = $(v);
+    	        	    // populate form data as key-value pairs
+    	                    // with the name of input as key and its value as value
+    	        	    formData[input.attr("name")] = input.val();
+    	                });
+    	                alert ( formData[input.attr("name")] );
+    	                $.ajax({
+    	                    type: "POST", // method attribute of form
+    	                    url: $("#insert").attr("action"),  // action attribute of form
+    	                  
+    	        	    // convert form data to json format
+    	                    data : JSON.stringify(formData),
+
+    	                success : function(response) {
+    	                    alert( response );
+    	                },
+    	                error : function(xhr, status, error) {
+    	                    alert(xhr.responseText);
+    	                }
+    	            });
+    	            return false;
+    	        });
+
+  });
+  
+function deleteControl(counter)
+{
+ $("#TextBoxDiv" + counter).remove();
+}
+</script>
+
 
 </head>
 <body>
 
-	<!--  <nav class="navbar navbar-default">
-		<div class="container-fluid">
-			
-			<div class="navbar-header">
-				<a class="navbar-brand" href="#">DayBridge</a>
-			</div>
-
-			<div class="collapse navbar-collapse"
-				id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav navbar-right">
-					<li><a href="/form.html">登録</a></li>
-				</ul>
-			</div>
-			
-		</div>
-		
-	</nav>
- -->
+	
 	<div class="container">
 		<div class="col-md-6 col-md-offset-3">
-			<form action="/insert" method="post">
+			<form id="insert" action="/insert" method="post">
 
 				<div class="form-group">
 					<label for="FullName">FullName</label> <input type="text"
@@ -63,35 +120,20 @@
 					<label for="Grade">Grade</label> <input type="text"
 						class="form-control" name="Grade" placeholder="Grade">
 				</div>
-
+				<div id='TextBoxesGroup' >
+					
+				</div>
+				<div>
+				<input type='button' value='Add Address' id='addButton'>
+				</div>
+				
 				<br>
-				<div class="form-group">
-					<label for="Address1">Address1</label> <input type="text"
-						class="form-control" name="Address1" placeholder="Address1">
-				</div>
-
-				<div class="form-group">
-					<label for="Address2">Address2</label> <input type="text"
-						class="form-control" name="Address2" placeholder="Address2">
-				</div>
-				
-				<div id='TextBoxesGroup'>
-					<div id="TextBoxDiv1">
-					<label>Address #1 : </label><input type='textbox' id='textbox1' >
-					<input type='button' value='Remove Button' id='removeButton'>
-					</div>
-				</div>
-				<input type='button' value='Add Button' id='addButton'>
-				
 				
 				<button type="submit" class="btn btn-default">create</button>
 			</form>
 		</div>
 	</div>
 
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="/webjars/jquery/3.2.1/jquery.min.js"></script>
-	<!-- Include all compiled plugins (below), or include individual files as needed -->
-	<script src="/webjars/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	
 </body>
 </html>

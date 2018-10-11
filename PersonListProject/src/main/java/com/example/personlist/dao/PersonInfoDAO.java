@@ -1,5 +1,6 @@
 package com.example.personlist.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -63,7 +64,7 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		
 	}
 	
-	public AddressInfo findAddressInfo(int aid)
+	public List<AddressInfo> findAddressInfo(int aid)
 	{
 		String asql = AddressInfoMapper.AD_SELECT_SQL +" where PersonID=?";
 		
@@ -71,8 +72,10 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		AddressInfoMapper mapper = new AddressInfoMapper();
 		try
 		{
-			AddressInfo info = this.getJdbcTemplate().queryForObject(asql, params,mapper);
-			return info;
+			
+			List<AddressInfo> list = this.getJdbcTemplate().query(asql, params,mapper);;
+			
+			return list;
 		}
 		catch(EmptyResultDataAccessException ex)
 		{
@@ -141,7 +144,7 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 	public void editPersonInfo(PersonInfo info,AddressInfo ainfo)
 	{
 		PersonInfo P = this.findPersonInfo(info.getPersonID());
-		AddressInfo a = this.findAddressInfo(info.getPersonID());
+		List<AddressInfo> a = this.findAddressInfo(info.getPersonID());
 		if(P!=null)
 		{
 			String sql = PersonInfoMapper.UPDATE_SQL;

@@ -1,10 +1,13 @@
 package com.example.personlist.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Description;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,18 +18,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import com.example.personlist.dao.PersonInfoDAO;
 import com.example.personlist.model.AddressInfo;
 import com.example.personlist.model.PersonInfo;
+
+
 
 @Controller
 public class MainController {
 
 	@Autowired
 	private PersonInfoDAO dao;
-
-	@RequestMapping(value = { "/", "/personList" }, method = RequestMethod.GET)
+	
+ @RequestMapping(value = "/")
+	  String index() {
+	    return "layout/layout";
+	  }
+	@RequestMapping(value = { "/personList" }, method = RequestMethod.GET)//"/", 
 	public String showPersonInfo(Model m) {
 		List<PersonInfo> list = dao.getPersonInfo();
 		m.addAttribute("personInfo", list);
@@ -54,19 +65,28 @@ public class MainController {
 	public String editPersonInfo(@PathVariable int pid, Model m) {
 		
 		PersonInfo info= dao.findPersonInfo(pid);
-		AddressInfo ainfo = dao.findAddressInfo(pid);
+		List<AddressInfo> ainfo = dao.findAddressInfo(pid);
 		if (ainfo != null) {
 			
-			System.out.println(ainfo.PersonID);
-			System.out.println(ainfo.Address);
+			
+			info.alist=new ArrayList<AddressInfo>();
+			for (AddressInfo addressInfo : ainfo) {
+				System.out.println(addressInfo.getAddressID());
+				System.out.println(addressInfo.getAddress());
+				AddressInfo adr = new AddressInfo();
+				adr.setAddressID(addressInfo.getAddressID());
+				adr.setAddress(addressInfo.getAddress());
+				info.alist.add(adr);
+			}
 			PersonInfo newinfo = new PersonInfo(info.getPersonID(),
 					info.getFullName(),
 					info.getFirstName(),
 					info.getLastName(),
 					info.getClassName(),
 					info.getGrade(),
-					ainfo.getAddressID(),
-					ainfo.getAddress());
+					info.alist);
+					//\ainfo.getAddressID(),
+					//ainfo.getAddress());
 			m.addAttribute("person", newinfo);
 			
 			return "editPerson";
