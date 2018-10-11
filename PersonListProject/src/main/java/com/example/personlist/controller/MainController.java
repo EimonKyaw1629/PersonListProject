@@ -49,15 +49,33 @@ public class MainController {
 
 	@RequestMapping(value = "/edit/pid={pid}")
 	public String editPersonInfo(@PathVariable int pid, Model m) {
-		PersonInfo info = dao.findPersonInfo(pid);
+		
+		PersonInfo info= dao.findPersonInfo(pid);
 		AddressInfo ainfo = dao.findAddressInfo(pid);
 		if (ainfo != null) {
-			info.address1 = ainfo.Address1;
-			info.address2 = ainfo.Address2;
+			
+			System.out.println(ainfo.Address1);
+			System.out.println(ainfo.Address1);
+			PersonInfo newinfo = new PersonInfo(info.getPersonID(),
+					info.getFullName(),
+					info.getFirstName(),
+					info.getLastName(),
+					info.getClassName(),
+					info.getGrade(),
+					ainfo.getAddress1(),
+					ainfo.getAddress2());
+			m.addAttribute("person", newinfo);
+			
+			return "editPerson";
+			
 		}
-
-		m.addAttribute("person", info);
-		// m.addAttribute("address",ainfo);
+		else
+		{
+			System.out.println("latest"+info.Address1);
+			System.out.println("latest"+info.Address1);
+			m.addAttribute("person", info);
+		}
+		
 		return "editPerson";
 	}
 
@@ -70,11 +88,8 @@ public class MainController {
 		PersonInfo personinfo = new PersonInfo(Integer.valueOf(pid), fullname, firstname, lastname, classname, grade);
 
 		AddressInfo addressinfo = new AddressInfo(a1, a2);
-		dao.editPersonInfo(personinfo, addressinfo);// Integer.valueOf(pid), fullname, firstname, lastname, classname,
-													// grade);
+		dao.editPersonInfo(personinfo, addressinfo);
 		List<PersonInfo> list = dao.getPersonInfo();
-		List<AddressInfo> alist = dao.getAddressInfo();
-
 		m.addAttribute("personInfo", list);
 		return "personList";
 	}

@@ -5,6 +5,10 @@ public class AddressInfo {
 	public String Address1;
 	public String Address2;
 	
+	public AddressInfo()
+	{
+		
+	}
 	public AddressInfo(int AddressID, String address1, String address2)
 	{
 		super();

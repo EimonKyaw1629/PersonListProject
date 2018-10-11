@@ -3,16 +3,16 @@ package com.example.personlist.model;
 import javax.validation.constraints.NotNull;
 
 
-public class PersonInfo {
+public class PersonInfo extends AddressInfo{
 	private int PersonID;
 	private String FullName;
 	private String FirstName;
 	private String LastName;
 	private String ClassName;
 	private String Grade;
-	
-	public String address1;
-	public String address2;
+//	public AddressInfo ainfo;
+	//public String address1;
+	//public String address2;
 	
 	
 	@Override
@@ -20,7 +20,6 @@ public class PersonInfo {
 		return "PersonInfo [PersonID=" + PersonID + ", FullName=" + FullName + ", FirstName=" + FirstName
 				+ ", LastName=" + LastName + ", ClassName=" + ClassName + ", Grade=" + Grade + "]";
 	}
-	
 	
 	public PersonInfo(int personid,String fullname,String firstname,String lastname,String classname,String grade)
 	{
@@ -31,7 +30,7 @@ public class PersonInfo {
 		this.LastName = lastname;
 		this.ClassName = classname;
 		this.Grade = grade;
-		//this.ainfo= ainfo;
+		
 	}
 	
 	public PersonInfo(String fullname,String firstname,String lastname,String classname,String grade)
@@ -47,27 +46,25 @@ public class PersonInfo {
 	
 	public PersonInfo(int personid,String fullname,String firstname,String lastname,String classname,String grade,String address1,String address2)
 	{
-		super();
+		super(address1,address2);
 		this.PersonID =personid;
 		this.FullName = fullname;
 		this.FirstName = firstname;
 		this.LastName = lastname;
 		this.ClassName = classname;
 		this.Grade = grade;
-		this.address1 = address1;
-		this.address2 = address2;
+		
 	}
 	
 	public PersonInfo(String fullname,String firstname,String lastname,String classname,String grade,String address1,String address2)
 	{
-		super();
+		super(address1,address2);
 		this.FullName = fullname;
 		this.FirstName = firstname;
 		this.LastName = lastname;
 		this.ClassName = classname;
 		this.Grade = grade;
-		this.address1 = address1;
-		this.address2 = address2;
+		
 	}
 
 	public int getPersonID()
@@ -129,23 +126,5 @@ public class PersonInfo {
     {
     	this.Grade =g;
     }
-    
-    public String  getAddress1()
-    {
-    	return address1;
-    }
-    
-    public void setAddress1(String info)
-    {
-    	this.address1 = info;
-    }
-    public String  getAddress2()
-    {
-    	return address1;
-    }
-    
-    public void setAddress2(String info)
-    {
-    	this.address2 = info;
-    }
+  
 }

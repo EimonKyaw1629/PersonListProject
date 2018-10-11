@@ -144,8 +144,6 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		AddressInfo a = this.findAddressInfo(info.getPersonID());
 		if(P!=null)
 		{
-			//this.deleteInfo(P.getPersonID());
-			//this.insertInfo(info, ainfo);
 			String sql = PersonInfoMapper.UPDATE_SQL;
 			
 			Object[] params = new Object[] {info.getFullName(),info.getFirstName(),info.getLastName(),info.getClassName(),info.getGrade(),info.getPersonID()};
