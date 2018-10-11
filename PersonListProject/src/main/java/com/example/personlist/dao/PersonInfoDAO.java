@@ -65,7 +65,7 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 	
 	public AddressInfo findAddressInfo(int aid)
 	{
-		String asql = AddressInfoMapper.AD_SELECT_SQL +" where AddressID=?";
+		String asql = AddressInfoMapper.AD_SELECT_SQL +" where PersonID=?";
 		
 		Object[] params = new Object[] {aid};
 		AddressInfoMapper mapper = new AddressInfoMapper();
@@ -97,7 +97,7 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		List<PersonInfo> list = getPersonInfo();
 	
 		String AddrSql = PersonInfoMapper.aINSERT_SQL;
-		Object[] paramsAddr = new Object[] {list.get(list.size()-1).getPersonID(),addressinfo.getAddress1(),addressinfo.getAddress2()};
+		Object[] paramsAddr = new Object[] {list.get(list.size()-1).getPersonID(),addressinfo.getAddress()};
 		getJdbcTemplate().update(AddrSql, paramsAddr);
 		
 	}
@@ -154,7 +154,7 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		{
 				String sql = AddressInfoMapper.AD_UPDATE_SQL;
 			
-			Object[] params = new Object[] {ainfo.getAddress1(),ainfo.getAddress2(),info.getPersonID()};
+			Object[] params = new Object[] {info.getPersonID(),ainfo.getAddress(),info.getPersonID()};
 			
 			getJdbcTemplate().update(sql, params);
 		}

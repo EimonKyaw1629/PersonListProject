@@ -20,7 +20,10 @@ public class PersonInfo extends AddressInfo{
 		return "PersonInfo [PersonID=" + PersonID + ", FullName=" + FullName + ", FirstName=" + FirstName
 				+ ", LastName=" + LastName + ", ClassName=" + ClassName + ", Grade=" + Grade + "]";
 	}
-	
+	public PersonInfo()
+	{
+		
+	}
 	public PersonInfo(int personid,String fullname,String firstname,String lastname,String classname,String grade)
 	{
 		super();
@@ -44,9 +47,9 @@ public class PersonInfo extends AddressInfo{
 		
 	}
 	
-	public PersonInfo(int personid,String fullname,String firstname,String lastname,String classname,String grade,String address1,String address2)
+	public PersonInfo(int personid,String fullname,String firstname,String lastname,String classname,String grade,int aid,String address1)
 	{
-		super(address1,address2);
+		super(aid,personid,address1);
 		this.PersonID =personid;
 		this.FullName = fullname;
 		this.FirstName = firstname;
@@ -56,16 +59,7 @@ public class PersonInfo extends AddressInfo{
 		
 	}
 	
-	public PersonInfo(String fullname,String firstname,String lastname,String classname,String grade,String address1,String address2)
-	{
-		super(address1,address2);
-		this.FullName = fullname;
-		this.FirstName = firstname;
-		this.LastName = lastname;
-		this.ClassName = classname;
-		this.Grade = grade;
-		
-	}
+
 
 	public int getPersonID()
 	{

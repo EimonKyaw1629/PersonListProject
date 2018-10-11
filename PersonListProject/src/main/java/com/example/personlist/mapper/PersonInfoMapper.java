@@ -11,8 +11,8 @@ import com.example.personlist.model.PersonInfo;
 public class PersonInfoMapper implements RowMapper<PersonInfo>{
 
 	public static final String  BASE_SQL ="Select PersonID,FullName,FirstName,LastName,ClassName,Grade from Tb_Person";
-	public static final String  pINSERT_SQL ="insert into Tb_Person(FullName,FirstName,LastName,ClassName,Grade) values(?,?,?,?,?)";
-	public static final String  aINSERT_SQL ="insert into Tb_Address(AddressID, Address1, Address2) values(?,?,?)";
+	public static final String  pINSERT_SQL ="Insert into Tb_Person(FullName,FirstName,LastName,ClassName,Grade) values(?,?,?,?,?)";
+	public static final String aINSERT_SQL="Insert into Tb_Address(PersonID,Address) values(?,?)";
 	public static final String  DELETE_SQL ="DELETE FROM Tb_Person WHERE PersonID = ?";
 	public static final String UPDATE_SQL ="Update Tb_Person set FullName=?,FirstName=?,LastName=?,ClassName=?,Grade=? where PersonID=?";
 

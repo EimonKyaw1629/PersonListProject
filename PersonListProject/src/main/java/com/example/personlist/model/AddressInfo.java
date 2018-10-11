@@ -2,26 +2,26 @@ package com.example.personlist.model;
 
 public class AddressInfo {
 	private int AddressID;
-	public String Address1;
-	public String Address2;
+	public int PersonID;
+	public String Address;
 	
 	public AddressInfo()
 	{
 		
 	}
-	public AddressInfo(int AddressID, String address1, String address2)
+	public AddressInfo(int addressID, int personid, String address2)
 	{
 		super();
-		this.AddressID = AddressID;
-		this.Address1 = address1;
-		this.Address2 = address2;
+		this.AddressID = addressID;
+		this.PersonID = personid;
+		this.Address = address2;
 	}
 	
-	public AddressInfo(String address1, String address2)
+	public AddressInfo(int personid, String address2)
 	{
 		super();
-		this.Address1 = address1;
-		this.Address2 = address2;
+		this.PersonID = personid;
+		this.Address = address2;
 	}
 	
 	public int getAddressID() {
@@ -30,17 +30,12 @@ public class AddressInfo {
 	public void setAddressID(int addressID) {
 		AddressID = addressID;
 	}
-	public String getAddress1() {
-		return Address1;
+	
+	public String getAddress() {
+		return Address;
 	}
-	public void setAddress1(String address1) {
-		Address1 = address1;
-	}
-	public String getAddress2() {
-		return Address2;
-	}
-	public void setAddress2(String address2) {
-		Address2 = address2;
+	public void setAddress(String address2) {
+		Address = address2;
 	}
 	
 	

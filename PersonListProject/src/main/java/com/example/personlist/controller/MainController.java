@@ -2,9 +2,12 @@ package com.example.personlist.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,11 +42,11 @@ public class MainController {
 
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	public String insertPersonInfo(@RequestParam String FullName, String FirstName, String LastName, String ClassName,
-			String Grade, String Address1, String Address2) {
+			String Grade, String Address1) {
 		PersonInfo personinfo = new PersonInfo(FullName, FirstName, LastName, ClassName, Grade);
-		AddressInfo addressinfo = new AddressInfo(Address1, Address2);
+		//AddressInfo addressinfo = new AddressInfo(Address1);
 
-		dao.insertInfo(personinfo, addressinfo);
+		//dao.insertInfo(personinfo, addressinfo);
 		return "redirect:/personList";
 	}
 
@@ -54,16 +57,16 @@ public class MainController {
 		AddressInfo ainfo = dao.findAddressInfo(pid);
 		if (ainfo != null) {
 			
-			System.out.println(ainfo.Address1);
-			System.out.println(ainfo.Address1);
+			System.out.println(ainfo.PersonID);
+			System.out.println(ainfo.Address);
 			PersonInfo newinfo = new PersonInfo(info.getPersonID(),
 					info.getFullName(),
 					info.getFirstName(),
 					info.getLastName(),
 					info.getClassName(),
 					info.getGrade(),
-					ainfo.getAddress1(),
-					ainfo.getAddress2());
+					ainfo.getAddressID(),
+					ainfo.getAddress());
 			m.addAttribute("person", newinfo);
 			
 			return "editPerson";
@@ -71,8 +74,7 @@ public class MainController {
 		}
 		else
 		{
-			System.out.println("latest"+info.Address1);
-			System.out.println("latest"+info.Address1);
+			
 			m.addAttribute("person", info);
 		}
 		
@@ -83,20 +85,22 @@ public class MainController {
 	public String geteditPersonInfo(@RequestParam(value = "pid") String pid, Model m,
 			@RequestParam(value = "fu") String fullname, @RequestParam(value = "fs") String firstname,
 			@RequestParam(value = "ls") String lastname, @RequestParam(value = "cs") String classname,
-			@RequestParam(value = "g") String grade, @RequestParam(value = "a1") String a1,
-			@RequestParam(value = "a2") String a2) {
+			@RequestParam(value = "g") String grade, @RequestParam(value = "a1") String a1) {
 		PersonInfo personinfo = new PersonInfo(Integer.valueOf(pid), fullname, firstname, lastname, classname, grade);
 
-		AddressInfo addressinfo = new AddressInfo(a1, a2);
+		AddressInfo addressinfo = new AddressInfo(Integer.valueOf(pid),a1);
 		dao.editPersonInfo(personinfo, addressinfo);
-		List<PersonInfo> list = dao.getPersonInfo();
-		m.addAttribute("personInfo", list);
-		return "personList";
+		
+		return "redirect:/personList";
 	}
 	@RequestMapping(value="/searchInfo",method = RequestMethod.POST)
-	public String searchPersonInfo(Model m,@RequestParam("fullname") String fullname,@RequestParam("classname") String classname)
+	//public String searchPersonInfo(Model m,@RequestParam("fullname") String fullname,@RequestParam("classname") String classname)
+	public String searchPersonInfo(@Valid @ModelAttribute("person")PersonInfo info, 
+		      BindingResult result, Model m)
 	{
-		List<PersonInfo> pinfo = dao.getSearchPersonInfo(fullname, classname);
+		System.out.println("latest"+info.getFullName());
+		System.out.println("latest"+info.getClassName());
+		List<PersonInfo> pinfo = dao.getSearchPersonInfo(info.getFullName(),info.getClassName());//fullname, classname);
 		m.addAttribute("personInfo",pinfo);
 		return "personList";
 	}
