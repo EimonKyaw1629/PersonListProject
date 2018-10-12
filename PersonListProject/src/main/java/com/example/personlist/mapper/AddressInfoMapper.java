@@ -12,7 +12,7 @@ public class AddressInfoMapper implements RowMapper<AddressInfo>
 {
 	public static final String AD_UPDATE_SQL = "Update Tb_Address set PersonID=?,Address=? where PersonID=?";
 	public static final String AD_SELECT_SQL = "Select * from  Tb_Address";
-	public static final String AD_INSERT_SQL = "insert into Tb_Address(personID,address2) values(?,?)";
+	public static final String AD_INSERT_SQL = "insert into Tb_Address(personID,address) values(?,?)";
 	
 	@Override
 	public AddressInfo mapRow(ResultSet rs, int rowNum) throws SQLException {

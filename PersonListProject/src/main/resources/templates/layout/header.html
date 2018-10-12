@@ -7,23 +7,48 @@
 <meta name="keywords" content="Home" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<script>
+	var oTbl;
+	//Row 追加
+	function insRow() {
+		oTbl = document.getElementById("addTable");
+		var oRow = oTbl.insertRow();
+		oRow.onmouseover = function() {
+			oTbl.clickedRowIndex = this.rowIndex
+		}; //clickedRowIndex - Rowの位置確認
+		var oCell = oRow.insertCell();
 
-<!-- <link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-	crossorigin="anonymous" />
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
-	integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
-	crossorigin="anonymous" /> -->
+		//Form Tag
+		var frmTag = "<input type=text name=addText style=width:350px; height:20px;> ";
+		frmTag += "<input type=button value='削除' onClick='removeRow()' style='cursor:hand'>";
+		oCell.innerHTML = frmTag;
+	}
+	//Row 削除
+	function removeRow() {
+		oTbl.deleteRow(oTbl.clickedRowIndex);
+	}
+
+	/* function frmCheck()
+	 {
+	 var frm = document.form;
 	
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	 for( var i = 0; i <= frm.elements.length - 1; i++ ){
+	 if( frm.elements[i].name == "addText" )
+	 {
+	 if( !frm.elements[i].value ){
+	 alert("텍스트박스에 값을 입력하세요!");
+	 frm.elements[i].focus();
+	 return;
+	 }
+	 }
+	 }
+	 } */
+</script>
 
-<!-- <script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-	crossorigin="anonymous"></script> -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 </head>
 

@@ -1,6 +1,7 @@
 package com.example.personlist.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -27,7 +28,7 @@ import com.example.personlist.model.PersonInfo;
 
 @Controller
 public class MainController {
-
+	
 	@Autowired
 	private PersonInfoDAO dao;
 
@@ -56,8 +57,10 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
-	public String insertPersonInfo(PersonInfo personinfo) {
-		dao.insertInfo(personinfo);
+	public String insertPersonInfo(PersonInfo personinfo, @RequestParam String addText) {
+		List<String> addrlist = null;
+        addrlist = Arrays.asList(addText.split(","));
+		dao.insertInfo(personinfo, addrlist);
 		return "redirect:/personList";
 	}
 

@@ -93,16 +93,18 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 	}
 	
 	
-	public void insertInfo(PersonInfo personinfo) {
+	public void insertInfo(PersonInfo personinfo,List<String> addrlist) {
 		String sql = PersonInfoMapper.INSERT_SQL;
 		Object[] params = new Object[] {personinfo.getFullName(),personinfo.getFirstName(),personinfo.getLastName(),personinfo.getClassName(),personinfo.getGrade()};
 		getJdbcTemplate().update(sql, params);
 		
-		/*List<PersonInfo> list = getPersonInfo();
-		String AddrSql = AddressInfoMapper.AD_INSERT_SQL;
-		Object[] paramsAddr = new Object[] {list.get(list.size()-1).getPersonID(),personinfo.getAddress()};
-		getJdbcTemplate().update(AddrSql, paramsAddr);*/
+		List<PersonInfo> list = getPersonInfo();
 		
+		for(int i=0,size = addrlist.size(); i<size; i++){
+			String AddrSql = AddressInfoMapper.AD_INSERT_SQL;
+			Object[] paramsAddr = new Object[] {list.get(list.size()-1).getPersonID(),addrlist.get(i)};
+			getJdbcTemplate().update(AddrSql, paramsAddr);
+		}
 	}
 	public List<PersonInfo> getSearchPersonInfo(String fullname,String classname)
 	{
@@ -163,7 +165,7 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		}
 		else
 		{
-			this.insertInfo(info);
+			//this.insertInfo(info);
 		}
 		
 	}

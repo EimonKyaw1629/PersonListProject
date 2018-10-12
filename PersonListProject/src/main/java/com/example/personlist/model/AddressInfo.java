@@ -7,7 +7,6 @@ public class AddressInfo {
 	
 	public AddressInfo()
 	{
-		
 	}
 	public AddressInfo(int addressID, int personid, String address2)
 	{
