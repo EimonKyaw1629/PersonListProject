@@ -93,15 +93,15 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 	}
 	
 	
-	public void insertInfo(PersonInfo personinfo, AddressInfo addressinfo) {
-		String sql = PersonInfoMapper.pINSERT_SQL;
+	public void insertInfo(PersonInfo personinfo) {
+		String sql = PersonInfoMapper.INSERT_SQL;
 		Object[] params = new Object[] {personinfo.getFullName(),personinfo.getFirstName(),personinfo.getLastName(),personinfo.getClassName(),personinfo.getGrade()};
 		getJdbcTemplate().update(sql, params);
-		List<PersonInfo> list = getPersonInfo();
-	
-		String AddrSql = PersonInfoMapper.aINSERT_SQL;
-		Object[] paramsAddr = new Object[] {list.get(list.size()-1).getPersonID(),addressinfo.getAddress()};
-		getJdbcTemplate().update(AddrSql, paramsAddr);
+		
+		/*List<PersonInfo> list = getPersonInfo();
+		String AddrSql = AddressInfoMapper.AD_INSERT_SQL;
+		Object[] paramsAddr = new Object[] {list.get(list.size()-1).getPersonID(),personinfo.getAddress()};
+		getJdbcTemplate().update(AddrSql, paramsAddr);*/
 		
 	}
 	public List<PersonInfo> getSearchPersonInfo(String fullname,String classname)
@@ -141,7 +141,7 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		}
 	}
 	
-	public void editPersonInfo(PersonInfo info,AddressInfo ainfo)
+	public void editPersonInfo(PersonInfo info)
 	{
 		PersonInfo P = this.findPersonInfo(info.getPersonID());
 		List<AddressInfo> a = this.findAddressInfo(info.getPersonID());
@@ -157,13 +157,13 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		{
 				String sql = AddressInfoMapper.AD_UPDATE_SQL;
 			
-			Object[] params = new Object[] {info.getPersonID(),ainfo.getAddress(),info.getPersonID()};
+			Object[] params = new Object[] {info.getPersonID(),info.getAddress(),info.getPersonID()};
 			
 			getJdbcTemplate().update(sql, params);
 		}
 		else
 		{
-			this.insertInfo(info, ainfo);
+			this.insertInfo(info);
 		}
 		
 	}

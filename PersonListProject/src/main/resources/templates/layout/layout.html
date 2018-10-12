@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 
 <head th:replace="layout/header :: header">
 <title>Header</title>
@@ -8,25 +9,22 @@
 
 <body>
 
-  <div th:replace="layout/navi :: navigation"></div>
+	<div th:replace="layout/navi :: navigation"></div>
+	<div class="container" id="mainContent">
 
-  <div class="container" id="mainContent">
+		<div class="row">
+			<div class="col-md-8">
+				<div layout:fragment="content"></div>
+			</div>
 
-    <div class="row">
-      <div class="col-md-8">
-        <div layout:fragment="content"></div>
-      </div>
+			<!-- <div class="col-md-4">
+				<div th:replace="layout/sidebar :: sidebar"></div>
 
-      <div class="col-md-4">
-        <div th:replace="layout/sidebar :: sidebar">
-        
-        </div>
-       
-      </div>
-    </div>
-  </div>
+			</div> -->
+		</div>
+	</div>
 
-  <div th:replace="layout/footer :: footer"></div>
+	<div th:replace="layout/footer :: footer"></div>
 
 </body>
 
