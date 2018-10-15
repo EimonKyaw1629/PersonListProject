@@ -1,20 +1,23 @@
 package com.example.personlist.controller;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.validation.Valid;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.personlist.dao.PersonInfoDAO;
 import com.example.personlist.model.AddressInfo;
@@ -52,8 +55,8 @@ public class MainController {
 			{
 				pinfo.alist=new ArrayList<AddressInfo>();
 				for (AddressInfo addressInfo : ainfo) {
-					System.out.println(addressInfo.getAddressID());
-					System.out.println(addressInfo.getAddress());
+					/*System.out.println(addressInfo.getAddressID());
+					System.out.println(addressInfo.getAddress());*/
 					if(addressInfo.PersonID ==pinfo.PersonID)
 					{
 						AddressInfo adr = new AddressInfo();
@@ -103,6 +106,66 @@ public class MainController {
 		return "redirect:/personList";
 	}
 
+	@RequestMapping(value = "/uploadOneFile", method = RequestMethod.POST)
+	   public String uploadOneFileHandlerPOST(HttpServletRequest request, //
+	         Model model, //
+	         @ModelAttribute("myUploadForm") MyUploadForm myUploadForm) {
+	 
+	      return this.doUpload(request, model, myUploadForm);
+	 
+	   }
+	
+	private String doUpload(HttpServletRequest request, Model model, //
+	         MyUploadForm myUploadForm) {
+	 
+	      String description = myUploadForm.getDescription();
+	      System.out.println("Description: " + description);
+	 
+	      // Root Directory.
+	      String uploadRootPath = request.getServletContext().getRealPath("upload");
+	      System.out.println("uploadRootPath=" + uploadRootPath);
+	 
+	      File uploadRootDir = new File(uploadRootPath);
+	      // Create directory if it not exists.
+	      if (!uploadRootDir.exists()) {
+	         uploadRootDir.mkdirs();
+	      }
+	      MultipartFile[] fileDatas = myUploadForm.getFileDatas();
+	      //
+	      List<File> uploadedFiles = new ArrayList<File>();
+	      List<String> failedFiles = new ArrayList<String>();
+	 
+	      for (MultipartFile fileData : fileDatas) {
+	 
+	         // Client File Name
+	         String name = fileData.getOriginalFilename();
+	         System.out.println("Client File Name = " + name);
+	 
+	         if (name != null && name.length() > 0) {
+	            try {
+	               // Create the file at server
+	               File serverFile = new File(uploadRootDir.getAbsolutePath() + File.separator + name);
+	 
+	               BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
+	               stream.write(fileData.getBytes());
+	               stream.close();
+	               //
+	               uploadedFiles.add(serverFile);
+	               System.out.println("Write file: " + serverFile);
+	            } catch (Exception e) {
+	               System.out.println("Error Write file: " + name);
+	               failedFiles.add(name);
+	            }
+	         }
+	      }
+	      model.addAttribute("description", description);
+	      model.addAttribute("uploadedFiles", uploadedFiles);
+	      model.addAttribute("failedFiles", failedFiles);
+	      return "redirect:/insert";
+	   }
+	
+	
+	
 	@RequestMapping(value = "/edit/pid={pid}")
 	public String editPersonInfo(@PathVariable int pid, Model m) {
 
@@ -135,27 +198,32 @@ public class MainController {
 	public String geteditPersonInfo(@RequestParam(value = "pid") String pid, Model m,
 			@RequestParam(value = "fu") String fullname, @RequestParam(value = "fs") String firstname,
 			@RequestParam(value = "ls") String lastname, @RequestParam(value = "cs") String classname,
-			@RequestParam(value = "g") String grade,@RequestParam(value = "aid")String[] aid,@RequestParam(value = "a")String[] ar) {
+			@RequestParam(value = "g") String grade,@RequestParam(value = "aid",required = false)String[] aid,@RequestParam(value = "a",required = false)String[] ar) {
 			
-		System.out.println(ar[0]);
+		//System.out.println(ar[0]);
 		PersonInfo personinfo = new PersonInfo(Integer.valueOf(pid), fullname, firstname, lastname, classname, grade);
 
 		List<AddressInfo> alist = new ArrayList<AddressInfo>();
-		System.out.println(aid.length);
+		//System.out.println(aid.length);
+		if(ar != null)
+		{
 			for(int j =0;j<ar.length;j++)
 			{
 				AddressInfo ainfo= new AddressInfo();
 				ainfo.setPersonID(Integer.valueOf(pid));
+				if(aid!=null)
+				{
 				int f = aid.length;
-				if(f>j)
+				if(f>j && f>0)
 				{
 					ainfo.setAddressID(Integer.parseInt(aid[j]));
+				}
 				}
 				
 				ainfo.Address = ar[j];
 				alist.add(ainfo);
 			}
-			
+		}
 		dao.editPersonInfo(personinfo, alist);
 		
 		return "redirect:/personList";

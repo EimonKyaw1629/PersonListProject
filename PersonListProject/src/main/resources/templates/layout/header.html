@@ -1,65 +1,85 @@
-<html xmlns:th="http://www.thymeleaf.org">
+html xmlns:th="http://www.thymeleaf.org">
 
 <head th:fragment="header">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Home</title>
 
 <meta name="keywords" content="Home" />
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <script>
-var oTbl;
-//Row 追加
-function insRow() {
-    oTbl = document.getElementById("addTable");
-    var oRow = oTbl.insertRow();
-    oRow.onmouseover = function() {
-        oTbl.clickedRowIndex = this.rowIndex
-    }; //clickedRowIndex - Rowの位置確認
-    var oCell = oRow.insertCell();
+	var oTbl;
+	//Row 追加
+	function insRow() {
+		oTbl = document.getElementById("addTable");
+		var oRow = oTbl.insertRow();
+		oRow.onmouseover = function() {
+			oTbl.clickedRowIndex = this.rowIndex
+		}; //clickedRowIndex - Rowの位置確認
+		var oCell = oRow.insertCell();
 
-    //Form Tag
-    var frmTag = "<input type=text name=addText style=width:350px; height:20px;> ";
-    frmTag += "<input type=button value='削除' onClick='removeRow()' style='cursor:hand'>";
-    oCell.innerHTML = frmTag;
-}
-//Row 削除
-function removeRow() {
-    oTbl.deleteRow(oTbl.clickedRowIndex);
-}
- var counter = 1;
-    
-  
-        function AddRow()    {
-    if(counter>10){
-            alert("Only 10 textboxes allow");
-            return false;
-    }
-        
-    var newTextBoxDiv = $(document.createElement('div'))
-         .attr("id", 'TextBoxDiv' + counter);
-    
-    newTextBoxDiv.after().html('<div class="form-group" id="TextBoxDiv'+counter+'"><label class="col-sm-2 control-label">Address </label>' +
-          '<div class="col-sm-7"><input type="text" class="form-control" name="a'  +
-          '"  th:value="" >'+'<input type="button" value="Remove Button" id="removeButton' + counter + '" onclick="deleteControl('+counter+')"></div></div><br>');
-    
-    newTextBoxDiv.appendTo("#TextBoxesGroup");
+		//Form Tag
+		var frmTag = "<input type=text name=addText style=width:350px; height:20px;> ";
+		frmTag += "<input type=button value='削除' onClick='removeRow()' style='cursor:hand'>";
+		oCell.innerHTML = frmTag;
+	}
+	//Row 削除
+	function removeRow() {
+		oTbl.deleteRow(oTbl.clickedRowIndex);
+	}
+	var counter = 1;
 
-                
-    counter++;
-        }
-        
-     $("#upa").click(function () {
-        
-    var msg = '';
-    for(i=1; i<counter; i++){
-         msg += "\n Textbox #" + i + " : " + $('#Address' + i).val();
-    }
-          alert(msg);
-     });
-     function deleteControl(counter)
-     {
-      $("#TextBoxDiv" + counter).remove();
-     }
+	function AddRow() {
+		if (counter > 10) {
+			alert("Only 10 textboxes allow");
+			return false;
+		}
+
+		var newTextBoxDiv = $(document.createElement('div')).attr("id",
+				'TextBoxDiv' + counter);
+
+		newTextBoxDiv
+				.after()
+				.html(
+						'<div class="form-group" id="TextBoxDiv'+counter+'"><div><label class="col-sm-2 control-label">Address </label>'
+								+ '<div class="col-sm-7"><input type="text" class="form-control" name="a'  
+								+ '"  th:value="" ></div>'
+								+ '<input type="button" value="Remove Button" id="removeButton'
+								+ counter
+								+ '" onclick="deleteControl('
+								+ counter + ')"></div></div>');
+
+		newTextBoxDiv.appendTo("#TextBoxesGroup");
+
+		counter++;
+	}
+
+	$("#upa").click(function() {
+
+		var msg = '';
+		for (i = 1; i < counter; i++) {
+			msg += "\n Textbox #" + i + " : " + $('#Address' + i).val();
+		}
+		alert(msg);
+	});
+	function deleteControl(counter) {
+		$("#TextBoxDiv" + counter).remove();
+	}
+	var button = document.getElementById('button');
+	alert(button);
+	button.onclick = getIDs;
+
+	function getIDs(obj) {
+		//  var button = document.getElementById('button');
+		var id = obj.id;
+
+		alert(id);
+		// var id,divs = document.getElementsByTagName('div');
+		//     for (var i = 0; i < divs.length; i++) {
+		//          id = divs[i].id //  .id is a method
+		//        alert(id);
+		//    }
+	}
 </script>
 
 <link rel="stylesheet"

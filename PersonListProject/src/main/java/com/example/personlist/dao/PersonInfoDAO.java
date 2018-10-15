@@ -110,28 +110,28 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 	public List<PersonInfo> getSearchPersonInfo(String fullname,String classname)
 	{
 		String sql=null;
-		Object[] params= null;
+		
 		PersonInfoMapper mapper = new PersonInfoMapper();
 		//sql = PersonInfoMapper.BASE_SQL +" where (@a is null or  FullName=@a) and (ISNUlLL(@b) or ClassName=@b)" ;
 		if(fullname !="" && classname!="")
 		{
 			sql=PersonInfoMapper.BASE_SQL +" where FullName like  '%"+fullname+"%' and ClassName like  '%"+classname+"%'";
-			//params= new Object[] {fullname,classname};
+			
 		}
 		else if (fullname !="" && classname=="")
 		{
 			sql=PersonInfoMapper.BASE_SQL +" where FullName like  '%"+fullname+"%' ";
-			//params= new Object[] {fullname};
+			
 		}
 		else if(fullname =="" && classname!="")
 		{
 			sql=PersonInfoMapper.BASE_SQL +" where  ClassName like  '%"+classname+"%'";
-			//params= new Object[] {classname};
+			
 		}
 		else
 		{
 			sql=PersonInfoMapper.BASE_SQL ;
-			params= new Object[] {};
+			
 		}
 		try
 		{
@@ -156,7 +156,7 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 			
 			getJdbcTemplate().update(sql, params);
 		}
-		if(a!=null)
+		if(a!=null && !ainfo.isEmpty())
 		{
 				String sql = AddressInfoMapper.AD_UPDATE_SQL;
 			for (AddressInfo addressInfo : ainfo) {
@@ -178,9 +178,11 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 			}
 			
 		}
-		else
+		if(ainfo.isEmpty())
 		{
-			
+			String sql = AddressInfoMapper.AD_DELETE_SQL;
+			Object[] params = new Object[] {info.getPersonID()};
+			getJdbcTemplate().update(sql,params);
 		}
 		
 	}
