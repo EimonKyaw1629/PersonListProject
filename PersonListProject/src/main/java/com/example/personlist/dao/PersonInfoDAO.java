@@ -82,6 +82,25 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 			return null;
 		}
 	}
+	public AddressInfo findAddressInfoObject(int aid)
+	{
+		String asql = AddressInfoMapper.AD_SELECT_SQL +" where AddressID=?";
+		
+		Object[] params = new Object[] {aid};
+		AddressInfoMapper mapper = new AddressInfoMapper();
+		try
+		{
+			
+			AddressInfo list = this.getJdbcTemplate().queryForObject(asql, params,mapper);;
+			
+			
+			return list;
+		}
+		catch(EmptyResultDataAccessException ex)
+		{
+			return null;
+		}
+	}
 	
 	public void deleteInfo(int pid) {
 		String sql = PersonInfoMapper.DELETE_SQL;
@@ -158,23 +177,16 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		}
 		if(a!=null && !ainfo.isEmpty())
 		{
-				String sql = AddressInfoMapper.AD_UPDATE_SQL;
+			String dsql= AddressInfoMapper.AD_DELETE_SQL;
+			Object[] params = new Object[] {info.getPersonID()};
+			
+			getJdbcTemplate().update(dsql, params);	
+			
 			for (AddressInfo addressInfo : ainfo) {
-				if(addressInfo.getAddressID()==0)
-				{
-					String isql = AddressInfoMapper.AD_INSERT_SQL;
-					Object[] params = new Object[] {info.getPersonID(),addressInfo.getAddress()};
-					
-					getJdbcTemplate().update(isql, params);
-				}
-				else
-				{
-					Object[] params = new Object[] {info.getPersonID(),addressInfo.getAddress(),addressInfo.getAddressID()};
-					
-					getJdbcTemplate().update(sql, params);
-				}
-					
+				String isql = AddressInfoMapper.AD_INSERT_SQL;
+				Object[] param = new Object[] {info.getPersonID(),addressInfo.getAddress()};
 				
+				getJdbcTemplate().update(isql, param);
 			}
 			
 		}
