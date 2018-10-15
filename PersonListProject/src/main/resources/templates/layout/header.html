@@ -39,7 +39,7 @@
 		var newTextBoxDiv = $(document.createElement('div'))
 		     .attr("id", 'TextBoxDiv' + counter);
 		
-		newTextBoxDiv.after().html('<div class="form-group" id="TextBoxDiv'+counter+'"><label class="col-sm-2 control-label">Address '+ counter + ' : </label>' +
+		newTextBoxDiv.after().html('<div class="form-group" id="TextBoxDiv'+counter+'"><label class="col-sm-2 control-label">Address </label>' +
 		      '<div class="col-sm-7"><input type="text" class="form-control" name="a'  + 
 		      '"  th:value="" >'+'<input type="button" value="Remove Button" id="removeButton' + counter + '" onclick="deleteControl('+counter+')"></div></div><br>');
 		

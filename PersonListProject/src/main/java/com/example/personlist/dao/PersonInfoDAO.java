@@ -115,18 +115,18 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		//sql = PersonInfoMapper.BASE_SQL +" where (@a is null or  FullName=@a) and (ISNUlLL(@b) or ClassName=@b)" ;
 		if(fullname !="" && classname!="")
 		{
-			sql=PersonInfoMapper.BASE_SQL +" where FullName=? and ClassName=?";
-			params= new Object[] {fullname,classname};
+			sql=PersonInfoMapper.BASE_SQL +" where FullName like  '%"+fullname+"%' and ClassName like  '%"+classname+"%'";
+			//params= new Object[] {fullname,classname};
 		}
 		else if (fullname !="" && classname=="")
 		{
-			sql=PersonInfoMapper.BASE_SQL +" where FullName=? ";
-			params= new Object[] {fullname};
+			sql=PersonInfoMapper.BASE_SQL +" where FullName like  '%"+fullname+"%' ";
+			//params= new Object[] {fullname};
 		}
 		else if(fullname =="" && classname!="")
 		{
-			sql=PersonInfoMapper.BASE_SQL +" where  ClassName=?";
-			params= new Object[] {classname};
+			sql=PersonInfoMapper.BASE_SQL +" where  ClassName like  '%"+classname+"%'";
+			//params= new Object[] {classname};
 		}
 		else
 		{
@@ -135,7 +135,7 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		}
 		try
 		{
-			List<PersonInfo> info = this.getJdbcTemplate().query(sql, params,mapper);
+			List<PersonInfo> info = this.getJdbcTemplate().query(sql,mapper);//(sql, params,mapper);
 			return info;
 		}
 		catch(EmptyResultDataAccessException ex)
@@ -162,7 +162,7 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 			for (AddressInfo addressInfo : ainfo) {
 				if(addressInfo.getAddressID()==0)
 				{
-					String isql = AddressInfoMapper.AD_UPDATE_SQL;
+					String isql = AddressInfoMapper.AD_INSERT_SQL;
 					Object[] params = new Object[] {info.getPersonID(),addressInfo.getAddress()};
 					
 					getJdbcTemplate().update(isql, params);

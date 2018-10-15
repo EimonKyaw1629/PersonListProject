@@ -166,10 +166,10 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "/searchInfo", method = RequestMethod.POST)
-	public String searchPersonInfo(@Valid @ModelAttribute("person") PersonInfo info, BindingResult result, Model m) {
-		System.out.println("latest" + info.getFullName());
-		System.out.println("latest" + info.getClassName());
-		List<PersonInfo> pinfo = dao.getSearchPersonInfo(info.getFullName(), info.getClassName());// fullname,
+	public String searchPersonInfo( @RequestParam(value = "fullname") String firstname,@RequestParam(value = "classname") String classname,Model m) {//@ModelAttribute("person") PersonInfo info, BindingResult result, Model m) {
+		System.out.println("latest" + firstname);
+		System.out.println("latest" + classname);
+		List<PersonInfo> pinfo = dao.getSearchPersonInfo(firstname,classname);//info.getFullName(), info.getClassName());// fullname,
 																									// classname);
 		m.addAttribute("personInfo", pinfo);
 		return "personList";
