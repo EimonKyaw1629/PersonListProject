@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<head th:replace="layout/header :: header">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -52,28 +55,8 @@ $(document).ready(function() {
 </script>
 </head>
 <body>
-
-	<nav class="navbar navbar-default">
-		<div class="container-fluid">
-			<!-- Brand and toggle get grouped for better mobile display -->
-			<div class="navbar-header">
-				<a class="navbar-brand" href="#">DayBridge</a>
-			</div>
-
-			<!-- Collect the nav links, forms, and other content for toggling -->
-			<div class="collapse navbar-collapse"
-				id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav navbar-right">
-					<li><a href="/form.html">登録</a></li>
-					<li><a href="/personList">ユーザーリスト</a></li>
-				</ul>
-			</div>
-			<!-- /.navbar-collapse -->
-		</div>
-		<!-- /.container-fluid -->
-	</nav>
-
-	<div class="form-horizontal">
+	<div class="form-horizontal" layout:fragment="content">
+	<div class="container">
 		<div class="col-md-6 col-md-offset-3">
 			<h2>Person Info Edit</h2>
 			<form id="editpage" action="/edit" method="post" th:object="${person}">
@@ -119,17 +102,24 @@ $(document).ready(function() {
 					</div>
 				</div>
 
-				<div class="form-group">
-					<label for="address1" class="col-sm-2 control-label">Address1</label>
-					<div class="col-sm-7">
-						<input type="text" class="form-control" name="a1"
-							placeholder="address1" th:value="${person.address}">
+				<div th:each="person : ${person.alist}">
+					<div class="form-group">
+						<label for="address1" class="col-sm-2 control-label">Address</label>
+						<div class="col-sm-7">
+						<input type="hidden" th:value="${person.AddressID}" name="aid" />
+					
+						<input type="text" class="form-control" name="a"
+							 th:value="${person.address}">
+						</div>
 					</div>
 				</div>
-				<div th:each="person : ${person.alist}">
-				
-				</div>
 
+			<div id='TextBoxesGroup' >
+					
+				</div>
+				<div>
+				<input type='button' value='Add Address' id='addButton' onCLick="AddRow()">
+				</div>
 			
 
 				<div class="form-group">
@@ -139,6 +129,7 @@ $(document).ready(function() {
 				</div>
 			</form>
 		</div>
+	</div>
 	</div>
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 	<script src="/webjars/jquery/3.2.1/jquery.min.js"></script>

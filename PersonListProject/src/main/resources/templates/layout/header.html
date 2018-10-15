@@ -27,22 +27,41 @@
 	function removeRow() {
 		oTbl.deleteRow(oTbl.clickedRowIndex);
 	}
+	 var counter = 1;
+		
+	   
+	    	function AddRow()	{
+		if(counter>10){
+	            alert("Only 10 textboxes allow");
+	            return false;
+		}   
+			
+		var newTextBoxDiv = $(document.createElement('div'))
+		     .attr("id", 'TextBoxDiv' + counter);
+		
+		newTextBoxDiv.after().html('<div class="form-group" id="TextBoxDiv'+counter+'"><label class="col-sm-2 control-label">Address '+ counter + ' : </label>' +
+		      '<div class="col-sm-7"><input type="text" class="form-control" name="a'  + 
+		      '"  th:value="" >'+'<input type="button" value="Remove Button" id="removeButton' + counter + '" onclick="deleteControl('+counter+')"></div></div><br>');
+		
+		newTextBoxDiv.appendTo("#TextBoxesGroup");
 
-	/* function frmCheck()
-	 {
-	 var frm = document.form;
+					
+		counter++;
+	    	}
+			
+	     $("#upa").click(function () {
+			
+		var msg = '';
+		for(i=1; i<counter; i++){
+	   	  msg += "\n Textbox #" + i + " : " + $('#Address' + i).val();
+		}
+	    	  alert(msg);
+	     });
+	     function deleteControl(counter)
+	     {
+	      $("#TextBoxDiv" + counter).remove();
+	     }
 	
-	 for( var i = 0; i <= frm.elements.length - 1; i++ ){
-	 if( frm.elements[i].name == "addText" )
-	 {
-	 if( !frm.elements[i].value ){
-	 alert("text入力!");
-	 frm.elements[i].focus();
-	 return;
-	 }
-	 }
-	 }
-	 } */
 </script>
 
 <link rel="stylesheet"

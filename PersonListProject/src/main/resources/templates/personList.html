@@ -76,6 +76,11 @@ $(document).ready(function() {
 							<td th:utext="${person.PersonID}">..</td>
 							<td th:utext="${person.FullName}">..</td>
 							<td th:utext="${person.ClassName}">..</td>
+							<td>
+							<div th:each="list :${person.alist}">
+								<div th:utext="${list.address}"></div>
+							</div>
+						</td>
 							<td><a th:href="${'/edit/pid='+person.PersonID}">Edit</a></td>
 							<td><a th:href="${'/delete/pid='+person.PersonID}">Delete</a></td>
 						</tr>

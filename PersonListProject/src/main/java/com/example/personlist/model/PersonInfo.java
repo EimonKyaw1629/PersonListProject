@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 
 
 public class PersonInfo extends AddressInfo{
-	private int PersonID;
+	public int PersonID;
 	private String FullName;
 	private String FirstName;
 	private String LastName;

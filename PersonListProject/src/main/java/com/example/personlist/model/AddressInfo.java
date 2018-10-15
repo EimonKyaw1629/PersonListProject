@@ -36,6 +36,15 @@ public class AddressInfo {
 	public void setAddress(String address2) {
 		Address = address2;
 	}
+	public int getPersonID()
+	{
+		return PersonID;
+	}
+	
+	public void setPersonID(int pid)
+	{
+		this.PersonID = pid;
+	}
 	
 	
 }

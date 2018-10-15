@@ -42,14 +42,53 @@ public class MainController {
 		return "form";
 	}
 
-	@RequestMapping(value = { "/", "/personList" }, method = RequestMethod.GET)
+	@RequestMapping(value = {  "/","/personList" }, method = RequestMethod.GET)//
 	public String showPersonInfo(Model m) {
 		List<PersonInfo> list = dao.getPersonInfo();
+		List<AddressInfo> ainfo = dao.getAddressInfo();
+		PersonInfo newinfo = null;
+		if (ainfo != null) {
+			List<PersonInfo> newPList= new ArrayList<PersonInfo>();
+			for(PersonInfo pinfo :list)
+			{
+				pinfo.alist=new ArrayList<AddressInfo>();
+				for (AddressInfo addressInfo : ainfo) {
+					System.out.println(addressInfo.getAddressID());
+					System.out.println(addressInfo.getAddress());
+					if(addressInfo.PersonID ==pinfo.PersonID)
+					{
+						AddressInfo adr = new AddressInfo();
+						adr.setAddressID(addressInfo.getAddressID());
+						adr.setAddress(addressInfo.getAddress());
+						pinfo.alist.add(adr);
+						
+					}
+					
+					
+				}
+				newinfo = new PersonInfo(pinfo.getPersonID(),
+						pinfo.getFullName(),
+						pinfo.getFirstName(),
+						pinfo.getLastName(),
+						pinfo.getClassName(),
+						pinfo.getGrade(),
+						pinfo.alist);
+				newPList.add(newinfo);
+			
+			}
+			
+					
+			m.addAttribute("personInfo", newPList);
+			
+			return "personList";
+			
+		}
+		else
+		{
 		m.addAttribute("personInfo", list);
-
+		}
 		return "personList";
 	}
-
 	@RequestMapping(value = "/delete/pid={pid}")
 	public String deletePersonInfo(@PathVariable int pid, Model m) {
 		dao.deleteInfo(pid);
@@ -97,12 +136,32 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
-	public String geteditPersonInfo(PersonInfo personinfo, Model m) {
+	public String geteditPersonInfo(@RequestParam(value = "pid") String pid, Model m,
+			@RequestParam(value = "fu") String fullname, @RequestParam(value = "fs") String firstname,
+			@RequestParam(value = "ls") String lastname, @RequestParam(value = "cs") String classname,
+			@RequestParam(value = "g") String grade,@RequestParam(value = "aid")String[] aid,@RequestParam(value = "a")String[] ar) {
+			
+		System.out.println(ar[0]);
+		PersonInfo personinfo = new PersonInfo(Integer.valueOf(pid), fullname, firstname, lastname, classname, grade);
 
-		dao.editPersonInfo(personinfo);
-
-		List<PersonInfo> list = dao.getPersonInfo();
-		m.addAttribute("personInfo", list);
+		List<AddressInfo> alist = new ArrayList<AddressInfo>();
+		System.out.println(aid.length);
+			for(int j =0;j<ar.length;j++)
+			{
+				AddressInfo ainfo= new AddressInfo();
+				ainfo.setPersonID(Integer.valueOf(pid));
+				int f = aid.length;
+				if(f>j)
+				{
+					ainfo.setAddressID(Integer.parseInt(aid[j]));
+				}
+				
+				ainfo.Address = ar[j];
+				alist.add(ainfo);
+			}
+			
+		dao.editPersonInfo(personinfo, alist);
+		
 		return "redirect:/personList";
 	}
 
