@@ -72,7 +72,13 @@
 							</td>
 						</tr>
 					</table>
-					<br><button type="submit" class="btn btn-default">create</button>
+
+					<div th:object="${myUploadForm}">
+						<br /> File to upload: <input th:field="*{fileDatas}" type="file" />
+						<!-- <br /> <input type="submit" value="Upload"> -->
+					</div>
+					<br>
+					<button type="submit" class="btn btn-default">create</button>
 				</form>
 			</div>
 		</div>

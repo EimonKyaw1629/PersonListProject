@@ -11,36 +11,7 @@
 
 <title>Person List Template</title>
 
-<script>
-$(document).ready(function() {
-    $('#sampleForm').submit(
-        function(event) {
-            var fullname = $('#fn').val();
-            var classname = $('#cs').val();                
-            var data = 'fullname='
-                    + $('#fn').val()
-                    +'& classname='
-                    +$('#cs').val();
-            alert( data );
-            $.ajax({
-                url : $("#sampleForm").attr("action"),
-                data : 'fullname='
-                    + $('#fn').val()
-                    +'& classname='
-                    +$('#cs').val();
-                type : "POST",
- 
-                success : function(response) {
-                    alert( response );
-                },
-                error : function(xhr, status, error) {
-                    alert(xhr.responseText);
-                }
-            });
-            return false;
-        });
-    });
-</script>
+
 </head>
 <body>
 	<div layout:fragment="content">

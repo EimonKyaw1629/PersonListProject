@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.personlist.dao.PersonInfoDAO;
 import com.example.personlist.model.AddressInfo;
+import com.example.personlist.model.MyUploadForm;
 import com.example.personlist.model.PersonInfo;
 
 @Controller
@@ -31,8 +32,12 @@ public class MainController {
 		return "main";
 	}
 
-	@RequestMapping(value = "/form")
-	String form() {
+	@RequestMapping(value = "/form", method = RequestMethod.GET)
+	public String form(Model model) {
+		 
+		MyUploadForm myUploadForm = new MyUploadForm();
+		model.addAttribute("myUploadForm", myUploadForm);
+		 
 		return "form";
 	}
 
@@ -157,13 +162,14 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "/searchInfo", method = RequestMethod.POST)
-	public String searchPersonInfo(@Valid @ModelAttribute("person") PersonInfo info, BindingResult result, Model m) {
-		System.out.println("latest" + info.getFullName());
-		System.out.println("latest" + info.getClassName());
-		List<PersonInfo> pinfo = dao.getSearchPersonInfo(info.getFullName(), info.getClassName());// fullname,
+	public String searchPersonInfo( @RequestParam(value = "fullname") String firstname,@RequestParam(value = "classname") String classname,Model m) {//@ModelAttribute("person") PersonInfo info, BindingResult result, Model m) {
+		System.out.println("latest" + firstname);
+		System.out.println("latest" + classname);
+		List<PersonInfo> pinfo = dao.getSearchPersonInfo(firstname,classname);//info.getFullName(), info.getClassName());// fullname,
 																									// classname);
 		m.addAttribute("personInfo", pinfo);
 		return "personList";
 	}
-
+	
+	
 }
