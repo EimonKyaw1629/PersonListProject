@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<head th:replace="layout/header :: header">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,122 +10,119 @@
 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 <title>Edit person Template</title>
 
-<!-- Bootstrap -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
 <script>
-$(document).ready(function() {
-    $('#editpage').submit(
-        function(event) {
-        	// reference to form object
-        	var form = this;
-                // for stopping the default action of element
-                e.preventDefault();
-                // mapthat will hold form data
-                var formData = {}
-        	//iterate over form elements   
-                $.each(this, function(i, v){
-        	    var input = $(v);
-        	    // populate form data as key-value pairs
-                    // with the name of input as key and its value as value
-        	    formData[input.attr("name")] = input.val();
-                });
-                alert ( formData[input.attr("name")] );
-                $.ajax({
-                    type: "POST", // method attribute of form
-                    url: $("#editpage").attr("action"),  // action attribute of form
-                  
-        	    // convert form data to json format
-                    data : JSON.stringify(formData),
+	$(document).ready(function() {
+		$('#editpage').submit(function(event) {
+			// reference to form object
+			var form = this;
+			// for stopping the default action of element
+			e.preventDefault();
+			// mapthat will hold form data
+			var formData = {}
+			//iterate over form elements   
+			$.each(this, function(i, v) {
+				var input = $(v);
+				// populate form data as key-value pairs
+				// with the name of input as key and its value as value
+				formData[input.attr("name")] = input.val();
+			});
+			alert(formData[input.attr("name")]);
+			$.ajax({
+				type : "POST", // method attribute of form
+				url : $("#editpage").attr("action"), // action attribute of form
 
-                success : function(response) {
-                    alert( response );
-                },
-                error : function(xhr, status, error) {
-                    alert(xhr.responseText);
-                }
-            });
-            return false;
-        });
+				// convert form data to json format
+				data : JSON.stringify(formData),
 
-    });
+				success : function(response) {
+					alert(response);
+				},
+				error : function(xhr, status, error) {
+					alert(xhr.responseText);
+				}
+			});
+			return false;
+		});
+
+	});
 </script>
 </head>
 <body>
+	<div class="form-horizontal" layout:fragment="content">
+		<div class="container">
+			<div class="col-md-6 col-md-offset-3">
+				<h2>Person Info Edit</h2>
+				<form id="editpage" action="/edit" method="post"
+					th:object="${person}">
+					<input type="hidden" th:value="${person.PersonID}" name="pid" />
 
-	<div class="form-horizontal">
-		<div class="col-md-6 col-md-offset-3">
-			<h2>Person Info Edit</h2>
-			<form id="editpage" action="/edit" method="post" th:object="${person}">
-				<input type="hidden" th:value="${person.PersonID}" name="pid" />
-
-				<div class="form-group">
-					<label for="FullName" class="col-sm-2 control-label">FullName</label>
-					<div class="col-sm-7">
-						<input type="text" class="form-control" name="fu"
-							placeholder="FullName" th:value="${person.FullName}">
+					<div class="form-group">
+						<label for="FullName" class="col-sm-2 control-label">FullName</label>
+						<div class="col-sm-7">
+							<input type="text" class="form-control" name="fu"
+								placeholder="FullName" th:value="${person.FullName}">
+						</div>
 					</div>
-				</div>
 
-				<div class="form-group">
-					<label for="FirstName" class="col-sm-2 control-label">FirstName</label>
-					<div class="col-sm-7">
-						<input type="text" class="form-control" name="fs"
-							placeholder="FirstName" th:value="${person.FirstName}">
+					<div class="form-group">
+						<label for="FirstName" class="col-sm-2 control-label">FirstName</label>
+						<div class="col-sm-7">
+							<input type="text" class="form-control" name="fs"
+								placeholder="FirstName" th:value="${person.FirstName}">
+						</div>
 					</div>
-				</div>
 
-				<div class="form-group">
-					<label for="LastName" class="col-sm-2 control-label">LastName</label>
-					<div class="col-sm-7">
-						<input type="text" class="form-control" name="ls"
-							placeholder="LastName" th:value="${person.LastName}">
+					<div class="form-group">
+						<label for="LastName" class="col-sm-2 control-label">LastName</label>
+						<div class="col-sm-7">
+							<input type="text" class="form-control" name="ls"
+								placeholder="LastName" th:value="${person.LastName}">
+						</div>
 					</div>
-				</div>
 
-				<div class="form-group">
-					<label for="ClassName" class="col-sm-2 control-label">ClassName</label>
-					<div class="col-sm-7">
-						<input type="text" class="form-control" name="cs"
-							placeholder="ClassName" th:value="${person.ClassName}">
+					<div class="form-group">
+						<label for="ClassName" class="col-sm-2 control-label">ClassName</label>
+						<div class="col-sm-7">
+							<input type="text" class="form-control" name="cs"
+								placeholder="ClassName" th:value="${person.ClassName}">
+						</div>
 					</div>
-				</div>
 
-				<div class="form-group">
-					<label for="Grade" class="col-sm-2 control-label">Grade</label>
-					<div class="col-sm-7">
-						<input type="text" class="form-control" name="g"
-							placeholder="Grade" th:value="${person.Grade}">
+					<div class="form-group">
+						<label for="Grade" class="col-sm-2 control-label">Grade</label>
+						<div class="col-sm-7">
+							<input type="text" class="form-control" name="g"
+								placeholder="Grade" th:value="${person.Grade}">
+						</div>
 					</div>
-				</div>
 
-				<div class="form-group">
-					<label for="address1" class="col-sm-2 control-label">Address1</label>
-					<div class="col-sm-7">
-						<input type="text" class="form-control" name="a1"
-							placeholder="address1" th:value="${person.address}">
+					<div th:each="person : ${person.alist}">
+						<div class="form-group">
+							<label for="address1" class="col-sm-2 control-label">Address</label>
+							<div class="col-sm-7">
+								<input type="hidden" th:value="${person.AddressID}" name="aid" />
+
+								<input type="text" class="form-control" name="a"
+									th:value="${person.address}">
+							</div>
+						</div>
 					</div>
-				</div>
-				<div th:each="person : ${person.alist}">
-				
-				</div>
 
-			
-
-				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-10">
-						<button type="submit" class="btn btn-default" name="update">Update</button>
+					<div id='TextBoxesGroup'></div>
+					<div>
+						<input type='button' value='Add Address' id='addButton'
+							onCLick="AddRow()">
 					</div>
-				</div>
-			</form>
+
+
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+							<button type="submit" class="btn btn-default" name="update">Update</button>
+						</div>
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="/webjars/jquery/3.2.1/jquery.min.js"></script>
-	<!-- Include all compiled plugins (below), or include individual files as needed -->
-	<script src="/webjars/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </body>
 </html>

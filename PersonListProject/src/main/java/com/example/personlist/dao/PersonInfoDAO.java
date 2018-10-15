@@ -144,7 +144,7 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		}
 	}
 	
-	public void editPersonInfo(PersonInfo info)
+	public void editPersonInfo(PersonInfo info,List<AddressInfo> ainfo)
 	{
 		PersonInfo P = this.findPersonInfo(info.getPersonID());
 		List<AddressInfo> a = this.findAddressInfo(info.getPersonID());
@@ -159,17 +159,30 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		if(a!=null)
 		{
 				String sql = AddressInfoMapper.AD_UPDATE_SQL;
+			for (AddressInfo addressInfo : ainfo) {
+				if(addressInfo.getAddressID()==0)
+				{
+					String isql = AddressInfoMapper.AD_UPDATE_SQL;
+					Object[] params = new Object[] {info.getPersonID(),addressInfo.getAddress()};
+					
+					getJdbcTemplate().update(isql, params);
+				}
+				else
+				{
+					Object[] params = new Object[] {info.getPersonID(),addressInfo.getAddress(),addressInfo.getAddressID()};
+					
+					getJdbcTemplate().update(sql, params);
+				}
+					
+				
+			}
 			
-			Object[] params = new Object[] {info.getPersonID(),info.getAddress(),info.getPersonID()};
-			
-			getJdbcTemplate().update(sql, params);
 		}
 		else
 		{
-			//this.insertInfo(info);
+			
 		}
 		
 	}
-	
 	
 }
