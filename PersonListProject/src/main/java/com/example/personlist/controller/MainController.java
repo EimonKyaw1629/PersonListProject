@@ -28,7 +28,7 @@ import com.example.personlist.model.PersonInfo;
 
 @Controller
 public class MainController {
-	
+
 	@Autowired
 	private PersonInfoDAO dao;
 
@@ -36,7 +36,7 @@ public class MainController {
 	String main() {
 		return "main";
 	}
-	
+
 	@RequestMapping(value = "/form")
 	String form() {
 		return "form";
@@ -59,7 +59,7 @@ public class MainController {
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	public String insertPersonInfo(PersonInfo personinfo, @RequestParam String addText) {
 		List<String> addrlist = null;
-        addrlist = Arrays.asList(addText.split(","));
+		addrlist = Arrays.asList(addText.split(","));
 		dao.insertInfo(personinfo, addrlist);
 		return "redirect:/personList";
 	}
@@ -98,7 +98,7 @@ public class MainController {
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	public String geteditPersonInfo(PersonInfo personinfo, Model m) {
-		
+
 		dao.editPersonInfo(personinfo);
 
 		List<PersonInfo> list = dao.getPersonInfo();

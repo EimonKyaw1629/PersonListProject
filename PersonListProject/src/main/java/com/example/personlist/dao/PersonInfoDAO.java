@@ -85,11 +85,12 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 	
 	public void deleteInfo(int pid) {
 		String sql = PersonInfoMapper.DELETE_SQL;
-		
 		Object[] params = new Object[] {pid};
-		
 		getJdbcTemplate().update(sql, params);
-	
+		
+		String AddrSql = AddressInfoMapper.AD_DELETE_SQL;
+		Object[] paramsAddr = new Object[] {pid};
+		getJdbcTemplate().update(AddrSql, paramsAddr);
 	}
 	
 	
