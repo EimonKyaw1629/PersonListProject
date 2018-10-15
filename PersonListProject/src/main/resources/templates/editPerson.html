@@ -11,48 +11,22 @@
 <title>Edit person Template</title>
 
 <!-- Bootstrap -->
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
-<script>
-$(document).ready(function() {
-    $('#editpage').submit(
-        function(event) {
-        	// reference to form object
-        	var form = this;
-                // for stopping the default action of element
-                e.preventDefault();
-                // mapthat will hold form data
-                var formData = {}
-        	//iterate over form elements   
-                $.each(this, function(i, v){
-        	    var input = $(v);
-        	    // populate form data as key-value pairs
-                    // with the name of input as key and its value as value
-        	    formData[input.attr("name")] = input.val();
-                });
-                alert ( formData[input.attr("name")] );
-                $.ajax({
-                    type: "POST", // method attribute of form
-                    url: $("#editpage").attr("action"),  // action attribute of form
-                  
-        	    // convert form data to json format
-                    data : JSON.stringify(formData),
 
-                success : function(response) {
-                    alert( response );
-                },
-                error : function(xhr, status, error) {
-                    alert(xhr.responseText);
-                }
-            });
-            return false;
-        });
+<script type="text/javascript">
+var button = document.getElementById('button');
+alert(button);
+button.onclick = getIDs;
 
-    });
+function getIDs(){
+ var id,divs = document.getElementsByTagName('div');
+    for (var i = 0; i < divs.length; i++) {        
+         id = divs[i].id //  .id is a method 
+        alert(id);
+    }
+}
 </script>
+
 </head>
 <body>
 	<div class="form-horizontal" layout:fragment="content">
@@ -102,16 +76,23 @@ $(document).ready(function() {
 					</div>
 				</div>
 
-				<div th:each="person : ${person.alist}">
-					<div class="form-group">
-						<label for="address1" class="col-sm-2 control-label">Address</label>
-						<div class="col-sm-7">
-						<input type="hidden" th:value="${person.AddressID}" name="aid" />
-					
-						<input type="text" class="form-control" name="a"
-							 th:value="${person.address}">
+				<div th:each="person,stat : ${person.alist}">
+				
+				<div >
+					<div class="form-group" >
+						
+						<div >
+						<label for="address1" class="col-sm-2 control-label">Address</label><input type="hidden" th:value="${person.AddressID}" name="aid" />
+						<input type="text" class="form-control" name="a" th:value="${person.address}" style="left:50px;">
+						 <input type='button' value='Remove Button' id='${stat.index}' onCLick="this.parentElement.remove();">
 						</div>
+						
 					</div>
+					</div>
+					
+				
+					
+		
 				</div>
 
 			<div id='TextBoxesGroup' >

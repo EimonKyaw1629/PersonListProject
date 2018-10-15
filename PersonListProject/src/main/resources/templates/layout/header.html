@@ -61,7 +61,21 @@
 	     {
 	      $("#TextBoxDiv" + counter).remove();
 	     }
-	
+	     var button = document.getElementById('button');
+	     alert(button);
+	     button.onclick = getIDs;
+
+	     function getIDs(obj){
+	    	//  var button = document.getElementById('button');
+	    	var id = obj.id;
+
+	 	     alert(id);
+	     // var id,divs = document.getElementsByTagName('div');
+	    //     for (var i = 0; i < divs.length; i++) {        
+	    //          id = divs[i].id //  .id is a method 
+	     //        alert(id);
+	     //    }
+	     }
 </script>
 
 <link rel="stylesheet"

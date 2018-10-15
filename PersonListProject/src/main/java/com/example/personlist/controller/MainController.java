@@ -139,27 +139,32 @@ public class MainController {
 	public String geteditPersonInfo(@RequestParam(value = "pid") String pid, Model m,
 			@RequestParam(value = "fu") String fullname, @RequestParam(value = "fs") String firstname,
 			@RequestParam(value = "ls") String lastname, @RequestParam(value = "cs") String classname,
-			@RequestParam(value = "g") String grade,@RequestParam(value = "aid")String[] aid,@RequestParam(value = "a")String[] ar) {
+			@RequestParam(value = "g") String grade,@RequestParam(value = "aid",required = false)String[] aid,@RequestParam(value = "a",required = false)String[] ar) {
 			
-		System.out.println(ar[0]);
+		//System.out.println(ar[0]);
 		PersonInfo personinfo = new PersonInfo(Integer.valueOf(pid), fullname, firstname, lastname, classname, grade);
 
 		List<AddressInfo> alist = new ArrayList<AddressInfo>();
-		System.out.println(aid.length);
+		//System.out.println(aid.length);
+		if(ar != null)
+		{
 			for(int j =0;j<ar.length;j++)
 			{
 				AddressInfo ainfo= new AddressInfo();
 				ainfo.setPersonID(Integer.valueOf(pid));
+				if(aid!=null)
+				{
 				int f = aid.length;
-				if(f>j)
+				if(f>j && f>0)
 				{
 					ainfo.setAddressID(Integer.parseInt(aid[j]));
+				}
 				}
 				
 				ainfo.Address = ar[j];
 				alist.add(ainfo);
 			}
-			
+		}
 		dao.editPersonInfo(personinfo, alist);
 		
 		return "redirect:/personList";
