@@ -57,6 +57,7 @@ public class MainController {
 		List<PersonInfo> newPList= new ArrayList<PersonInfo>();
 		List<AddressInfo> adlist = new ArrayList<AddressInfo>();
 		PersonInfo newinfo = new PersonInfo();
+		
 		if(ainfo!=null)
 		{
 		String[] output = ainfo.split("/>");

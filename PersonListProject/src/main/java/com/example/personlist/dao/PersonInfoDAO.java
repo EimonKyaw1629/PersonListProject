@@ -1,6 +1,7 @@
 package com.example.personlist.dao;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -41,12 +42,16 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 	{
 		String sql = AddressInfoMapper.XML_SELECT;
 		Object[] params = new Object[] {};
-		AddressInfoMapper mapper = new AddressInfoMapper();
-		//String list = (String)this.getJdbcTemplate().queryForObject(sql, params,mapper);
-		String name = (String)getJdbcTemplate().queryForObject(
-				sql, new Object[] {  }, String.class);
-		System.out.println(name);
-		return name;
+		//AddressInfoMapper mapper = new AddressInfoMapper();
+		try
+		{
+			String name = (String)getJdbcTemplate().queryForObject(sql, params, String.class);
+			return name;
+		}
+		catch(EmptyResultDataAccessException ex)
+		{
+			return null;
+		}
 	}
 	
 	public PersonInfo findPersonInfo(int pid)
