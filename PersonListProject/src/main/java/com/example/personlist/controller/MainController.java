@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,7 +27,7 @@ import com.example.personlist.model.PersonInfo;
 
 @Controller
 public class MainController {
-
+	
 	@Autowired
 	private PersonInfoDAO dao;
 
@@ -131,6 +132,7 @@ public class MainController {
 	      }
 	      MultipartFile[] fileDatas = myUploadForm.getFileDatas();
 	      //
+	      
 	      List<File> uploadedFiles = new ArrayList<File>();
 	      List<String> failedFiles = new ArrayList<String>();
 	 
@@ -139,10 +141,12 @@ public class MainController {
 	         // Client File Name
 	         String name = fileData.getOriginalFilename();
 	         System.out.println("Client File Name = " + name);
-	 
+	         
+	         
 	         if (name != null && name.length() > 0) {
 	            try {
 	               // Create the file at server
+	               name = UUID.randomUUID() + name;
 	               File serverFile = new File(uploadRootDir.getAbsolutePath() + File.separator + name);
 	 
 	               BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
@@ -151,6 +155,9 @@ public class MainController {
 	               //
 	               uploadedFiles.add(serverFile);
 	               System.out.println("Write file: " + serverFile);
+	               
+	               dao.insertUpload(description, uploadRootPath, name, serverFile);
+	               
 	            } catch (Exception e) {
 	               System.out.println("Error Write file: " + name);
 	               failedFiles.add(name);
@@ -162,8 +169,6 @@ public class MainController {
 	      model.addAttribute("failedFiles", failedFiles);
 	      return "redirect:/personList";
 	   }
-	
-	
 	
 	@RequestMapping(value = "/edit/pid={pid}")
 	public String editPersonInfo(@PathVariable int pid, Model m) {

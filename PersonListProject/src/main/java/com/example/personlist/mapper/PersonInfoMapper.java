@@ -15,6 +15,8 @@ public class PersonInfoMapper implements RowMapper<PersonInfo> {
 	public static final String DELETE_SQL = "DELETE FROM Tb_Person WHERE PersonID = ?";
 	public static final String UPDATE_SQL = "Update Tb_Person set FullName=?,FirstName=?,LastName=?,ClassName=?,Grade=? where PersonID=?";
 
+	public static final String file_INSERT_SQL = "insert into Tb_File(personID,description,uploadRootPath,name,serverFile) values(?,?,?,?,?)";
+			
 	@Override
 	public PersonInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 		// TODO Auto-generated method stub

@@ -1,5 +1,6 @@
 package com.example.personlist.dao;
 
+import java.io.File;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -43,6 +44,7 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		List<AddressInfo> list = this.getJdbcTemplate().query(sql, params,mapper);
 		return list;
 	}
+	
 	public PersonInfo findPersonInfo(int pid)
 	{
 		String sql = PersonInfoMapper.BASE_SQL +" where PersonID=?";
@@ -123,6 +125,16 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 			getJdbcTemplate().update(AddrSql, paramsAddr);
 		}
 	}
+	
+	public void insertUpload(String description, String uploadRootPath, String name, File serverFile) {
+		String sql = PersonInfoMapper.file_INSERT_SQL;
+		String serverfile = ""+serverFile;
+		List<PersonInfo> list = getPersonInfo();
+		
+		Object[] params = new Object[] {list.get(list.size()-1).getPersonID(), description, uploadRootPath, name, serverfile};
+		getJdbcTemplate().update(sql, params);
+	}
+	
 	public List<PersonInfo> getSearchPersonInfo(String fullname,String classname)
 	{
 		String sql=null;
