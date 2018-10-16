@@ -30,6 +30,11 @@ public class MainController {
 	@Autowired
 	private PersonInfoDAO dao;
 
+	@RequestMapping(value = "/layout")
+	String main1() {
+		return "layout/layout";
+	}
+	
 	@RequestMapping(value = "/main")
 	String main() {
 		return "main";
@@ -99,21 +104,15 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
-	public String insertPersonInfo(PersonInfo personinfo, @RequestParam String addText) {
+	public String insertPersonInfo(PersonInfo personinfo, @RequestParam String addText, HttpServletRequest request, //
+	         Model model, //
+	         @ModelAttribute("myUploadForm") MyUploadForm myUploadForm) {
 		List<String> addrlist = null;
 		addrlist = Arrays.asList(addText.split(","));
 		dao.insertInfo(personinfo, addrlist);
-		return "redirect:/personList";
+		
+		return this.doUpload(request, model, myUploadForm);
 	}
-
-	@RequestMapping(value = "/uploadOneFile", method = RequestMethod.POST)
-	   public String uploadOneFileHandlerPOST(HttpServletRequest request, //
-	         Model model, //
-	         @ModelAttribute("myUploadForm") MyUploadForm myUploadForm) {
-	 
-	      return this.doUpload(request, model, myUploadForm);
-	 
-	   }
 	
 	private String doUpload(HttpServletRequest request, Model model, //
 	         MyUploadForm myUploadForm) {
@@ -161,7 +160,7 @@ public class MainController {
 	      model.addAttribute("description", description);
 	      model.addAttribute("uploadedFiles", uploadedFiles);
 	      model.addAttribute("failedFiles", failedFiles);
-	      return "redirect:/insert";
+	      return "redirect:/personList";
 	   }
 	
 	

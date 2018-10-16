@@ -2,31 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org"
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="~{layout/layout}">
-<head th:replace="layout/header :: header">
+
 <head>
 <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- The above 3 meta tags ＊must＊ come first in the head; any other head content must come ＊after＊ these tags -->
 <title>Edit person Template</title>
-
-<!-- Bootstrap -->
-
-
-<script type="text/javascript">
-var button = document.getElementById('button');
-alert(button);
-button.onclick = getIDs;
-
-function getIDs(){
-var id,divs = document.getElementsByTagName('div');
-   for (var i = 0; i < divs.length; i++) {
-        id = divs[i].id //  .id is a method
-       alert(id);
-   }
-}
-</script>
-
 </head>
 <body>
     <div class="form-horizontal" layout:fragment="content">
