@@ -63,25 +63,61 @@
 														style="width: 350px; height: 20px;"></td>
 													<td align="left"></td>
 												</tr>
-											</table><br>
+											</table>
+											<br>
 										</td>
 									</tr>
 								</table>
 							</td>
 						</tr>
-					</table>
-					<div th:object="${myUploadForm}" class="form-group">
-						<label for="Grade">File Description</label><input th:field="*{description}" class="form-control" placeholder="Description"/><br>
-						<label for="Grade">File to upload (1)</label><input th:field="*{fileDatas}" type="file" onchange="readURL(this);"/>
-						<label for="Grade">File to upload (2)</label><input th:field="*{fileDatas}" type="file" onchange="readURL(this);"/>
-						<label for="Grade">File to upload (3)</label><input th:field="*{fileDatas}" type="file" onchange="readURL(this);"/>
-					
-						<br><img id="ShowImage" src="#" />
-						<img id="ShowImage" src="#" />
-						<img id="ShowImage" src="#" />
-					</div>
-					<br>
+					</table><br>
 
+					<!-- file追加 -->
+					<div th:object="${myUploadForm}" class="form-group">
+					<label for="Grade">File Description</label><input th:field="*{description}" class="form-control" placeholder="Description" /><br>
+						<table>
+							<tr>
+								<td colspan="2" align="left" bgcolor="#FFFFFF">
+									<table>
+										<tr>
+											<td colspan="5" bgcolor="#FFFFFF" height="25" align="left">
+												<input name="fileAddButton" type="button" style="cursor: hand"
+												onClick="fileInsRow()" value="File to upload"> <font
+												color="#FF0000">*</font> ファイルの追加は押してください。
+											</td>
+										</tr>
+										<tr>
+											<td height="25">
+												<table id="fileAddTable">
+													
+													<tr>
+														
+														<td><input th:field="*{fileDatas}" type="file" onchange="readURL(this);" name="fileAddText"/><td>
+														<td align="left"><img id="ShowImage" src="#" /></td>
+														
+													</tr>
+												</table>
+												<br>
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+
+					<!-- <div th:object="${myUploadForm}" class="form-group">
+						<label for="Grade">File Description</label><input th:field="*{description}" class="form-control" placeholder="Description" /><br> 
+						<label for="Grade">File to upload (1)</label><input th:field="*{fileDatas}" type="file" onchange="readURL(this);" />
+						<label for="Grade">File to upload (2)</label><input th:field="*{fileDatas}" type="file" onchange="readURL(this);" /> 
+						<label for="Grade">File to upload (3)</label><input th:field="*{fileDatas}" type="file" onchange="readURL(this);" /> <br>
+						
+						<img id="ShowImage" src="#" /> 
+						<img id="ShowImage" src="#" /> 
+						<img id="ShowImage" src="#" />
+					</div> -->
+					
+					<br>
 					<button type="submit" class="btn btn-default">create</button>
 				</form>
 			</div>
