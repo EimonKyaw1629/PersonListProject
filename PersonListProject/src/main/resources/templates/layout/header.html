@@ -72,12 +72,23 @@
 		var id = obj.id;
 
 		alert(id);
-		// var id,divs = document.getElementsByTagName('div');
-		//     for (var i = 0; i < divs.length; i++) {
-		//          id = divs[i].id //  .id is a method
-		//        alert(id);
-		//    }
 	}
+	
+	function readURL(input) {
+	    if (input.files && input.files[0]) {
+	        var reader = new FileReader();
+
+	        reader.onload = function (e) {
+	            $('#ShowImage')
+	                .attr('src', e.target.result)
+	                .width(125)
+	                .height(100);
+	        };
+
+	        reader.readAsDataURL(input.files[0]);
+	    }
+	}
+	
 </script>
 
 <link rel="stylesheet"
