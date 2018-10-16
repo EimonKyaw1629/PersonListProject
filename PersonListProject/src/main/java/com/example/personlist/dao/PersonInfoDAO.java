@@ -35,13 +35,17 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		return list;
 	}
 	
-	public List<AddressInfo> getAddressInfo()
+	
+	public String getAddressInfo()
 	{
-		String sql = AddressInfoMapper.AD_SELECT_SQL;
+		String sql = AddressInfoMapper.XML_SELECT;
 		Object[] params = new Object[] {};
 		AddressInfoMapper mapper = new AddressInfoMapper();
-		List<AddressInfo> list = this.getJdbcTemplate().query(sql, params,mapper);
-		return list;
+		//String list = (String)this.getJdbcTemplate().queryForObject(sql, params,mapper);
+		String name = (String)getJdbcTemplate().queryForObject(
+				sql, new Object[] {  }, String.class);
+		System.out.println(name);
+		return name;
 	}
 	public PersonInfo findPersonInfo(int pid)
 	{
