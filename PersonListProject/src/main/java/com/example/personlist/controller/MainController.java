@@ -53,47 +53,60 @@ public class MainController {
 	@RequestMapping(value = {  "/","/personList" }, method = RequestMethod.GET)//
 	public String showPersonInfo(Model m) {
 		List<PersonInfo> list = dao.getPersonInfo();
-		List<AddressInfo> ainfo = dao.getAddressInfo();
-		PersonInfo newinfo = null;
-		if (ainfo != null) {
-			List<PersonInfo> newPList= new ArrayList<PersonInfo>();
-			for(PersonInfo pinfo :list)
+		String ainfo = dao.getAddressInfo();
+		List<PersonInfo> newPList= new ArrayList<PersonInfo>();
+		List<AddressInfo> adlist = new ArrayList<AddressInfo>();
+		PersonInfo newinfo = new PersonInfo();
+		if(ainfo!=null)
+		{
+		String[] output = ainfo.split("/>");
+		for(String a :output)
+		{
+			
+			String[] animals = a.split("\\s+");
+			String []addressID=animals[1].split("\"");		
+			String []personID=animals[2].split("\"");
+			String []Address=animals[3].split("\"");
+			
+			
+			AddressInfo adr = new AddressInfo();
+			adr.setAddressID(Integer.valueOf(addressID[1]));
+			adr.setPersonID(Integer.valueOf(personID[1]));
+			adr.setAddress(Address[1]);
+			adlist.add(adr);
+			
+		}
+		for(PersonInfo pinfo :list)
+		{
+			pinfo.alist=new ArrayList<AddressInfo>();
+			for(AddressInfo inf:adlist)
 			{
-				pinfo.alist=new ArrayList<AddressInfo>();
-				for (AddressInfo addressInfo : ainfo) {
-					/*System.out.println(addressInfo.getAddressID());
-					System.out.println(addressInfo.getAddress());*/
-					if(addressInfo.PersonID ==pinfo.PersonID)
-					{
-						AddressInfo adr = new AddressInfo();
-						adr.setAddressID(addressInfo.getAddressID());
-						adr.setAddress(addressInfo.getAddress());
-						pinfo.alist.add(adr);
-						
-					}
-					
+				if(inf.PersonID ==pinfo.PersonID)
+				{
+					AddressInfo adr = new AddressInfo();
+					adr.setAddressID(inf.getAddressID());
+					adr.setAddress(inf.getAddress());
+					pinfo.alist.add(adr);
 					
 				}
-				newinfo = new PersonInfo(pinfo.getPersonID(),
-						pinfo.getFullName(),
-						pinfo.getFirstName(),
-						pinfo.getLastName(),
-						pinfo.getClassName(),
-						pinfo.getGrade(),
-						pinfo.alist);
-				newPList.add(newinfo);
-			
+				
 			}
 			
-					
-			m.addAttribute("personInfo", newPList);
-			
-			return "personList";
+			newinfo = new PersonInfo(pinfo.getPersonID(),
+					pinfo.getFullName(),
+					pinfo.getFirstName(),
+					pinfo.getLastName(),
+					pinfo.getClassName(),
+					pinfo.getGrade(),
+					pinfo.alist);
+			newPList.add(newinfo);
+		}
+		m.addAttribute("personInfo", newPList);
 			
 		}
 		else
 		{
-		m.addAttribute("personInfo", list);
+			m.addAttribute("personInfo", list);
 		}
 		return "personList";
 	}
