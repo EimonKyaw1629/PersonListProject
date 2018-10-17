@@ -4,119 +4,161 @@
 <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
 <meta name="keywords" content="Home" />
 <meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <script>
-	var oTbl;
-	//Row 追加
-	function insRow() {
-		oTbl = document.getElementById("addTable");
-		var oRow = oTbl.insertRow();
-		oRow.onmouseover = function() {
-			oTbl.clickedRowIndex = this.rowIndex
-		}; //clickedRowIndex - Rowの位置確認
-		var oCell = oRow.insertCell();
+    var oTbl;
+    //Row 追加
+    function insRow() {
+        oTbl = document.getElementById("addTable");
+        var oRow = oTbl.insertRow();
+        oRow.onmouseover = function() {
+            oTbl.clickedRowIndex = this.rowIndex
+        }; //clickedRowIndex - Rowの位置確認
+        var oCell = oRow.insertCell();
 
-		//Form Tag
-		var frmTag = "<input type=text name=addText style=width:350px; height:20px;> ";
-		frmTag += "<input type=button value='削除' onClick='removeRow()' style='cursor:hand'>";
-		oCell.innerHTML = frmTag;
-	}
-	//Row 削除
-	function removeRow() {
-		oTbl.deleteRow(oTbl.clickedRowIndex);
-	}
-	
-	/* var fTbl;
-	var fileCount = 1;
-	//Row 追加
-	function fileInsRow() {
-		fTbl = document.getElementById("fileAddTable");
-		var fRow = fTbl.insertRow();
-		fRow.onmouseover = function() {
-			fTbl.clickedRowIndex = this.rowIndex
-		}; //clickedRowIndex - Rowの位置確認
-		fileCount = fTbl.clickedRowIndex;
-		var fCell = fRow.insertCell();
-		
-		//Form Tag
-		var frmTag = '<input th:field="*{fileDatas}" type="file" onchange="readURL(this); name="fileName"">';
-		frmTag += '<img id="ShowImage'+fileCount+'" src="#" />'
-		frmTag += '<input type=button value="削除" onClick="fileRemoveRow()" style="cursor:hand">';
-		
-		fCell.innerHTML = frmTag;
-	}
-	//Row 削除
-	function fileRemoveRow() {
-		fTbl.deleteRow(fTbl.clickedRowIndex);
-	} */
-	
-	
-	var counter = 1;
+        //Form Tag
+        var frmTag = "<input type=text name=addText style=width:350px; height:20px;> ";
+        frmTag += "<input type=button value='削除' onClick='removeRow()' style='cursor:hand'>";
+        oCell.innerHTML = frmTag;
+    }
+    //Row 削除
+    function removeRow() {
+        oTbl.deleteRow(oTbl.clickedRowIndex);
+    }
+    
+    var fTbl;
+    //Row 追加
+    function fileInsRow() {
+        fTbl = document.getElementById("fileAddTable");
+        var fRow = fTbl.insertRow();
+        fRow.onmouseover = function() {
+            fTbl.clickedRowIndex = this.rowIndex
+        }; //clickedRowIndex - Rowの位置確認
+        var fCell = fRow.insertCell();
+        
+        //Form Tag
+        var frmTag = "<input th:field='*{fileDatas}' type=file onchange=readURL(this); name=fileAddText> ";
+        frmTag += "<img id=ShowImage src='#' />"
+        frmTag += "<input type=button value='削除' onClick='fileRemoveRow()' style='cursor:hand'>";
+        fCell.innerHTML = frmTag;
+    }
+    //Row 削除
+    function fileRemoveRow() {
+        fTbl.deleteRow(fTbl.clickedRowIndex);
+    }
+    
+    var counter = 1;
 
-	function AddRow() {
-		if (counter > 10) {
-			alert("Only 10 textboxes allow");
-			return false;
-		}
+    function AddRow() {
+        if (counter > 10) {
+            alert("Only 10 textboxes allow");
+            return false;
+        }
 
-		var newTextBoxDiv = $(document.createElement('div')).attr("id",
-				'TextBoxDiv' + counter);
+        var newTextBoxDiv = $(document.createElement('div')).attr("id",
+                'TextBoxDiv' + counter);
 
-		newTextBoxDiv
-				.after()
-				.html(
-						'<div class="form-group" id="TextBoxDiv'+counter+'"><div><label class="col-sm-2 control-label">Address </label>'
-								+ '<div class="col-sm-7"><input type="text" class="form-control" name="a'  
-								+ '"  th:value="" ></div>'
-								+ '<input type="button" value="Remove Button" id="removeButton'
-								+ counter
-								+ '" onclick="deleteControl('
-								+ counter + ')"></div></div>');
+        newTextBoxDiv
+                .after()
+                .html(
+                        '<div class="form-group" id="TextBoxDiv'+counter+'"><div><label class="col-sm-2 control-label">Address </label>'
+                                + '<div class="col-sm-7"><input type="text" class="form-control" name="a'
+                                + '"  th:value="" ></div>'
+                                + '<input type="button" value="Remove Button" id="removeButton'
+                                + counter
+                                + '" onclick="deleteControl('
+                                + counter + ')"></div></div>');
 
-		newTextBoxDiv.appendTo("#TextBoxesGroup");
+        newTextBoxDiv.appendTo("#TextBoxesGroup");
 
-		counter++;
-	}
+        counter++;
+    }
 
-	$("#upa").click(function() {
+    $("#upa").click(function() {
 
-		var msg = '';
-		for (i = 1; i < counter; i++) {
-			msg += "\n Textbox #" + i + " : " + $('#Address' + i).val();
-		}
-		alert(msg);
-	});
-	function deleteControl(counter) {
-		$("#TextBoxDiv" + counter).remove();
-	}
-	var button = document.getElementById('button');
-	alert(button);
-	button.onclick = getIDs;
+        var msg = '';
+        for (i = 1; i < counter; i++) {
+            msg += "\n Textbox #" + i + " : " + $('#Address' + i).val();
+        }
+        alert(msg);
+    });
+    function deleteControl(counter) {
+        $("#TextBoxDiv" + counter).remove();
+    }
+    var button = document.getElementById('button');
+    alert(button);
+    button.onclick = getIDs;
 
-	function getIDs(obj) {
-		//  var button = document.getElementById('button');
-		var id = obj.id;
+    function getIDs(obj) {
+        //  var button = document.getElementById('button');
+        var id = obj.id;
 
-		alert(id);
-	}
-	
-	/* function readURL(input) {
-	    if (input.files && input.files[0]) {
-	        var reader = new FileReader();
+        alert(id);
+    }
+    
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
 
-	        reader.onload = function (e) {
-	            $('#ShowImage'+fileCount)
-	                .attr('src', e.target.result)
-	                .width(125)
-	                .height(100);
-	        };
+            reader.onload = function (e) {
+                $('#ShowImage')
+                    .attr('src', e.target.result)
+                    .width(125)
+                    .height(100);
+            };
 
-	        reader.readAsDataURL(input.files[0]);
-	    }
-	} */
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
+    function AddImage() {
+        if (counter > 10) {
+            alert("Only 10 textboxes allow");
+            return false;
+        }
 
+        var newTextBoxDiv = $(document.createElement('div')).attr("id",
+                'ImageDiv' + counter);
+
+        
+        newTextBoxDiv
+                .after()
+                .html(
+                        '<div class="form-group" id="ImageDiv'+counter+'"><div><label class="col-sm-2 control-label">Image </label>'
+                                + '<div class="col-sm-7"></div>'
+                                +'<input th:value="" type="file" onchange="readURL(this);"name="fileAddText" /><br><img id="ShowImage" src="#" />'
+                                + '<input type="button" value="Remove Button" id="removeButton'
+                                + counter
+                                + '" onclick="deleteImageControl('
+                                + counter + ')"></div></div>');
+
+        newTextBoxDiv.appendTo("#ImageGroup");
+
+        counter++;
+    }
+function deleteImageControl(counter) {
+        $("#ImageDiv" + counter).remove();
+    }
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#ShowImage')
+                    .attr('src', e.target.result)
+                    .width(125)
+                    .height(100);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
 </script>
 
+
+<!-- file or img 設定 -->
 <script>
 	attachFile = {
 		idx : 0,

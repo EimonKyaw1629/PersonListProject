@@ -13,6 +13,7 @@ public class PersonInfo extends AddressInfo{
 	private String ClassName;
 	private String Grade;
 	public List<AddressInfo> alist;
+	public List<MyUploadForm> fileString;
 	
 	@Override
 	public String toString() {
@@ -58,7 +59,18 @@ public class PersonInfo extends AddressInfo{
 		this.alist = info;
 	}
 	
-
+	public PersonInfo(int personid,String fullname,String firstname,String lastname,String classname,String grade,List<AddressInfo> info,List<MyUploadForm> fl)
+	{
+		super();
+		this.PersonID =personid;
+		this.FullName = fullname;
+		this.FirstName = firstname;
+		this.LastName = lastname;
+		this.ClassName = classname;
+		this.Grade = grade;
+		this.alist = info;
+		this.fileString = fl;
+	}
 
 	public int getPersonID()
 	{
@@ -125,6 +137,9 @@ public class PersonInfo extends AddressInfo{
     	return this.alist;
     }
     
-  //  public void setAddressList()
+    public List<MyUploadForm> getFileString()
+    {
+    	return this.fileString;
+    }
   
 }

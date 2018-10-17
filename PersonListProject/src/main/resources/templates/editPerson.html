@@ -72,6 +72,21 @@
                 <div>
                 <input type='button' value='Add Address' id='addButton' onCLick="AddRow()">
                 </div>
+                 <div id='ImageGroup' ></div>
+                <div>
+                <input type='button' value='Add Image' id='addImage' onCLick="AddImage()">
+                </div>
+                
+            <div th:object="${upload}" class="form-group">
+            
+            <div th:each="list : ${upload}">
+            
+            	<input th:value="${list.uploadRootPath}" th:type="file" onchange="readURL(this);" name="fileAddText"/>	
+            	
+				<img id="ShowImage" src="#" />
+            		
+            </div>
+            	</div>
 
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
