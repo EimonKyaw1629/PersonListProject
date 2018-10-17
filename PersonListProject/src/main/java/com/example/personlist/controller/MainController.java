@@ -193,6 +193,10 @@ public class MainController {
 
 		PersonInfo info = dao.findPersonInfo(pid);
 		List<AddressInfo> ainfo = dao.findAddressInfo(pid);
+		List<MyUploadForm> upfile= dao.findFileList(pid);
+		List<String> imageUrlList = new ArrayList<String>();
+		if(info!=null)
+		{
 		if (ainfo != null) {
 
 			info.alist = new ArrayList<AddressInfo>();
@@ -202,12 +206,28 @@ public class MainController {
 				adr.setAddress(addressInfo.getAddress());
 				info.alist.add(adr);
 			}
+			if(!upfile.isEmpty())
+			{
+				info.fileString=new ArrayList<MyUploadForm>();
+				for(MyUploadForm form :upfile)
+				{
+					MyUploadForm upload = new MyUploadForm();
+					upload.setDescription(form.getDescription());
+					upload.setName(form.getName());
+					upload.setUploadRootPath(form.getUploadRootPath());
+					upload.setServerFile(form.getServerFile());
+					//upload.setFileDatas(form.getFileDatas());
+					info.fileString.add(upload);
+				}
+			}
+			
+		}
 			PersonInfo newinfo = new PersonInfo(info.getPersonID(), info.getFullName(), info.getFirstName(),
 					info.getLastName(), info.getClassName(), info.getGrade(), info.alist);
 			m.addAttribute("person", newinfo);
-
+			m.addAttribute("upload", upfile);
 			return "editPerson";
-
+		
 		} else {
 
 			m.addAttribute("person", info);

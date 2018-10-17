@@ -14,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.personlist.mapper.AddressInfoMapper;
 import com.example.personlist.mapper.PersonInfoMapper;
+import com.example.personlist.mapper.UploadFileMapper;
 import com.example.personlist.model.AddressInfo;
+import com.example.personlist.model.MyUploadForm;
 import com.example.personlist.model.PersonInfo;
 
 
@@ -108,6 +110,40 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		{
 			return null;
 		}
+	}
+	
+	public String findFile(int pid)
+	{
+		String sql = UploadFileMapper.file_Select_Sql;
+		Object[] params = new Object[] {pid};
+		UploadFileMapper mapper = new UploadFileMapper();
+		try
+		{
+			String name = (String)getJdbcTemplate().queryForObject(sql, params, String.class);
+			return name;
+		}
+		catch(EmptyResultDataAccessException ex)
+		{
+			return null;
+		}
+		
+	}
+	
+	public List<MyUploadForm> findFileList(int pid)
+	{
+		String sql = UploadFileMapper.file_Select_Sql+ " where PersonID=?";
+		Object[] params = new Object[] {pid};
+		UploadFileMapper mapper = new UploadFileMapper();
+		try
+		{
+			List<MyUploadForm> name =  this.getJdbcTemplate().query(sql, params,mapper);
+			return name;
+		}
+		catch(EmptyResultDataAccessException ex)
+		{
+			return null;
+		}
+		
 	}
 	
 	public void deleteInfo(int pid) {

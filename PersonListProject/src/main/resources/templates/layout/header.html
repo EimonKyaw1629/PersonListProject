@@ -111,6 +111,52 @@
 	    }
 	}
 	
+	function AddImage() {
+		if (counter > 10) {
+			alert("Only 10 textboxes allow");
+			return false;
+		}
+
+		var newTextBoxDiv = $(document.createElement('div')).attr("id",
+				'ImageDiv' + counter);
+
+		
+		newTextBoxDiv
+				.after()
+				.html(
+						'<div class="form-group" id="ImageDiv'+counter+'"><div><label class="col-sm-2 control-label">Image </label>'
+								+ '<div class="col-sm-7"></div>'
+								+'<input th:value="" type="file" onchange="readURL(this);"name="fileAddText" /><br><img id="ShowImage" src="#" />'
+								+ '<input type="button" value="Remove Button" id="removeButton'
+								+ counter
+								+ '" onclick="deleteImageControl('
+								+ counter + ')"></div></div>');
+
+		newTextBoxDiv.appendTo("#ImageGroup");
+
+		counter++;
+	}
+
+
+	function deleteImageControl(counter) {
+		$("#ImageDiv" + counter).remove();
+	}
+	function readURL(input) {
+	    if (input.files && input.files[0]) {
+	    	
+	        var reader = new FileReader();
+
+	        reader.onload = function (e) {
+	            $('#ShowImage')
+	                .attr('src', e.target.result)
+	                .width(125)
+	                .height(100);
+	        };
+
+	        reader.readAsDataURL(input.files[0]);
+	    }
+	}
+	
 </script>
 
 <link rel="stylesheet"
