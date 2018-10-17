@@ -5,6 +5,7 @@
 <meta name="keywords" content="Home" />
 <meta name="viewport"
     content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    
 <script>
     var oTbl;
     //Row 追加
@@ -125,12 +126,12 @@
                 .after()
                 .html(
                         '<div class="form-group" id="ImageDiv'+counter+'"><div><label class="col-sm-2 control-label">Image </label>'
-                                + '<div class="col-sm-7"></div>'
+                                + '<div class="col-sm-7"></div><div>'
                                 +'<input th:value="" type="file" onchange="readURL(this);"name="fileAddText" /><br><img id="ShowImage" src="#" />'
                                 + '<input type="button" value="Remove Button" id="removeButton'
                                 + counter
                                 + '" onclick="deleteImageControl('
-                                + counter + ')"></div></div>');
+                                + counter + ')"></div></div></div>');
 
         newTextBoxDiv.appendTo("#ImageGroup");
 
@@ -140,6 +141,7 @@ function deleteImageControl(counter) {
         $("#ImageDiv" + counter).remove();
     }
     function readURL(input) {
+    	alert(input);
         if (input.files && input.files[0]) {
             
             var reader = new FileReader();

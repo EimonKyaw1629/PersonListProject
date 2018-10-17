@@ -146,6 +146,8 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		
 	}
 	
+	
+	
 	public void deleteInfo(int pid) {
 		String sql = PersonInfoMapper.DELETE_SQL;
 		Object[] params = new Object[] {pid};
@@ -171,13 +173,32 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		}
 	}
 	
-	public void insertUpload(String uploadRootPath, String name, File serverFile) {
+	public void insertUpload(String uploadRootPath, String name, File serverFile,int pid) {
 		String sql = PersonInfoMapper.file_INSERT_SQL;
-		String serverfile = ""+serverFile;
-		List<PersonInfo> list = getPersonInfo();
-		
-		Object[] params = new Object[] {list.get(list.size()-1).getPersonID(), uploadRootPath, name, serverfile};
-		getJdbcTemplate().update(sql, params);
+		List<MyUploadForm> uform = this.findFileList(pid);
+		if(!uform.isEmpty())
+		{
+			String u_sql = UploadFileMapper.file_UPDATE_SQL;
+			
+			Object[] params = new Object[] { uploadRootPath, name, serverFile,pid};
+			
+			getJdbcTemplate().update(sql, params);
+			
+		}
+		else
+		{
+			String serverfile = ""+serverFile;
+			Object[] params = new Object[] {pid, uploadRootPath, name, serverfile};
+			getJdbcTemplate().update(sql, params);
+		}
+		if(pid ==0)
+		{
+			String serverfile = ""+serverFile;
+			List<PersonInfo> list = getPersonInfo();
+			
+			Object[] params = new Object[] {list.get(list.size()-1).getPersonID(), uploadRootPath, name, serverfile};
+			getJdbcTemplate().update(sql, params);
+		}
 	}
 	
 	public List<PersonInfo> getSearchPersonInfo(String fullname,String classname)
@@ -252,5 +273,5 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		}
 		
 	}
-	
+
 }

@@ -2,15 +2,24 @@ package com.example.personlist.controller;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.example.personlist.dao.PersonInfoDAO;
 import com.example.personlist.model.AddressInfo;
@@ -131,14 +141,15 @@ public class MainController {
 		addrlist = Arrays.asList(addText.split(","));
 		dao.insertInfo(personinfo, addrlist);
 
-		return this.doUpload(request, model, files);
+		return this.doUpload(request, model, files,Integer.valueOf(""));
 	}
 	
 	private String doUpload(HttpServletRequest request, Model model, //
-			MultipartFile[] myUploadForm) {
+			MultipartFile[] myUploadForm,int pid) {
 	 
 	      // Root Directory.
 	      String uploadRootPath = request.getServletContext().getRealPath("upload");
+	     // String uploadRootPath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath()+"/"; 
 	      System.out.println("uploadRootPath=" + uploadRootPath);
 	 
 	      File uploadRootDir = new File(uploadRootPath);
@@ -172,7 +183,7 @@ public class MainController {
 	               uploadedFiles.add(serverFile);
 	               System.out.println("Write file: " + serverFile);
 	               
-	               dao.insertUpload(uploadRootPath, name, serverFile);
+	               dao.insertUpload(uploadRootPath, name, serverFile,pid);
 	               
 	            } catch (Exception e) {
 	               System.out.println("Error Write file: " + name);
@@ -185,8 +196,8 @@ public class MainController {
 	      return "redirect:/personList";
 	   }
 	
-	@RequestMapping(value = "/edit/pid={pid}")
-	public String editPersonInfo(@PathVariable int pid, Model m) {
+	@RequestMapping(value = "/edit/pid={pid}",produces = MediaType.IMAGE_JPEG_VALUE)
+	public String editPersonInfo(@PathVariable int pid, Model m,HttpServletResponse response) throws IOException {
 
 		PersonInfo info = dao.findPersonInfo(pid);
 		List<AddressInfo> ainfo = dao.findAddressInfo(pid);
@@ -203,33 +214,58 @@ public class MainController {
 				adr.setAddress(addressInfo.getAddress());
 				info.alist.add(adr);
 			}
-			if(!upfile.isEmpty())
-			{
-				info.fileString=new ArrayList<MyUploadForm>();
-				for(MyUploadForm form :upfile)
-				{
-					MyUploadForm upload = new MyUploadForm();
-					upload.setDescription(form.getDescription());
-					upload.setName(form.getName());
-					upload.setUploadRootPath(form.getUploadRootPath());
-					upload.setServerFile(form.getServerFile());
-					//upload.setFileDatas(form.getFileDatas());
-					info.fileString.add(upload);
-				}
-			}
 			
+
+		} 
+		if(!upfile.isEmpty())
+		{
+			info.fileString=new ArrayList<MyUploadForm>();
+			for(MyUploadForm form :upfile)
+			{
+				MyUploadForm upload = new MyUploadForm();
+				
+				upload.setName(form.getName());
+				upload.setUploadRootPath(form.getUploadRootPath());
+				upload.setServerFile(form.getServerFile());
+				
+				  
+				//upload.setFileDatas(form.getFileDatas());
+				info.fileString.add(upload);
+			}
 		}
-			PersonInfo newinfo = new PersonInfo(info.getPersonID(), info.getFullName(), info.getFirstName(),
-					info.getLastName(), info.getClassName(), info.getGrade(), info.alist);
-			m.addAttribute("person", newinfo);
-			m.addAttribute("upload", upfile);
-			return "editPerson";
 		
-		} else {
+		
+		
+		if(!upfile.isEmpty())
+		{
+				for(MyUploadForm f :upfile)
+				{
+					
+					File imageDir = new File(f.getUploadRootPath());
+					for(File imageFile : imageDir.listFiles()){
+					  String imageFileName = imageFile.getName();
+					 
+					  // add this images name to the list we are building up
+					  imageUrlList.add(imageFileName);
+					
+					}
+				}
+		}
+		
+		
+		PersonInfo newinfo = new PersonInfo(info.getPersonID(), info.getFullName(), info.getFirstName(),
+				info.getLastName(), info.getClassName(), info.getGrade(), info.alist);
+		 
+		m.addAttribute("person", newinfo);//myUploadForm
+		m.addAttribute("upload", upfile);
+		m.addAttribute("imageUrlList", imageUrlList);
+
+		return "editPerson";
+	}else {
 
 			m.addAttribute("person", info);
 		}
-
+		
 		return "editPerson";
 	}
 
@@ -237,7 +273,8 @@ public class MainController {
 	public String geteditPersonInfo(@RequestParam(value = "pid") String pid, Model m,
 			@RequestParam(value = "fu") String fullname, @RequestParam(value = "fs") String firstname,
 			@RequestParam(value = "ls") String lastname, @RequestParam(value = "cs") String classname,
-			@RequestParam(value = "g") String grade,@RequestParam(value = "aid",required = false)String[] aid,@RequestParam(value = "a",required = false)String[] ar) {
+			@RequestParam(value = "g") String grade,@RequestParam(value = "aid",required = false)String[] aid,@RequestParam(value = "a",required = false)String[] ar,
+			@RequestParam(value ="files") MultipartFile[] uploadingFiles ,HttpServletRequest request) {
 			
 		//System.out.println(ar[0]);
 		PersonInfo personinfo = new PersonInfo(Integer.valueOf(pid), fullname, firstname, lastname, classname, grade);
@@ -265,7 +302,8 @@ public class MainController {
 		}
 		dao.editPersonInfo(personinfo, alist);
 		
-		return "redirect:/personList";
+		//return "redirect:/personList";
+		 return this.doUpload(request, m, uploadingFiles,personinfo.getPersonID());
 	}
 
 	@RequestMapping(value = "/searchInfo", method = RequestMethod.POST)
