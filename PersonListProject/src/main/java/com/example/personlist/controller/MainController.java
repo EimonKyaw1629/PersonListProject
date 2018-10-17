@@ -125,19 +125,17 @@ public class MainController {
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	public String insertPersonInfo(PersonInfo personinfo, @RequestParam String addText, HttpServletRequest request, //
 	         Model model, //
-	         @ModelAttribute("myUploadForm") MyUploadForm myUploadForm) {
+	         @RequestParam(value = "files",required = false)MultipartFile[] files) {
+
 		List<String> addrlist = null;
 		addrlist = Arrays.asList(addText.split(","));
 		dao.insertInfo(personinfo, addrlist);
-		
-		return this.doUpload(request, model, myUploadForm);
+
+		return this.doUpload(request, model, files);
 	}
 	
 	private String doUpload(HttpServletRequest request, Model model, //
-	         MyUploadForm myUploadForm) {
-	 
-	      String description = myUploadForm.getDescription();
-	      System.out.println("Description: " + description);
+			MultipartFile[] myUploadForm) {
 	 
 	      // Root Directory.
 	      String uploadRootPath = request.getServletContext().getRealPath("upload");
@@ -148,7 +146,7 @@ public class MainController {
 	      if (!uploadRootDir.exists()) {
 	         uploadRootDir.mkdirs();
 	      }
-	      MultipartFile[] fileDatas = myUploadForm.getFileDatas();
+	      MultipartFile[] fileDatas = myUploadForm;
 	      //
 	      
 	      List<File> uploadedFiles = new ArrayList<File>();
@@ -174,7 +172,7 @@ public class MainController {
 	               uploadedFiles.add(serverFile);
 	               System.out.println("Write file: " + serverFile);
 	               
-	               dao.insertUpload(description, uploadRootPath, name, serverFile);
+	               dao.insertUpload(uploadRootPath, name, serverFile);
 	               
 	            } catch (Exception e) {
 	               System.out.println("Error Write file: " + name);
@@ -182,7 +180,6 @@ public class MainController {
 	            }
 	         }
 	      }
-	      model.addAttribute("description", description);
 	      model.addAttribute("uploadedFiles", uploadedFiles);
 	      model.addAttribute("failedFiles", failedFiles);
 	      return "redirect:/personList";

@@ -135,12 +135,12 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		}
 	}
 	
-	public void insertUpload(String description, String uploadRootPath, String name, File serverFile) {
+	public void insertUpload(String uploadRootPath, String name, File serverFile) {
 		String sql = PersonInfoMapper.file_INSERT_SQL;
 		String serverfile = ""+serverFile;
 		List<PersonInfo> list = getPersonInfo();
 		
-		Object[] params = new Object[] {list.get(list.size()-1).getPersonID(), description, uploadRootPath, name, serverfile};
+		Object[] params = new Object[] {list.get(list.size()-1).getPersonID(), uploadRootPath, name, serverfile};
 		getJdbcTemplate().update(sql, params);
 	}
 	

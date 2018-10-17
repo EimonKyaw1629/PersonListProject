@@ -26,7 +26,8 @@
 		oTbl.deleteRow(oTbl.clickedRowIndex);
 	}
 	
-	var fTbl;
+	/* var fTbl;
+	var fileCount = 1;
 	//Row 追加
 	function fileInsRow() {
 		fTbl = document.getElementById("fileAddTable");
@@ -34,18 +35,21 @@
 		fRow.onmouseover = function() {
 			fTbl.clickedRowIndex = this.rowIndex
 		}; //clickedRowIndex - Rowの位置確認
+		fileCount = fTbl.clickedRowIndex;
 		var fCell = fRow.insertCell();
 		
 		//Form Tag
-		var frmTag = "<input th:field='*{fileDatas}' type=file onchange=readURL(this); name=fileAddText> ";
-		frmTag += "<img id=ShowImage src='#' />"
-		frmTag += "<input type=button value='削除' onClick='fileRemoveRow()' style='cursor:hand'>";
+		var frmTag = '<input th:field="*{fileDatas}" type="file" onchange="readURL(this); name="fileName"">';
+		frmTag += '<img id="ShowImage'+fileCount+'" src="#" />'
+		frmTag += '<input type=button value="削除" onClick="fileRemoveRow()" style="cursor:hand">';
+		
 		fCell.innerHTML = frmTag;
 	}
 	//Row 削除
 	function fileRemoveRow() {
 		fTbl.deleteRow(fTbl.clickedRowIndex);
-	}
+	} */
+	
 	
 	var counter = 1;
 
@@ -96,12 +100,12 @@
 		alert(id);
 	}
 	
-	function readURL(input) {
+	/* function readURL(input) {
 	    if (input.files && input.files[0]) {
 	        var reader = new FileReader();
 
 	        reader.onload = function (e) {
-	            $('#ShowImage')
+	            $('#ShowImage'+fileCount)
 	                .attr('src', e.target.result)
 	                .width(125)
 	                .height(100);
@@ -109,15 +113,144 @@
 
 	        reader.readAsDataURL(input.files[0]);
 	    }
-	}
-	
+	} */
+
 </script>
+
+<script>
+	attachFile = {
+		idx : 0,
+		add : function() {
+			var o = this;
+			var idx = o.idx;
+
+			var div = document.createElement('div');
+			div.style.marginTop = '3px';
+			div.id = 'file' + o.idx;
+
+			var dv = document.createElement('dv');
+			dv.style.marginTop = '3px';
+			dv.id = 'dv' + o.idx;
+
+			var file = document.all ? document
+					.createElement('<input name="files" >') : document
+					.createElement('input');
+			file.type = 'file';
+			file.name = 'files';
+			file.size = '40';
+			file.id = 'fileField' + o.idx;
+			file.onchange = function() {
+				o.prev(this, 'dv' + idx)
+			};
+
+			var btn = document.createElement('input');
+			btn.type = 'button';
+			btn.value = '削除';
+			btn.onclick = function() {
+				o.del(idx)
+			};
+			btn.style.marginLeft = '5px';
+
+			div.appendChild(file);
+			div.appendChild(btn);
+			document.getElementById('attachFileDiv').appendChild(div);
+			document.getElementById('attachFileDiv').appendChild(dv);
+
+			o.idx++;
+		},
+		del : function(idx) { 
+			if (document.getElementById('fileField' + idx).value != ''
+					&& !confirm('削除しますか?')) {
+				return;
+			}
+			document.getElementById('attachFileDiv').removeChild(
+					document.getElementById('file' + idx));
+			document.getElementById('attachFileDiv').removeChild(
+					document.getElementById('dv' + idx));
+		},
+		prev : function(targetObj, View_area) { 
+			var preview = document.getElementById(View_area); //div id
+			alert(View_area);
+			var ua = window.navigator.userAgent;
+			
+			if (ua.indexOf("MSIE") > -1) {
+				targetObj.select();
+				try {
+					var src = document.selection.createRange().text; 
+					var ie_preview_error = document
+							.getElementById("ie_preview_error_" + View_area);
+
+					if (ie_preview_error) {
+						preview.removeChild(ie_preview_error); 
+					}
+
+					var img = document.getElementById(View_area); 
+
+					
+					img.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"
+							+ src + "', sizingMethod='scale')";
+				} catch (e) {
+					if (!document.getElementById("ie_preview_error_"
+							+ View_area)) {
+						var info = document.createElement("<p>");
+						info.id = "ie_preview_error_" + View_area;
+						info.innerHTML = e.name;
+						preview.insertBefore(info, null);
+					}
+				}
+				
+			} else {
+				var files = targetObj.files;
+				for (var i = 0; i < files.length; i++) {
+					var file = files[i];
+					var imageType = /image.*/; 
+					var prevImg = document.getElementById("prev_" + View_area);
+					if (!file.type.match(imageType)) {
+						preview.removeChild(prevImg);
+						continue;
+					}
+					
+					if (prevImg) {
+						preview.removeChild(prevImg);
+					}
+					var img = document.createElement("img");
+					img.id = "prev_" + View_area;
+					img.classList.add("obj");
+					img.file = file;
+					img.style.width = '100px';
+					img.style.height = '100px';
+					preview.appendChild(img);
+					if (window.FileReader) { 
+						var reader = new FileReader();
+						reader.onloadend = (function(aImg) {
+							return function(e) {
+								aImg.src = e.target.result;
+							};
+						})(img);
+						reader.readAsDataURL(file);
+					} else { 
+						if (!document.getElementById("sfr_preview_error_"
+								+ View_area)) {
+							var info = document.createElement("p");
+							info.id = "sfr_preview_error_" + View_area;
+							info.innerHTML = "not supported FileReader";
+							preview.insertBefore(info, null);
+						}
+					}
+				}
+			}
+
+		}
+	}
+</script>
+
 
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
+	<script
+	src="https://rawgit.com/fyneworks/multifile/2.1.0-preview/jquery.MultiFile.js"></script>
 </head>
 
 <body>
