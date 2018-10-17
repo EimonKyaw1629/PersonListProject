@@ -73,7 +73,11 @@ public class MainController {
 			AddressInfo adr = new AddressInfo();
 			adr.setAddressID(Integer.valueOf(addressID[1]));
 			adr.setPersonID(Integer.valueOf(personID[1]));
+		if(Address.length==2)
+		{
 			adr.setAddress(Address[1]);
+		}
+			
 			adlist.add(adr);
 			
 		}
