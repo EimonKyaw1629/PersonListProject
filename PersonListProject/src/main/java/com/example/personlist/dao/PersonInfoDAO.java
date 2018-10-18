@@ -154,6 +154,10 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		String AddrSql = AddressInfoMapper.AD_DELETE_SQL;
 		Object[] paramsAddr = new Object[] {pid};
 		getJdbcTemplate().update(AddrSql, paramsAddr);
+		
+		/*String FileSql = PersonInfoMapper.file_DELETE_SQL;
+		Object[] paramsFile = new Object[] {pid};
+		getJdbcTemplate().update(FileSql, paramsFile);*/
 	}
 	
 	

@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,6 +33,11 @@ public class MainController {
 	@RequestMapping(value = "/layout")
 	String main1() {
 		return "layout/layout";
+	}
+	
+	@RequestMapping(value = "/index")
+	String main2() {
+		return "index";
 	}
 	
 	@RequestMapping(value = "/main")
@@ -134,14 +138,17 @@ public class MainController {
 		return this.doUpload(request, model, files);
 	}
 	
+	private static final String filePath = "C:\\Users\\kwy\\Documents\\git\\PersonListProject\\PersonListProject\\src\\main\\resources\\static\\images";
+	
 	private String doUpload(HttpServletRequest request, Model model, //
 			MultipartFile[] myUploadForm) {
 	 
 	      // Root Directory.
-	      String uploadRootPath = request.getServletContext().getRealPath("upload");
+	      String uploadRootPath = request.getServletContext().getRealPath("/static/images");
+
 	      System.out.println("uploadRootPath=" + uploadRootPath);
 	 
-	      File uploadRootDir = new File(uploadRootPath);
+	      File uploadRootDir = new File(filePath);
 	      // Create directory if it not exists.
 	      if (!uploadRootDir.exists()) {
 	         uploadRootDir.mkdirs();
@@ -279,4 +286,6 @@ public class MainController {
 	}
 	
 	
+
+
 }
