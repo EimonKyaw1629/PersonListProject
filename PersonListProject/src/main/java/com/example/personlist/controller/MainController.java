@@ -138,7 +138,7 @@ public class MainController {
 		addrlist = Arrays.asList(addText.split(","));
 		dao.insertInfo(personinfo, addrlist);
 
-		return this.doUpload(request, model, files,Integer.valueOf(""));
+		return this.doUpload(request, model, files, Integer.valueOf(""));
 	}
 	
 	private static final String filePath = "C:\\Users\\kwy\\Documents\\git\\PersonListProject\\PersonListProject\\src\\main\\resources\\static\\images";
