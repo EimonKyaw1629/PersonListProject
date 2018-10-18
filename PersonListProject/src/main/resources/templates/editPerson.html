@@ -12,7 +12,7 @@
     <div class="container">
         <div class="col-md-6 col-md-offset-3">
             <h2>Person Info Edit</h2>
-            <form id="editpage" action="/edit" method="post" th:object="${person}">
+            <form id="editpage" action="/edit" method="post" th:object="${person}"  enctype="multipart/form-data">
                 <input type="hidden" th:value="${person.PersonID}" name="pid" />
 
                 <div class="form-group">
@@ -72,11 +72,15 @@
                 <div>
                 <input type='button' value='Add Address' id='addButton' onCLick="AddRow()">
                 </div>
+                <div id="attachFileDiv"  class="form-group">
+					<input type="button" value="追加" onclick="attachFile.add()" style="margin-left: 5px">
+					</div>
+                <!--  
                  <div id='ImageGroup' ></div>
                 <div>
                 <input type='button' value='Add Image' id='addImage' onCLick="AddImage()">
                 </div>
-                
+                -->
             <div th:object="${upload}" class="form-group">
             
             <div th:each="list : ${upload}">

@@ -4,13 +4,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class MyUploadForm {
 
-	private String description;
+
 	private int FileID;
 	private int PersonID;
 	private String uploadRootPath;
 	private String name;
 	private String serverFile;
-
+	
 	// Upload files.
 	private MultipartFile[] fileDatas;
 
@@ -18,23 +18,18 @@ public class MyUploadForm {
 
 	}
 
-	public MyUploadForm(int fid, int pid, String des, String upath, String na, String sf) {
+	public MyUploadForm(int fid, int pid, String upath, String na, String sf) {
 		super();
 		this.FileID = fid;
 		this.PersonID = pid;
-		this.description = des;
+
 		this.uploadRootPath = upath;
 		this.name = na;
 		this.serverFile = sf;
+		
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
+	
 
 	public MultipartFile[] getFileDatas() {
 		return fileDatas;
