@@ -1,0 +1,42 @@
+parameter model - search,update = 
+
+
+where (@a is null or  FullName=@a) and (ISNUlLL(@b) or ClassName=@b)
+
+rowmapper
+
+update ‚Åmapper.update(model)
+
+fullnmae =- null throw error
+
+jquary, bootstruct
+
+
+master ,
+child
+
+
+
+xsd - definition
+xsl- style sheet
+xml - data
+
+jquary 
+mybatis- mapper
+------------------------------------------------------------------------------------
+
+dynamic address
+image upload
+
+address in list
+select 
+person -> subquery
+select rowto text
+
+f12
+f5
+
+layer 4 -> tcp,up
+
+l7-> http‚Ì— ‚É‚ ‚é•”•ª
+

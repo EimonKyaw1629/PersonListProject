@@ -163,7 +163,7 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 	}
 	
 	
-	public void insertInfo(PersonInfo personinfo,List<String> addrlist) {
+	public int insertInfo(PersonInfo personinfo,List<String> addrlist) {
 		String sql = PersonInfoMapper.INSERT_SQL;
 		Object[] params = new Object[] {personinfo.getFullName(),personinfo.getFirstName(),personinfo.getLastName(),personinfo.getClassName(),personinfo.getGrade()};
 		getJdbcTemplate().update(sql, params);
@@ -175,34 +175,31 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 			Object[] paramsAddr = new Object[] {list.get(list.size()-1).getPersonID(),addrlist.get(i)};
 			getJdbcTemplate().update(AddrSql, paramsAddr);
 		}
+		
+		return list.get(list.size()-1).getPersonID();
 	}
 	
 	public void insertUpload(String uploadRootPath, String name, File serverFile,int pid) {
 		String sql = PersonInfoMapper.file_INSERT_SQL;
 		List<MyUploadForm> uform = this.findFileList(pid);
-		if(!uform.isEmpty())
+		
+		String serverfile = ""+serverFile;
+		Object[] params = new Object[] {pid, uploadRootPath, name, serverfile};
+		getJdbcTemplate().update(sql, params);
+		/*if(!uform.isEmpty())
 		{
-			String u_sql = UploadFileMapper.file_UPDATE_SQL;
 			
-			Object[] params = new Object[] { uploadRootPath, name, serverFile,pid};
-			
+			String serverfile = ""+serverFile;
+			Object[] params = new Object[] {pid, uploadRootPath, name, serverfile};
 			getJdbcTemplate().update(sql, params);
-			
 		}
 		else
 		{
 			String serverfile = ""+serverFile;
 			Object[] params = new Object[] {pid, uploadRootPath, name, serverfile};
 			getJdbcTemplate().update(sql, params);
-		}
-		if(pid ==0)
-		{
-			String serverfile = ""+serverFile;
-			List<PersonInfo> list = getPersonInfo();
-			
-			Object[] params = new Object[] {list.get(list.size()-1).getPersonID(), uploadRootPath, name, serverfile};
-			getJdbcTemplate().update(sql, params);
-		}
+		}*/
+		
 	}
 	
 	public List<PersonInfo> getSearchPersonInfo(String fullname,String classname)

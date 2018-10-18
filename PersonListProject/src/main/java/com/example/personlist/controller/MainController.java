@@ -136,16 +136,17 @@ public class MainController {
 
 		List<String> addrlist = null;
 		addrlist = Arrays.asList(addText.split(","));
-		dao.insertInfo(personinfo, addrlist);
+		int pid=dao.insertInfo(personinfo, addrlist);
 
-		return this.doUpload(request, model, files,Integer.valueOf(""));
+		return this.doUpload(request, model, files,pid);
 	}
 	
-	private static final String filePath = "C:\\Users\\kwy\\Documents\\git\\PersonListProject\\PersonListProject\\src\\main\\resources\\static\\images";
+	private static final String filePath = "\\static\\images";
 	
 	private String doUpload(HttpServletRequest request, Model model, //
 			MultipartFile[] myUploadForm,int pid) {
-	 
+		
+		
 	      // Root Directory.
 	      String uploadRootPath = request.getServletContext().getRealPath("upload");
 	      
@@ -225,41 +226,21 @@ public class MainController {
 			{
 				MyUploadForm upload = new MyUploadForm();
 				
-				upload.setName(form.getName());
+				upload.setName("/static/images/"+form.getName());
 				upload.setUploadRootPath(form.getUploadRootPath());
 				upload.setServerFile(form.getServerFile());
 				
-				  
-				//upload.setFileDatas(form.getFileDatas());
 				info.fileString.add(upload);
 			}
 		}
 		
 		
-		
-		if(!upfile.isEmpty())
-		{
-				for(MyUploadForm f :upfile)
-				{
-					
-					File imageDir = new File(f.getUploadRootPath());
-					for(File imageFile : imageDir.listFiles()){
-					  String imageFileName = imageFile.getName();
-					 
-					  // add this images name to the list we are building up
-					  imageUrlList.add(imageFileName);
-					
-					}
-				}
-		}
-		
-		
 		PersonInfo newinfo = new PersonInfo(info.getPersonID(), info.getFullName(), info.getFirstName(),
-				info.getLastName(), info.getClassName(), info.getGrade(), info.alist);
+				info.getLastName(), info.getClassName(), info.getGrade(), info.alist,info.fileString);
 		 
 		m.addAttribute("person", newinfo);//myUploadForm
 		m.addAttribute("upload", upfile);
-		m.addAttribute("imageUrlList", imageUrlList);
+		//m.addAttribute("imageUrlList", imageUrlList);
 
 		return "editPerson";
 	}else {
