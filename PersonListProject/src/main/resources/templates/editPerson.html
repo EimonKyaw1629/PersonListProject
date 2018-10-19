@@ -81,8 +81,11 @@
              
               <div th:each="person,stat : ${person.fileString}">
                     <div class="form-group" >
-                    	<img id="ShowImage" th:src="${person.name}" height="100" width="100"/>
-                    	
+                    <input type="hidden" th:value="${person.FileID}"  name="image"/> 
+                    <input type="hidden" th:value="${person.uploadRootPath}"  name="uploadRootPath"/> 
+                    <input type="hidden" th:value="${person.serverFile}"  name="serverFile"/>  
+                    	<img id="ShowImage" th:src="${person.name}" height="100" width="100" name="name" th:value="${person.name}"/>
+                    		<input type="button" onCLick="this.parentElement.remove();"  value='Remove image'/>
                     </div>
                 </div>
              
