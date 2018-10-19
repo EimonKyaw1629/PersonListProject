@@ -75,23 +75,17 @@
                 <div id="attachFileDiv"  class="form-group">
 					<input type="button" value="追加" onclick="attachFile.add()" style="margin-left: 5px">
 					</div>
-                <!--  
-                 <div id='ImageGroup' ></div>
-                <div>
-                <input type='button' value='Add Image' id='addImage' onCLick="AddImage()">
+					<div>
+					<!-- <img id="ShowImage" src="/static/images/8a165428-6b7b-41db-860b-c6127cbe14c9images1.jpg" /> -->
+					</div>
+             
+              <div th:each="person,stat : ${person.fileString}">
+                    <div class="form-group" >
+                    	<img id="ShowImage" th:src="${person.name}" height="100" width="100"/>
+                    	
+                    </div>
                 </div>
-                -->
-            <div th:object="${upload}" class="form-group">
-            
-            <div th:each="list : ${upload}">
-            
-            	<input th:value="${list.uploadRootPath}" th:type="file" onchange="readURL(this);" name="fileAddText"/>	
-            	
-				<img id="ShowImage" src="#" />
-            		
-            </div>
-            	</div>
-
+             
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="submit" class="btn btn-default" name="update">Update</button>
