@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.personlist.dao.PersonInfoDAO;
@@ -151,8 +154,6 @@ public class MainController {
 	      // Root Directory.
 	      String uploadRootPath = request.getServletContext().getRealPath("upload");
 	      
-	     // String uploadRootPath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath()+"/"; 
-
 	      System.out.println("uploadRootPath=" + uploadRootPath);
 	 
 	      File uploadRootDir = new File(filePath);
@@ -293,13 +294,9 @@ public class MainController {
 	public String searchPersonInfo( @RequestParam(value = "fullname") String firstname,@RequestParam(value = "classname") String classname,Model m) {//@ModelAttribute("person") PersonInfo info, BindingResult result, Model m) {
 		System.out.println("latest" + firstname);
 		System.out.println("latest" + classname);
-		List<PersonInfo> pinfo = dao.getSearchPersonInfo(firstname,classname);//info.getFullName(), info.getClassName());// fullname,
-																									// classname);
+		List<PersonInfo> pinfo = dao.getSearchPersonInfo(firstname,classname);
+		
 		m.addAttribute("personInfo", pinfo);
 		return "personList";
 	}
-	
-	
-
-
 }
