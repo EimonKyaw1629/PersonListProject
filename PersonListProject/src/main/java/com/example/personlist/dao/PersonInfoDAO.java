@@ -157,16 +157,21 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		Object[] paramsAddr = new Object[] {pid};
 		getJdbcTemplate().update(AddrSql, paramsAddr);
 		
+		deleteFile(pid);
+	}
+	
+	public void deleteFile(int pid) {
+		
 		List<MyUploadForm> list = findFileList(pid);
-		String FileSql = PersonInfoMapper.file_DELETE_SQL;
-		Object[] paramsFile = new Object[] {pid};
-		getJdbcTemplate().update(FileSql, paramsFile);
 		
 		for (int j = 0; j < list.size(); j++) {
 			File deleteFolder = new File(list.get(j).getServerFile());
 			deleteFolder.delete();
 		}
-
+		
+		String FileSql = PersonInfoMapper.file_DELETE_SQL;
+		Object[] paramsFile = new Object[] {pid};
+		getJdbcTemplate().update(FileSql, paramsFile);
 	}
 	
 
