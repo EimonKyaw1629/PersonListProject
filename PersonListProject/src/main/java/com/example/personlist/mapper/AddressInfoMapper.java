@@ -15,7 +15,9 @@ public class AddressInfoMapper implements RowMapper<AddressInfo>
 	public static final String AD_INSERT_SQL = "insert into Tb_Address(personID,address) values(?,?)";
 	public static final String AD_DELETE_SQL = "DELETE FROM Tb_Address WHERE PersonID = ?";
 	public static final String AD_ADDELETE_SQL = "DELETE FROM Tb_Address WHERE AddressID = ?";
-	public static final String XML_SELECT = "SELECT  AddressID,PersonID,Address  FROM Tb_Address FOR XML AUTO";
+	public static final String XML_SELECT = "Select PersonID,FullName,ClassName\r\n" + 
+			",SUBSTRING((SELECT ',' + Address as 'data()'  FROM Tb_Address where Tb_Address.PersonID = Tb_Person.PersonID FOR XML PATH('')), 2, 999999)\r\n" + 
+			" from Tb_Person";
 	
 	@Override
 	public AddressInfo mapRow(ResultSet rs, int rowNum) throws SQLException {

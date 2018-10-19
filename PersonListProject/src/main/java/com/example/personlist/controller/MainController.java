@@ -4,14 +4,18 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -20,12 +24,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.personlist.dao.PersonInfoDAO;
 import com.example.personlist.model.AddressInfo;
 import com.example.personlist.model.MyUploadForm;
 import com.example.personlist.model.PersonInfo;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 public class MainController {
@@ -56,70 +63,15 @@ public class MainController {
 		 
 		return "form";
 	}
+	
+	
 
 	@RequestMapping(value = {  "/","/personList" }, method = RequestMethod.GET)//
-	public String showPersonInfo(Model m) {
-		List<PersonInfo> list = dao.getPersonInfo();
-		String ainfo = dao.getAddressInfo();
-		List<PersonInfo> newPList= new ArrayList<PersonInfo>();
-		List<AddressInfo> adlist = new ArrayList<AddressInfo>();
-		PersonInfo newinfo = new PersonInfo();
+	public String showPersonInfo(Model m) throws JsonProcessingException {
+		List<Map<String, Object>> list = dao.getPersonInfoList();
 		
-		if(ainfo!=null)
-		{
-		String[] output = ainfo.split("/>");
-		for(String a :output)
-		{
-			
-			String[] animals = a.split("\\s+");
-			String []addressID=animals[1].split("\"");		
-			String []personID=animals[2].split("\"");
-			String []Address=animals[3].split("\"");
-			
-			
-			AddressInfo adr = new AddressInfo();
-			adr.setAddressID(Integer.valueOf(addressID[1]));
-			adr.setPersonID(Integer.valueOf(personID[1]));
-		if(Address.length==2)
-		{
-			adr.setAddress(Address[1]);
-		}
-			
-			adlist.add(adr);
-			
-		}
-		for(PersonInfo pinfo :list)
-		{
-			pinfo.alist=new ArrayList<AddressInfo>();
-			for(AddressInfo inf:adlist)
-			{
-				if(inf.PersonID ==pinfo.PersonID)
-				{
-					AddressInfo adr = new AddressInfo();
-					adr.setAddressID(inf.getAddressID());
-					adr.setAddress(inf.getAddress());
-					pinfo.alist.add(adr);
-					
-				}
-				
-			}
-			
-			newinfo = new PersonInfo(pinfo.getPersonID(),
-					pinfo.getFullName(),
-					pinfo.getFirstName(),
-					pinfo.getLastName(),
-					pinfo.getClassName(),
-					pinfo.getGrade(),
-					pinfo.alist);
-			newPList.add(newinfo);
-		}
-		m.addAttribute("personInfo", newPList);
-			
-		}
-		else
-		{
-			m.addAttribute("personInfo", list);
-		}
+		m.addAttribute("personInfo", list);
+	
 		return "personList";
 	}
 	
@@ -226,8 +178,9 @@ public class MainController {
 			for(MyUploadForm form :upfile)
 			{
 				MyUploadForm upload = new MyUploadForm();
-				
-				upload.setName("/static/images/"+form.getName());
+				upload.setFileID(form.getFileID());
+				upload.setPersonID(form.getPersonID());
+				upload.setName(form.getName());
 				upload.setUploadRootPath(form.getUploadRootPath());
 				upload.setServerFile(form.getServerFile());
 				
@@ -319,7 +272,13 @@ public class MainController {
 		return "personList";
 	}
 	
-	
+	@ResponseBody
+	@RequestMapping(value = "/photo/{name}", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
+	public byte[] testphoto(@PathVariable String name) throws IOException {
+
+		File imgfile = new File("C:\\99_TMPFiles\\images\\" + name);
+	    return Files.readAllBytes(imgfile.toPath());
+	}
 
 
 }

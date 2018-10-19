@@ -3,19 +3,23 @@ package com.example.personlist.dao;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.personlist.mapper.AddressInfoMapper;
+import com.example.personlist.mapper.ConbineModelMapper;
 import com.example.personlist.mapper.PersonInfoMapper;
 import com.example.personlist.mapper.UploadFileMapper;
 import com.example.personlist.model.AddressInfo;
+import com.example.personlist.model.ConbineModel;
 import com.example.personlist.model.MyUploadForm;
 import com.example.personlist.model.PersonInfo;
 
@@ -39,9 +43,19 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		return list;
 	}
 	
+	public List<Map<String, Object>>   getPersonInfoList()
+	{
+		String sql = AddressInfoMapper.XML_SELECT;//PersonInfoMapper.BASE_SQL;
+		
+		ConbineModelMapper mapper = new ConbineModelMapper();
+		List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sql);
+		
+		return list;
+	}
+	
 	public String getAddressInfo()
 	{
-		String sql = AddressInfoMapper.XML_SELECT;
+		String sql = AddressInfoMapper.AD_SELECT_SQL;
 		Object[] params = new Object[] {};
 		//AddressInfoMapper mapper = new AddressInfoMapper();
 		try
