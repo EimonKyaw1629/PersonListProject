@@ -39,7 +39,6 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		return list;
 	}
 	
-	
 	public String getAddressInfo()
 	{
 		String sql = AddressInfoMapper.XML_SELECT;
@@ -153,16 +152,24 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		Object[] params = new Object[] {pid};
 		getJdbcTemplate().update(sql, params);
 		
+		
 		String AddrSql = AddressInfoMapper.AD_DELETE_SQL;
 		Object[] paramsAddr = new Object[] {pid};
 		getJdbcTemplate().update(AddrSql, paramsAddr);
 		
-		/*String FileSql = PersonInfoMapper.file_DELETE_SQL;
+		List<MyUploadForm> list = findFileList(pid);
+		String FileSql = PersonInfoMapper.file_DELETE_SQL;
 		Object[] paramsFile = new Object[] {pid};
-		getJdbcTemplate().update(FileSql, paramsFile);*/
+		getJdbcTemplate().update(FileSql, paramsFile);
+		
+		for (int j = 0; j < list.size(); j++) {
+			File deleteFolder = new File(list.get(j).getServerFile());
+			deleteFolder.delete();
+		}
+
 	}
 	
-	
+
 	public int insertInfo(PersonInfo personinfo,List<String> addrlist) {
 		String sql = PersonInfoMapper.INSERT_SQL;
 		Object[] params = new Object[] {personinfo.getFullName(),personinfo.getFirstName(),personinfo.getLastName(),personinfo.getClassName(),personinfo.getGrade()};
