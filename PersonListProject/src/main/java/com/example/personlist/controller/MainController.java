@@ -258,11 +258,13 @@ public class MainController {
 			@RequestParam(value = "fu") String fullname, @RequestParam(value = "fs") String firstname,
 			@RequestParam(value = "ls") String lastname, @RequestParam(value = "cs") String classname,
 			@RequestParam(value = "g") String grade,@RequestParam(value = "aid",required = false)String[] aid,@RequestParam(value = "a",required = false)String[] ar,
-			@RequestParam(value ="files") MultipartFile[] uploadingFiles ,HttpServletRequest request) {
+			@RequestParam(value ="files") MultipartFile[] uploadingFiles ,HttpServletRequest request,@RequestParam(value = "image",required = false)int[] img 
+			,@RequestParam(value = "uploadRootPath",required = false)String[] uploadRootPath ,@RequestParam(value = "serverFile",required = false)String[] serverFile 
+			,@RequestParam(value = "name",required = false)String[] name) {
 			
 		//System.out.println(ar[0]);
 		PersonInfo personinfo = new PersonInfo(Integer.valueOf(pid), fullname, firstname, lastname, classname, grade);
-
+		List<MyUploadForm>uplist= new ArrayList<MyUploadForm>();
 		List<AddressInfo> alist = new ArrayList<AddressInfo>();
 		//System.out.println(aid.length);
 		if(ar != null)
@@ -284,12 +286,30 @@ public class MainController {
 				alist.add(ainfo);
 			}
 		}
-		dao.editPersonInfo(personinfo, alist);
+		if(img!=null)
+		{
+			for(int k=0;k<img.length;k++)
+			{
+				MyUploadForm frm = new MyUploadForm();
+				frm.setFileID(img[k]);
+				frm.setUploadRootPath(uploadRootPath[k]);
+				frm.setServerFile(serverFile[k]);
+				if(name!=null)
+				{
+					frm.setName(name[k]);
+				}
+				
+				uplist.add(frm);
+				//personinfo.fileString.add(frm);
+			}
+			
+		}
+		dao.editPersonInfo(personinfo, alist,uplist);
 		
 		//return "redirect:/personList";
 		 return this.doUpload(request, m, uploadingFiles,personinfo.getPersonID());
 	}
-
+	
 	@RequestMapping(value = "/searchInfo", method = RequestMethod.POST)
 	public String searchPersonInfo( @RequestParam(value = "fullname") String firstname,@RequestParam(value = "classname") String classname,Model m) {//@ModelAttribute("person") PersonInfo info, BindingResult result, Model m) {
 		System.out.println("latest" + firstname);

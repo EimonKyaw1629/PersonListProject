@@ -251,7 +251,7 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		}
 	}
 	
-	public void editPersonInfo(PersonInfo info,List<AddressInfo> ainfo)
+	public void editPersonInfo(PersonInfo info,List<AddressInfo> ainfo,List<MyUploadForm> upfrm)
 	{
 		PersonInfo P = this.findPersonInfo(info.getPersonID());
 		List<AddressInfo> a = this.findAddressInfo(info.getPersonID());
@@ -284,7 +284,28 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 			Object[] params = new Object[] {info.getPersonID()};
 			getJdbcTemplate().update(sql,params);
 		}
-		
+		if(!upfrm.isEmpty())
+		{
+			String dsql= UploadFileMapper.file_Delete_Sql;
+			Object[] params = new Object[] {info.getPersonID()};
+			
+			getJdbcTemplate().update(dsql, params);	
+			
+			for (MyUploadForm frm:upfrm) {
+				String isql = UploadFileMapper.file_INSERT_SQL;
+				Object[] param = new Object[] {info.getPersonID(),frm.getUploadRootPath(),frm.getName(),frm.getServerFile()};
+				
+				getJdbcTemplate().update(isql, param);
+			}
+			
+			
+		}
+		else
+		{	
+			String dsql= UploadFileMapper.file_Delete_Sql;
+			Object[] params = new Object[] {info.getPersonID()};
+			
+			getJdbcTemplate().update(dsql, params);	
+		}
 	}
-
 }
