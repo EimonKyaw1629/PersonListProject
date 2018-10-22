@@ -42,33 +42,12 @@
 						</tr>
 					<tr th:each="person : ${personInfo}">
      				 <td th:each="entry : ${person}" th:text="${entry.value}" ></td>
-     			<!-- 	<td> <a th:href="${'/edit/pid='+person.id}">Edit</a></td>
-							<td><a th:href="${'/delete/pid='+person.id}">Delete</a></td> -->
+     				 <td> <a th:href="${'/edit/pid='+person.PersonID}">Edit</a></td>
+						<td><a th:href="${'/delete/pid='+person.PersonID}">Delete</a></td>
+     			
   					 </tr>
 
-						</tr>
-					<!-- 	<tr>
-							<th>ID</th>
-							<th>Full Name</th>
-							<th>Class</th>
-							<th>住所</th>
-							<th>修正</th>
-							<th>削除</th>
-						</tr>
-						<tr th:each="person : ${personInfo}">
-							<td th:utext="${person.PersonID}">..</td>
-							<td th:utext="${person.FullName}">..</td>
-							<td th:utext="${person.ClassName}">..</td>
-							<td>
-							
-							<div th:each="list :${person.alist}">
-								<div th:utext="${list.address}"></div>
-							</div>
-							 
-						</td>
-							
-						</tr>
-						-->
+				
 					</table>
 				</form>
 			</div>
