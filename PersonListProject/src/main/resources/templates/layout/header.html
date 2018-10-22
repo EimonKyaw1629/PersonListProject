@@ -27,27 +27,6 @@
         oTbl.deleteRow(oTbl.clickedRowIndex);
     }
     
-    var fTbl;
-    //Row 追加
-    function fileInsRow() {
-        fTbl = document.getElementById("fileAddTable");
-        var fRow = fTbl.insertRow();
-        fRow.onmouseover = function() {
-            fTbl.clickedRowIndex = this.rowIndex
-        }; //clickedRowIndex - Rowの位置確認
-        var fCell = fRow.insertCell();
-        
-        //Form Tag
-        var frmTag = "<input th:field='*{fileDatas}' type=file onchange=readURL(this); name=fileAddText> ";
-        frmTag += "<img id=ShowImage src='#' />"
-        frmTag += "<input type=button value='削除' onClick='fileRemoveRow()' style='cursor:hand'>";
-        fCell.innerHTML = frmTag;
-    }
-    //Row 削除
-    function fileRemoveRow() {
-        fTbl.deleteRow(fTbl.clickedRowIndex);
-    }
-    
     var counter = 1;
 
     function AddRow() {
@@ -136,25 +115,6 @@
         newTextBoxDiv.appendTo("#ImageGroup");
 
         counter++;
-    }
-function deleteImageControl(counter) {
-        $("#ImageDiv" + counter).remove();
-    }
-    function readURL(input) {
-    	alert(input);
-        if (input.files && input.files[0]) {
-            
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                $('#ShowImage')
-                    .attr('src', e.target.result)
-                    .width(125)
-                    .height(100);
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        }
     }
     
 </script>

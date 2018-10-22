@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,16 +36,6 @@ public class MainController {
 	
 	@Autowired
 	private PersonInfoDAO dao;
-
-	@RequestMapping(value = "/layout")
-	String main1() {
-		return "layout/layout";
-	}
-	
-	@RequestMapping(value = "/index")
-	String main2() {
-		return "index";
-	}
 	
 	@RequestMapping(value = "/main")
 	String main() {
@@ -200,46 +191,51 @@ public class MainController {
 	      return "redirect:/personList";
 	   }
 	
+	/*@ResponseBody
+    @RequestMapping(value = "/photo/{pid}", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
+    public byte[] testphoto(@PathVariable int pid) throws IOException {
+
+        File imgfile = new File("src/main/resources/static/images/" + name);
+        return Files.readAllBytes(imgfile.toPath());
+    }*/
+	
 	@RequestMapping(value = "/edit/pid={pid}",produces = MediaType.IMAGE_JPEG_VALUE)
 	public String editPersonInfo(@PathVariable int pid, Model m,HttpServletResponse response) throws IOException {
 
 		PersonInfo info = dao.findPersonInfo(pid);
 		List<AddressInfo> ainfo = dao.findAddressInfo(pid);
 		List<MyUploadForm> upfile= dao.findFileList(pid);
-		List<String> imageUrlList = new ArrayList<String>();
+		
 		if(info!=null)
 		{
-		if (ainfo != null) {
-
-			info.alist = new ArrayList<AddressInfo>();
-			for (AddressInfo addressInfo : ainfo) {
-				AddressInfo adr = new AddressInfo();
-				adr.setAddressID(addressInfo.getAddressID());
-				adr.setAddress(addressInfo.getAddress());
-				info.alist.add(adr);
+			if (ainfo != null) {
+	
+				info.alist = new ArrayList<AddressInfo>();
+				for (AddressInfo addressInfo : ainfo) {
+					AddressInfo adr = new AddressInfo();
+					adr.setAddressID(addressInfo.getAddressID());
+					adr.setAddress(addressInfo.getAddress());
+					info.alist.add(adr);
+				}
 			}
 			
-
-		} 
-		if(!upfile.isEmpty())
-		{
-			info.fileString=new ArrayList<MyUploadForm>();
-			for(MyUploadForm form :upfile)
-			{
-				MyUploadForm upload = new MyUploadForm();
-				
-				upload.setName("/static/images/"+form.getName());
-				upload.setUploadRootPath(form.getUploadRootPath());
-				upload.setServerFile(form.getServerFile());
-				
-				info.fileString.add(upload);
+			if(!upfile.isEmpty()) {
+				info.fileString = new ArrayList<MyUploadForm>();
+				for(MyUploadForm form :upfile)
+				{
+					MyUploadForm upload = new MyUploadForm();
+					
+					upload.setName(form.getName());
+					upload.setUploadRootPath(form.getUploadRootPath());
+					upload.setServerFile(form.getServerFile());
+					
+					info.fileString.add(upload);
+				}
 			}
-		}
-		
 		
 		PersonInfo newinfo = new PersonInfo(info.getPersonID(), info.getFullName(), info.getFirstName(),
-				info.getLastName(), info.getClassName(), info.getGrade(), info.alist,info.fileString);
-		 
+				info.getLastName(), info.getClassName(), info.getGrade(), info.alist, info.fileString);
+		
 		m.addAttribute("person", newinfo);//myUploadForm
 		m.addAttribute("upload", upfile);
 		//m.addAttribute("imageUrlList", imageUrlList);
@@ -262,11 +258,12 @@ public class MainController {
 			,@RequestParam(value = "uploadRootPath",required = false)String[] uploadRootPath ,@RequestParam(value = "serverFile",required = false)String[] serverFile 
 			,@RequestParam(value = "name",required = false)String[] name) {
 			
-		//System.out.println(ar[0]);
+
 		PersonInfo personinfo = new PersonInfo(Integer.valueOf(pid), fullname, firstname, lastname, classname, grade);
 		List<MyUploadForm>uplist= new ArrayList<MyUploadForm>();
 		List<AddressInfo> alist = new ArrayList<AddressInfo>();
-		//System.out.println(aid.length);
+		
+		
 		if(ar != null)
 		{
 			for(int j =0;j<ar.length;j++)
@@ -286,6 +283,7 @@ public class MainController {
 				alist.add(ainfo);
 			}
 		}
+		
 		if(img!=null)
 		{
 			for(int k=0;k<img.length;k++)
@@ -319,4 +317,6 @@ public class MainController {
 		m.addAttribute("personInfo", pinfo);
 		return "personList";
 	}
+	
+	
 }
