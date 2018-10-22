@@ -94,7 +94,7 @@ public class MainController {
 		return this.doUpload(request, model, files,pid);
 	}
 	
-	private static final String filePath = "src/main/resources/static/images/";
+	private static final String filePath = "C:\\99_TMPFiles\\images\\";
 	
 	private String doUpload(HttpServletRequest request, Model model, //
 			MultipartFile[] myUploadForm,int pid) {
