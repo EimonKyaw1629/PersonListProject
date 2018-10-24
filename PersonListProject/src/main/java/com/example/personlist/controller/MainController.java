@@ -45,15 +45,17 @@ public class MainController {
 		return "layout/layout";
 	}
 	
-	@RequestMapping(value = "/index")
-	String main2() {
-		return "index";
+	@RequestMapping(value = "/login")
+	String login1() {
+		return "Login";
 	}
 	
-	@RequestMapping(value = "/main")
+	@RequestMapping(value = { "/","/signup"})
 	String main() {
-		return "main";
+		return "SignUp";
 	}
+	
+	
 
 	@RequestMapping(value = "/form", method = RequestMethod.GET)
 	public String form(Model model) {
@@ -66,7 +68,7 @@ public class MainController {
 	
 	
 
-	@RequestMapping(value = {  "/","/personList" }, method = RequestMethod.GET)//
+	@RequestMapping(value = { "/personList" }, method = RequestMethod.GET)// "/",
 	public String showPersonInfo(Model m) throws JsonProcessingException {
 		List<Map<String, Object>> list = dao.getPersonInfoList();
 		
