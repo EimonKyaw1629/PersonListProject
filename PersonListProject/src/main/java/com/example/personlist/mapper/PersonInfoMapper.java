@@ -28,7 +28,7 @@ public class PersonInfoMapper implements RowMapper<PersonInfo> {
 		String lastName = rs.getString("LastName");
 		String className = rs.getString("ClassName");
 		String grade = rs.getString("Grade");
-
+		
 		return new PersonInfo(personID, fullName, firstName, lastName, className, grade);
 	}
 

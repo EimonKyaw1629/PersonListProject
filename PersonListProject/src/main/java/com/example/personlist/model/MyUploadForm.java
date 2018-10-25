@@ -10,7 +10,16 @@ public class MyUploadForm {
 	private String uploadRootPath;
 	private String name;
 	private String serverFile;
+	private byte[] imgbyte;
 	
+	public byte[] getImgbyte() {
+		return imgbyte;
+	}
+
+	public void setImgbyte(byte[] imgbyte) {
+		this.imgbyte = imgbyte;
+	}
+
 	// Upload files.
 	private MultipartFile[] fileDatas;
 
@@ -29,7 +38,16 @@ public class MyUploadForm {
 		
 	}
 
-	
+	public MyUploadForm(int fid, int pid, String upath, String na, String sf, byte[] imgbyte) {
+		super();
+		this.FileID = fid;
+		this.PersonID = pid;
+		this.uploadRootPath = upath;
+		this.name = na;
+		this.serverFile = sf;
+		this.imgbyte = imgbyte;
+		
+	}
 
 	public MultipartFile[] getFileDatas() {
 		return fileDatas;

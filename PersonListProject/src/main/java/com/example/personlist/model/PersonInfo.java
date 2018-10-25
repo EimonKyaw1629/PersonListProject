@@ -12,9 +12,12 @@ public class PersonInfo extends AddressInfo{
 	private String LastName;
 	private String ClassName;
 	private String Grade;
+	private String Address;
+	
 	public List<AddressInfo> alist;
 	public List<MyUploadForm> fileString;
 	public List<String> fpathList;
+	public List<MongoInfo> mongoList;
 	
 	@Override
 	public String toString() {
@@ -73,7 +76,7 @@ public class PersonInfo extends AddressInfo{
 		this.fpathList = fl;
 	}
 	*/
-	public PersonInfo(int personid,String fullname,String firstname,String lastname,String classname,String grade,List<AddressInfo> info,List<MyUploadForm> fl)
+	public PersonInfo(int personid,String fullname,String firstname,String lastname,String classname,String grade,List<AddressInfo> info,List<MyUploadForm> fl, List<MongoInfo> mongo)
 	{
 		super();
 		this.PersonID =personid;
@@ -84,6 +87,20 @@ public class PersonInfo extends AddressInfo{
 		this.Grade = grade;
 		this.alist = info;
 		this.fileString = fl;
+		this.mongoList = mongo;
+		
+	}
+	public PersonInfo(int personid,String fullname,String firstname,String lastname,String classname,String grade,String fl)
+	{
+		super();
+		this.PersonID =personid;
+		this.FullName = fullname;
+		this.FirstName = firstname;
+		this.LastName = lastname;
+		this.ClassName = classname;
+		this.Grade = grade;
+		
+		this.Address = fl;
 	}
 
 	public int getPersonID()
@@ -151,6 +168,11 @@ public class PersonInfo extends AddressInfo{
     	return this.alist;
     }
     
+    public List<MongoInfo> getMongoList()
+    {
+    	return this.mongoList;
+    }
+    
     public List<MyUploadForm> getFileString()
     {
     	return this.fileString;
@@ -159,6 +181,11 @@ public class PersonInfo extends AddressInfo{
     public List<String> getfpathList()
     {
     	return fpathList;
+    }
+    
+    public String getAddress()
+    {
+    	return this.Address;
     }
   
 }

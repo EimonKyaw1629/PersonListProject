@@ -136,9 +136,9 @@
 			dv.style.marginTop = '3px';
 			dv.id = 'dv' + o.idx;
 
-			var file = document.all ? document
-					.createElement('<input name="files" >') : document
-					.createElement('input');
+			var file = document.all ? 
+					document.createElement('<input name="files" >') : 
+					document.createElement('input');
 			file.type = 'file';
 			file.name = 'files';
 			file.size = '40';
@@ -147,7 +147,8 @@
 				o.prev(this, 'dv' + idx)
 			};
 
-			var btn = document.createElement('input');
+			var btn = 
+				document.createElement('input');
 			btn.type = 'button';
 			btn.value = '削除';
 			btn.onclick = function() {
@@ -245,6 +246,19 @@
 			}
 
 		}
+	}
+</script>
+
+<script type="text/javascript">
+	function checkForm() {
+	    var FullName = document.insert.FullName;
+
+	    if(FullName.value == '' || !(FullName.value.length >= 1 && FullName.value.length <= 12)) {
+	        window.alert("FullNameを入力してください！");
+	        document.insert.FullName.focus();
+	        document.getElementById('FullName').select();
+	        return false; 
+	    }
 	}
 </script>
 
