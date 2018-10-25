@@ -2,15 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/layout}">
-
 <head>
-<meta charset="utf-8">
-<title>Edit person Template</title>
+<meta charset="UTF-8">
+<title>Insert title here</title>
 </head>
 <body>
-	<div class="form-horizontal" layout:fragment="content">
+<div  class="form-horizontal" layout:fragment="content">
+          
+            <div class="container">
+            <div class="col-md-6 col-md-offset-3">
+	<!-- <div class="form-horizontal" layout:fragment="content">
 		<div class="container">
-			<div class="col-md-6 col-md-offset-3">
+			<div class="col-md-6 col-md-offset-3"> -->
 				<h2>Person Info Edit</h2>
 				<form name="editpage" id="editpage" action="/edit" method="post"
 					th:object="${person}" enctype="multipart/form-data">

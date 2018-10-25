@@ -15,9 +15,12 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,12 +31,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.example.personlist.dao.PersonInfoDAO;
+import com.example.personlist.dao.UserService;
+import com.example.personlist.mapper.UserRepository;
 import com.example.personlist.model.AddressInfo;
 import com.example.personlist.model.MongoInfo;
 import com.example.personlist.model.MyUploadForm;
 import com.example.personlist.model.PersonInfo;
+import com.example.personlist.model.User;
 import com.example.personlist.repository.MongoInfoRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -46,17 +53,79 @@ public class MainController {
 	@Autowired
 	private MongoInfoRepository repository;
 	
-	@RequestMapping(value = "/login")
-	String login1() {
-		return "Login";
+	@Autowired
+	private UserRepository userrepository;
+	@Autowired
+	private UserService userService;
+	public void UserRepository(UserRepository r)
+	  {
+		  this.userrepository = r;
+	  } 
+	
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public ModelAndView login() {
+	    ModelAndView modelAndView = new ModelAndView();
+	    modelAndView.setViewName("login");
+	    return modelAndView;
 	}
 	
-	@RequestMapping(value = { "/","/signup"})
-	String main() {
-		return "SignUp";
+	@RequestMapping(value="/loginProcess",method=RequestMethod.POST)
+	public void  BeginLogin(@Valid @ModelAttribute User user,HttpServletRequest request,HttpServletResponse response) throws IOException
+	{
+		
+		User u = userService.findUserByEmail(user.getEmail());
+		
+	    if (u != null ) {
+	    	response.setStatus(HttpServletResponse.SC_OK);
+	    	response.sendRedirect("/personList");
+	    	
+
+	    } else {
+	    	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+	    	response.sendRedirect("/login");
+	    	
+	    }
+
+	}
+	
+	@RequestMapping(value = "/signup", method = RequestMethod.POST)
+	public ModelAndView createNewUser(@Valid @ModelAttribute User user, BindingResult bindingResult) {
+	    ModelAndView modelAndView = new ModelAndView();
+	    User userExists = userService.findUserByEmail(user.getEmail());
+	    if (userExists != null) {
+	        bindingResult
+	                .rejectValue("email", "error.user",
+	                        "There is already a user registered with the username provided");
+	    }
+	    if (bindingResult.hasErrors()) {
+	        modelAndView.setViewName("signup");
+	    } else {
+	        userService.saveUser(user);
+	        modelAndView.addObject("successMessage", "User has been registered successfully");
+	        modelAndView.addObject("user", new User());
+	        modelAndView.setViewName("login");
+
+	    }
+	    return modelAndView;
 	}
 	
 	
+@RequestMapping(value = "/signup", method = RequestMethod.GET)
+public ModelAndView signup() {
+    ModelAndView modelAndView = new ModelAndView();
+    User user = new User();
+    modelAndView.addObject("user", user);
+    modelAndView.setViewName("SignUp");
+    return modelAndView;
+}
+
+	
+	@RequestMapping(value = {"/","/home"}, method = RequestMethod.GET)
+	public ModelAndView home() {
+	    ModelAndView modelAndView = new ModelAndView();
+	    modelAndView.setViewName("home");
+	    return modelAndView;
+	}
 
 	@RequestMapping(value = "/form", method = RequestMethod.GET)
 	public String form(Model model) {
@@ -67,7 +136,21 @@ public class MainController {
 		return "form";
 	}
 	
-
+	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
+	public ModelAndView dashboard(Model m) throws JsonProcessingException{
+	    ModelAndView modelAndView = new ModelAndView();
+	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    User user = userService.findUserByEmail(auth.getName());
+	    modelAndView.addObject("currentUser", user);
+	    modelAndView.addObject("email", "Welcome " + user.getEmail());
+	    modelAndView.addObject("adminMessage", "Content Available Only for Users with Admin Role");
+	    List<Map<String, Object>> list = dao.getPersonInfoList();
+		
+		m.addAttribute("personInfo", list);
+	    modelAndView.setViewName("dashboard");
+	    return modelAndView;
+	}
+	
 	@RequestMapping(value = { "/personList" }, method = RequestMethod.GET)// "/",
 	public String showPersonInfo(Model m) throws JsonProcessingException {
 		List<Map<String, Object>> list = dao.getPersonInfoList();
@@ -222,7 +305,7 @@ public class MainController {
         return "editPerson";
     }
 
-	@RequestMapping(value = "/edit", method = RequestMethod.POST)
+	@RequestMapping(value = "personList/edit", method = RequestMethod.POST)
 	public String geteditPersonInfo(@RequestParam(value = "pid") String pid, Model m,
 			@RequestParam(value = "fu") String fullname, @RequestParam(value = "fs") String firstname,
 			@RequestParam(value = "ls") String lastname, @RequestParam(value = "cs") String classname,
