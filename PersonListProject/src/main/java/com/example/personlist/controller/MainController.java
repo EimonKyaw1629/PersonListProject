@@ -46,10 +46,17 @@ public class MainController {
 	@Autowired
 	private MongoInfoRepository repository;
 	
-	@RequestMapping(value = "/main")
-	String main() {
-		return "main";
+	@RequestMapping(value = "/login")
+	String login1() {
+		return "Login";
 	}
+	
+	@RequestMapping(value = { "/","/signup"})
+	String main() {
+		return "SignUp";
+	}
+	
+	
 
 	@RequestMapping(value = "/form", method = RequestMethod.GET)
 	public String form(Model model) {
@@ -60,9 +67,8 @@ public class MainController {
 		return "form";
 	}
 	
-	
 
-	@RequestMapping(value = {  "/","/personList" }, method = RequestMethod.GET)//
+	@RequestMapping(value = { "/personList" }, method = RequestMethod.GET)// "/",
 	public String showPersonInfo(Model m) throws JsonProcessingException {
 		List<Map<String, Object>> list = dao.getPersonInfoList();
 		
