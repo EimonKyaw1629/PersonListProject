@@ -390,13 +390,19 @@ public ModelAndView signup() {
 	
 	
 	@RequestMapping(value = "/searchInfo", method = RequestMethod.POST)
-	public String searchPersonInfo( @RequestParam(value = "fullname") String firstname,@RequestParam(value = "classname") String classname,Model m) {//@ModelAttribute("person") PersonInfo info, BindingResult result, Model m) {
-		System.out.println("latest" + firstname);
-		System.out.println("latest" + classname);
-		List<PersonInfo> pinfo = dao.getSearchPersonInfo(firstname,classname);
+	public ModelAndView searchPersonInfo( @RequestParam(value = "fullname") String firstname,@RequestParam(value = "classname") String classname,Model m) {//@ModelAttribute("person") PersonInfo info, BindingResult result, Model m) {
+		
+		ModelAndView modelAndView = new ModelAndView();
+	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    User user = userService.findUserByEmail(auth.getName());
+	    modelAndView.addObject("currentUser", user);
+	    modelAndView.addObject("email", "Welcome " + user.getEmail());
+	    
+		List<Map<String, Object>> pinfo = dao.getSearchPersonInfo(firstname,classname);
 		
 		m.addAttribute("personInfo", pinfo);
-		return "personList";
+		 modelAndView.setViewName("dashboard");
+		    return modelAndView;
 	}
 	
 	

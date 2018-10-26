@@ -210,52 +210,39 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		String serverfile = ""+serverFile;
 		Object[] params = new Object[] {pid, uploadRootPath, name, serverfile};
 		getJdbcTemplate().update(sql, params);
-		/*if(!uform.isEmpty())
-		{
-			
-			String serverfile = ""+serverFile;
-			Object[] params = new Object[] {pid, uploadRootPath, name, serverfile};
-			getJdbcTemplate().update(sql, params);
-		}
-		else
-		{
-			String serverfile = ""+serverFile;
-			Object[] params = new Object[] {pid, uploadRootPath, name, serverfile};
-			getJdbcTemplate().update(sql, params);
-		}*/
 		
 	}
 	
-	public List<PersonInfo> getSearchPersonInfo(String fullname,String classname)
+	public List<Map<String, Object>> getSearchPersonInfo(String fullname,String classname)
 	{
 		String sql=null;
 		
-		PersonInfoMapper mapper = new PersonInfoMapper();
+		ConbineModelMapper mapper = new ConbineModelMapper();
 		//sql = PersonInfoMapper.BASE_SQL +" where (@a is null or  FullName=@a) and (ISNUlLL(@b) or ClassName=@b)" ;
 		if(fullname !="" && classname!="")
 		{
-			sql=PersonInfoMapper.BASE_SQL +" where FullName like  '%"+fullname+"%' and ClassName like  '%"+classname+"%'";
+			sql=AddressInfoMapper.XML_SELECT +" where FullName like  '%"+fullname+"%' and ClassName like  '%"+classname+"%'";
 			
 		}
 		else if (fullname !="" && classname=="")
 		{
-			sql=PersonInfoMapper.BASE_SQL +" where FullName like  '%"+fullname+"%' ";
+			sql=AddressInfoMapper.XML_SELECT +" where FullName like  '%"+fullname+"%' ";
 			
 		}
 		else if(fullname =="" && classname!="")
 		{
-			sql=PersonInfoMapper.BASE_SQL +" where  ClassName like  '%"+classname+"%'";
+			sql=AddressInfoMapper.XML_SELECT +" where  ClassName like  '%"+classname+"%'";
 			
 		}
 		else
 		{
-			sql=PersonInfoMapper.BASE_SQL ;
+			sql=AddressInfoMapper.XML_SELECT ;
 			
 		}
 		try
 		{
-			List<PersonInfo> info = this.getJdbcTemplate().query(sql,mapper);//(sql, params,mapper);
-			return info;
+			List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sql);//(sql, params,mapper);
+			return list;
 		}
 		catch(EmptyResultDataAccessException ex)
 		{
