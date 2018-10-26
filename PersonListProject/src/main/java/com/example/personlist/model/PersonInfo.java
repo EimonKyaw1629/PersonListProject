@@ -2,12 +2,16 @@ package com.example.personlist.model;
 
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 
 public class PersonInfo extends AddressInfo{
+	
 	public int PersonID;
+	
+	@Size(min=1, message="FullNameを入力してぐださい。")
 	private String FullName;
+	
 	private String FirstName;
 	private String LastName;
 	private String ClassName;
