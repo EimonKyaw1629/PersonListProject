@@ -9,9 +9,9 @@ public class ConbineModel {
 	private String ClassName;
 	private String Grade;
 	private String Address;
+	private String Gender;
 	
-	
-	public ConbineModel(int personid,String fullname,String firstname,String lastname,String classname,String grade,String fl)
+	public ConbineModel(int personid,String fullname,String firstname,String lastname,String classname,String grade,String fl,String gender)
 	{
 		super();
 		this.PersonID =personid;
@@ -20,9 +20,20 @@ public class ConbineModel {
 		this.LastName = lastname;
 		this.ClassName = classname;
 		this.Grade = grade;
-		
+		this.Gender = gender;
 		this.Address = fl;
 	}
+	
+	public String getGender()
+	{
+		return this.Gender;
+	}
+	
+	public void setGender(String g)
+	{
+		this.Gender = g;
+	}
+	
 	public int getPersonID()
 	{
 		return PersonID;
