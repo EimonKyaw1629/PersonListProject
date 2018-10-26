@@ -20,6 +20,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -128,12 +129,19 @@ public ModelAndView signup() {
 	}
 
 	@RequestMapping(value = "/form", method = RequestMethod.GET)
-	public String form(Model model) {
-		 
+	public ModelAndView form(Model model) {
+		ModelAndView modelAndView = new ModelAndView();
+		  Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		    User user = userService.findUserByEmail(auth.getName());
+		    modelAndView.addObject("currentUser", user);
+		    modelAndView.addObject("fullName", "Welcome " + user.getEmail());
+		    
 		MyUploadForm myUploadForm = new MyUploadForm();
 		model.addAttribute("myUploadForm", myUploadForm);
 		 
-		return "form";
+		  modelAndView.setViewName("form");
+		    return modelAndView;
+		//return "form";
 	}
 	
 	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
@@ -151,6 +159,7 @@ public ModelAndView signup() {
 	    return modelAndView;
 	}
 	
+	/*
 	@RequestMapping(value = { "/personList" }, method = RequestMethod.GET)// "/",
 	public String showPersonInfo(Model m) throws JsonProcessingException {
 		List<Map<String, Object>> list = dao.getPersonInfoList();
@@ -159,7 +168,7 @@ public ModelAndView signup() {
 	
 		return "personList";
 	}
-	
+	*/
 	@RequestMapping(value = "/delete/pid={pid}")
 	public String deletePersonInfo(@PathVariable int pid, Model m) {
 		repository.deleteById(pid);
@@ -172,6 +181,9 @@ public ModelAndView signup() {
 	public String insertPersonInfo(PersonInfo personinfo, @RequestParam String addText,
 	         @RequestParam(value = "files",required = false)MultipartFile[] files, @ModelAttribute MongoInfo mongoInfo, BindingResult bindingResult, 
 	         HttpServletRequest request, Model model) {
+
+		
+		 
 
 		System.out.println(mongoInfo);
 		
@@ -239,12 +251,19 @@ public ModelAndView signup() {
 	      }
 	      model.addAttribute("uploadedFiles", uploadedFiles);
 	      model.addAttribute("failedFiles", failedFiles);
-	      return "redirect:/personList";
+	      return "redirect:/dashboard";//"redirect:/personList";
 	   }
 	
 	@RequestMapping(value = "/edit/pid={pid}",produces = MediaType.IMAGE_JPEG_VALUE)
-    public String editPersonInfo(@PathVariable int pid, Model m,HttpServletResponse response) throws IOException {
+    public ModelAndView editPersonInfo(@PathVariable int pid, Model m,HttpServletResponse response) throws IOException {
+		
+		 ModelAndView modelAndView = new ModelAndView();
+		  Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		    User user = userService.findUserByEmail(auth.getName());
+		    modelAndView.addObject("currentUser", user);
+		    modelAndView.addObject("fullName", "Welcome " + user.getEmail());
 
+		  
         PersonInfo info = dao.findPersonInfo(pid);
         List<AddressInfo> ainfo = dao.findAddressInfo(pid);
         List<MyUploadForm> upfile= dao.findFileList(pid);
@@ -295,17 +314,19 @@ public ModelAndView signup() {
         m.addAttribute("person", newinfo);//myUploadForm
         m.addAttribute("upload", upfile);
         //m.addAttribute("imageUrlList", imageUrlList);
+        modelAndView.setViewName("editPerson");
+       
 
-        return "editPerson";
+        //return "editPerson";
     }else {
 
             m.addAttribute("person", info);
         }
-        
-        return "editPerson";
+        return modelAndView;
+        //return "editPerson";
     }
 
-	@RequestMapping(value = "personList/edit", method = RequestMethod.POST)
+	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	public String geteditPersonInfo(@RequestParam(value = "pid") String pid, Model m,
 			@RequestParam(value = "fu") String fullname, @RequestParam(value = "fs") String firstname,
 			@RequestParam(value = "ls") String lastname, @RequestParam(value = "cs") String classname,
