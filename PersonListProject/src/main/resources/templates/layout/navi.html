@@ -22,9 +22,19 @@
 			<div class="collapse navbar-collapse"
 				id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="/form">登録</a></li>
-					<li><a href="/personList">ユーザーリスト</a></li>
+					
+					 <li class="nav-item" th:if="${currentUser == null}"><a class="nav-link" th:href="@{/login}">Log in</a></li>
+                    <li class="nav-item" th:if="${currentUser}">
+                     
+                       <div><h6 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h6><a href="/form">登録</a></div><div><a href="/personList">ユーザーリスト</a></div>
+                       
+                        <form th:action="@{/logout}" method="post">
+                            <input type="submit" value="Sign Out"/>
+                        </form>
+                    </li>
 				</ul>
+				 
+				
 			</div>
 			<!-- /.navbar-collapse -->
 		</div>

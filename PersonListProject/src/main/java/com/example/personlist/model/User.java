@@ -1,6 +1,9 @@
 package com.example.personlist.model;
 
+import java.util.Set;
+
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="LoginUser")
@@ -8,23 +11,28 @@ public class User {
 	
 	@Id
 	private String id;
-	private String Email;
-	private String Password;
-	private boolean enabled;
+	private String email;
+	private String password;
 	
+	@DBRef
+	private Set<Role> roles;
 	
 	@Override
 	public String toString()
 	{
-		return "User{"+"id=" + id + ", Email=" +Email + ", Password=" + Password +  ", enabled=" +enabled + '}';
+		return "User{"+"id=" + id + ", Email=" +email + ", Password=" + password + '}';
 	}
 	
-	public User(String email,String psw,boolean e)
+	public User()
+	{
+		
+	}
+	public User(String email,String psw)
 	{
 		super();
-		this.Email = email;
-		this.Password = psw;
-		this.enabled = e;
+		this.email = email;
+		this.password = psw;
+		
 	}
 	
 	public String getID()
@@ -39,32 +47,32 @@ public class User {
 	
 	public String getEmail()
 	{
-		return this.Email;
+		return this.email;
 	}
 	
 	public void setEmail(String em)
 	{
-		this.Email = em;
+		this.email = em;
 	}
 	
 	public String getPassword()
 	{
-		return this.Password;
+		return this.password;
 	}
 	
 	public void setPassword(String ps)
 	{
-		this.Password = ps;
+		this.password = ps;
 	}
 	
-	public boolean isEnabled()
-	{
-		return this.enabled;
-	}
 	
-	public void setEnabled(boolean f)
-	{
-		this.enabled = f;
+	
+	public Set<Role> getRoles() {
+	    return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+	    this.roles = roles;
 	}
 
 }
