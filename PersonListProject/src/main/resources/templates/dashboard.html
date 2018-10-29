@@ -44,11 +44,15 @@
 		</form>
 					<h2>Person List</h2>
 					<table class="table table-hover">
-					<tr th:each="person : ${personInfo}">
-     				 <td th:each="entry : ${person}" th:text="${entry.key}" ></td>
-     				 <td>修正</td>
-					<td>削除</td>
-     				 </tr>
+					<tr>
+							<th>ID</th>
+							<th>Full Name</th>
+							<th>Class</th>
+							<th>住所</th>
+							<th>性別</th>
+							<th>修正</th>
+							<th>削除</th>
+						</tr>
 				
 					<tr th:each="person : ${personInfo}">
      				 <td th:each="entry : ${person}" th:text="${entry.value}" ></td>
