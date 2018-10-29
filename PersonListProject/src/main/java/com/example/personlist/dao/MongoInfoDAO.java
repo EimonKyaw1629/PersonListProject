@@ -99,21 +99,24 @@ public class MongoInfoDAO extends JdbcDaoSupport {
 
 		try {
 			List<DBObject> myList = null;
-			MongoInfo mongoinfo = new MongoInfo();
-			List<MongoInfo> gList = new ArrayList<MongoInfo>();
-			mongoClient = new MongoClient();
-			DB db = mongoClient.getDB(database);
 
-			DBCollection mongoTable = db.getCollection("mongoInfo");
+			MongoClient client = new MongoClient("localhost", 27017);
+			MongoDatabase database = client.getDatabase("MongoInfo");
+			MongoCollection<Document> collection = database.getCollection("mongoInfo");
 			BasicDBObject whereQuery = new BasicDBObject();
 			whereQuery.put("gender", g);
-			DBCursor cursor = mongoTable.find(whereQuery);
-			myList = cursor.toArray();
+			List<Document> employees = (List<Document>) collection.find(whereQuery).into(new ArrayList<Document>());
+			List<MongoInfo> gList = new ArrayList<MongoInfo>();
+			for (Document employee : employees) {
 
-			mongoinfo.setId((int) (myList.get(0).get("_id")));
-			mongoinfo.setGender((String) (myList.get(0).get("gender")));
-			mongoinfo.setAge((int) (myList.get(0).get("age")));
-			gList.add(mongoinfo);
+				MongoInfo mongoinfo = new MongoInfo();
+				mongoinfo.setId(employee.getInteger("_id"));
+				mongoinfo.setGender(employee.getString("gender"));
+				mongoinfo.setAge(employee.getInteger("age"));
+				gList.add(mongoinfo);
+
+			}
+
 			return gList;
 		} catch (Exception ex) {
 			return null;

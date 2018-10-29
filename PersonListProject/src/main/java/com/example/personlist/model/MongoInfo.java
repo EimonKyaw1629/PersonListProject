@@ -2,13 +2,8 @@ package com.example.personlist.model;
 
 import javax.validation.constraints.NotNull;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document(collection = "mongoInfo")
 public class MongoInfo {
 	
-	@Id
 	private int id;
 	private String gender;
 	
