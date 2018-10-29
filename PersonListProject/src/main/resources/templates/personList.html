@@ -2,22 +2,21 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/layout}">
-
 <head>
-<meta charset="utf-8">
-<title>Person List Template</title>
+<meta charset="UTF-8">
+<title>Insert title here</title>
 </head>
-
 <body>
-
-	<div layout:fragment="content">
-		<div class="container">
-			<div class="col-md-6 col-md-offset-3">
+<div layout:fragment="content">
+          
+            <div class="container">
+            <div class="col-md-6 col-md-offset-3">
 				<h1>Person Info</h1>
 				<!-- Include _menu.html -->
+			
 				<form id="sampleForm" action="searchInfo" method="post"
 					modelAttribute="person">
-<!--
+
 					<div class="form-group">
 						<label for="FullName">FullName</label> <input type="text"
 							class="form-control" name="fullname">
@@ -27,9 +26,11 @@
 						<label for="ClassName">ClassName</label> <input type="text"
 							class="form-control" name="classname">
 					</div>
-					  -->
 					
-					<div class="form-group">
+					<button type="submit" class="btn btn-default">Search</button>
+	</form>
+		<form id="sampleForm" action="searchGender" method="post">
+			<div class="form-group">
 						<label for="Gender">gender</label>
 							<label class="radio-inline">
 							<input type="radio" name="gender" id="optionsRadios1" value="male" checked>Male
@@ -37,14 +38,12 @@
 							<label class="radio-inline">
 							<input type="radio" name="gender" id="optionsRadios2" value="woman">Woman
 							</label>
+							&nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-default">SearchByGender</button>
 					</div>
 					
-				
-					
-					<button type="submit" class="btn btn-default">Search</button>
-
+		</form>
 					<h2>Person List</h2>
-					<table ><!-- class="table table-hover" -->
+					<table class="table table-hover">
 					<tr>
 							<th>ID</th>
 							<th>Full Name</th>
@@ -54,6 +53,7 @@
 							<th>修正</th>
 							<th>削除</th>
 						</tr>
+				
 					<tr th:each="person : ${personInfo}">
      				 <td th:each="entry : ${person}" th:text="${entry.value}" ></td>
      				 <td> <a th:href="${'/edit/pid='+person.PersonID}">Edit</a></td>
@@ -63,9 +63,11 @@
 
 				
 					</table>
-				</form>
+				
+				
 			</div>
 		</div>
-	</div>
+        </div>
+
 </body>
 </html>

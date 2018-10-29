@@ -36,6 +36,12 @@ public class MongoInfoDAO extends JdbcDaoSupport {
 	@Value("${spring.data.mongodb.database}")
 	private String database;
 	private MongoClient mongoClient;
+	
+	public MongoDatabase getMongoDatabase()
+	{
+		MongoClient client = new MongoClient("localhost", 27017);
+		return client.getDatabase("MongoInfo");
+	}
 
 	public void mongoInsert(MongoInfo mongoinfo) {
 
@@ -45,26 +51,27 @@ public class MongoInfoDAO extends JdbcDaoSupport {
 		DBCollection mongoTable = db.getCollection("mongoInfo");
 		BasicDBObject doc = new BasicDBObject("_id", mongoinfo.getId()).append("gender", mongoinfo.getGender())
 				.append("age", mongoinfo.getAge());
+		
+
+
 
 		mongoTable.insert(doc);
 	}
 
-	public List<MongoInfo> SelectAll() {
+	public List<MongoInfo> SelectAllGender() {
 		try {
-			List<DBObject> myList = null;
-
-			MongoClient client = new MongoClient("localhost", 27017);
-			MongoDatabase database = client.getDatabase("MongoInfo");
+			
+			MongoDatabase database = this.getMongoDatabase();
 			MongoCollection<Document> collection = database.getCollection("mongoInfo");
 
-			List<Document> employees = (List<Document>) collection.find().into(new ArrayList<Document>());
+			List<Document> listGender = (List<Document>) collection.find().into(new ArrayList<Document>());
 			List<MongoInfo> gList = new ArrayList<MongoInfo>();
-			for (Document employee : employees) {
+			for (Document gender : listGender) {
 
 				MongoInfo mongoinfo = new MongoInfo();
-				mongoinfo.setId(employee.getInteger("_id"));
-				mongoinfo.setGender(employee.getString("gender"));
-				mongoinfo.setAge(employee.getInteger("age"));
+				mongoinfo.setId(gender.getInteger("_id"));
+				mongoinfo.setGender(gender.getString("gender"));
+				mongoinfo.setAge(gender.getInteger("age"));
 				gList.add(mongoinfo);
 			}
 
@@ -74,7 +81,7 @@ public class MongoInfoDAO extends JdbcDaoSupport {
 		}
 	}
 
-	public MongoInfo mongoFind(int pid) {
+	public MongoInfo mongoFindbyPersonID(int pid) {
 
 		List<DBObject> myList = null;
 		MongoInfo mongoinfo = new MongoInfo();
@@ -98,10 +105,7 @@ public class MongoInfoDAO extends JdbcDaoSupport {
 	public List<MongoInfo> mongoFindGender(String g) {
 
 		try {
-			List<DBObject> myList = null;
-
-			MongoClient client = new MongoClient("localhost", 27017);
-			MongoDatabase database = client.getDatabase("MongoInfo");
+			MongoDatabase database = this.getMongoDatabase();
 			MongoCollection<Document> collection = database.getCollection("mongoInfo");
 			BasicDBObject whereQuery = new BasicDBObject();
 			whereQuery.put("gender", g);
@@ -130,8 +134,7 @@ public class MongoInfoDAO extends JdbcDaoSupport {
 		DB db = mongoClient.getDB(database);
 		DBCollection mongoTable = db.getCollection("mongoInfo");
 
-		BasicDBObject updateQuery = new BasicDBObject().append("gender", mongoinfo.getGender()).append("age",
-				mongoinfo.getAge());
+		BasicDBObject updateQuery = new BasicDBObject().append("gender", mongoinfo.getGender()).append("age",mongoinfo.getAge());
 
 		BasicDBObject searchQuery = new BasicDBObject().append("_id", mongoinfo.getId());
 

@@ -35,11 +35,9 @@ public class PersonInfoDAO extends JdbcDaoSupport {
 		this.setDataSource(ds);
 	}
 
-	@Autowired
-	private MongoInfoRepository repository;
-
-	private MongoInfoDAO dao;
-
+	/**
+	 *  for Person Info
+	 */
 	public List<PersonInfo> getPersonInfo() {
 		String sql = PersonInfoMapper.BASE_SQL;
 		Object[] params = new Object[] {};
@@ -52,7 +50,6 @@ public class PersonInfoDAO extends JdbcDaoSupport {
 		String sql = AddressInfoMapper.XML_SELECT;
 
 		List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sql);
-		// List<MongoInfo> gender =dao.get// repository.findAll();
 
 		for (Map<String, Object> k : list) {
 			for (MongoInfo j : i) {
@@ -65,17 +62,6 @@ public class PersonInfoDAO extends JdbcDaoSupport {
 		return list;
 	}
 
-	public String getAddressInfo() {
-		String sql = AddressInfoMapper.AD_SELECT_SQL;
-		Object[] params = new Object[] {};
-		// AddressInfoMapper mapper = new AddressInfoMapper();
-		try {
-			String name = (String) getJdbcTemplate().queryForObject(sql, params, String.class);
-			return name;
-		} catch (EmptyResultDataAccessException ex) {
-			return null;
-		}
-	}
 
 	public PersonInfo findPersonInfo(int pid) {
 		String sql = PersonInfoMapper.BASE_SQL + " where PersonID=?";
@@ -90,92 +76,8 @@ public class PersonInfoDAO extends JdbcDaoSupport {
 		}
 
 	}
-
-	public List<AddressInfo> findAddressInfo(int aid) {
-		String asql = AddressInfoMapper.AD_SELECT_SQL + " where PersonID=?";
-
-		Object[] params = new Object[] { aid };
-		AddressInfoMapper mapper = new AddressInfoMapper();
-		try {
-
-			List<AddressInfo> list = this.getJdbcTemplate().query(asql, params, mapper);
-			;
-
-			return list;
-		} catch (EmptyResultDataAccessException ex) {
-			return null;
-		}
-	}
-
-	public AddressInfo findAddressInfoObject(int aid) {
-		String asql = AddressInfoMapper.AD_SELECT_SQL + " where AddressID=?";
-
-		Object[] params = new Object[] { aid };
-		AddressInfoMapper mapper = new AddressInfoMapper();
-		try {
-
-			AddressInfo list = this.getJdbcTemplate().queryForObject(asql, params, mapper);
-			;
-
-			return list;
-		} catch (EmptyResultDataAccessException ex) {
-			return null;
-		}
-	}
-
-	public String findFile(int pid) {
-		String sql = UploadFileMapper.file_Select_Sql;
-		Object[] params = new Object[] { pid };
-		UploadFileMapper mapper = new UploadFileMapper();
-		try {
-			String name = (String) getJdbcTemplate().queryForObject(sql, params, String.class);
-			return name;
-		} catch (EmptyResultDataAccessException ex) {
-			return null;
-		}
-
-	}
-
-	public List<MyUploadForm> findFileList(int pid) {
-		String sql = UploadFileMapper.file_Select_Sql + " where PersonID=?";
-		Object[] params = new Object[] { pid };
-		UploadFileMapper mapper = new UploadFileMapper();
-		try {
-			List<MyUploadForm> name = this.getJdbcTemplate().query(sql, params, mapper);
-			return name;
-		} catch (EmptyResultDataAccessException ex) {
-			return null;
-		}
-
-	}
-
-	public void deleteInfo(int pid) {
-		String sql = PersonInfoMapper.DELETE_SQL;
-		Object[] params = new Object[] { pid };
-		getJdbcTemplate().update(sql, params);
-
-		String AddrSql = AddressInfoMapper.AD_DELETE_SQL;
-		Object[] paramsAddr = new Object[] { pid };
-		getJdbcTemplate().update(AddrSql, paramsAddr);
-
-		deleteFile(pid);
-	}
-
-	public void deleteFile(int pid) {
-
-		List<MyUploadForm> list = findFileList(pid);
-
-		for (int j = 0; j < list.size(); j++) {
-			File deleteFolder = new File(list.get(j).getServerFile());
-			deleteFolder.delete();
-		}
-
-		String FileSql = PersonInfoMapper.file_DELETE_SQL;
-		Object[] paramsFile = new Object[] { pid };
-		getJdbcTemplate().update(FileSql, paramsFile);
-	}
-
-	public int insertInfo(PersonInfo personinfo, List<String> addrlist) {
+	
+	public int insertPersonInfo(PersonInfo personinfo, List<String> addrlist) {
 		String sql = PersonInfoMapper.INSERT_SQL;
 		Object[] params = new Object[] { personinfo.getFullName(), personinfo.getFirstName(), personinfo.getLastName(),
 				personinfo.getClassName(), personinfo.getGrade() };
@@ -191,15 +93,20 @@ public class PersonInfoDAO extends JdbcDaoSupport {
 
 		return list.get(list.size() - 1).getPersonID();
 	}
-
-	public void insertUpload(String uploadRootPath, String name, File serverFile, int pid) {
-		String sql = PersonInfoMapper.file_INSERT_SQL;
-		String serverfile = "" + serverFile;
-		Object[] params = new Object[] { pid, uploadRootPath, name, serverfile };
+	
+	
+	public void deletePersonInfo(int pid) {
+		String sql = PersonInfoMapper.DELETE_SQL;
+		Object[] params = new Object[] { pid };
 		getJdbcTemplate().update(sql, params);
 
-	}
+		String AddrSql = AddressInfoMapper.AD_DELETE_SQL;
+		Object[] paramsAddr = new Object[] { pid };
+		getJdbcTemplate().update(AddrSql, paramsAddr);
 
+		deleteFileByPersonID(pid);
+	}
+	
 	public List<Map<String, Object>> getSearchGenderInfo(List<MongoInfo> pid) {
 
 		String sql = null;
@@ -225,15 +132,9 @@ public class PersonInfoDAO extends JdbcDaoSupport {
 	public List<Map<String, Object>> getSearchPersonInfo(String fullname, String classname) {
 		String sql = null;
 
-		ConbineModelMapper mapper = new ConbineModelMapper();
-
 		if (!StringUtils.isEmpty(fullname) || !StringUtils.isEmpty(classname)) {
 			sql = AddressInfoMapper.XML_SELECT + " where ('" + fullname + "' is null or  FullName='" + fullname
-					+ "') or ('" + classname + "' is null or ClassName='" + classname + "') ";// or (PersonID
-																								// =IIF("+pid+" IS NULL,
-																								// PersonID, "+pid+"))"
-																								// ;
-		} else {
+					+ "') or ('" + classname + "' is null or ClassName='" + classname + "') ";
 			sql = AddressInfoMapper.XML_SELECT;
 		}
 
@@ -245,10 +146,10 @@ public class PersonInfoDAO extends JdbcDaoSupport {
 			return null;
 		}
 	}
-
+	
 	public void editPersonInfo(PersonInfo info, List<AddressInfo> ainfo, List<MyUploadForm> upfrm) {
 		PersonInfo P = this.findPersonInfo(info.getPersonID());
-		List<AddressInfo> a = this.findAddressInfo(info.getPersonID());
+		List<AddressInfo> a = this.findAddressInfoByPersonID(info.getPersonID());
 		if (P != null) {
 			String sql = PersonInfoMapper.UPDATE_SQL;
 
@@ -297,4 +198,103 @@ public class PersonInfoDAO extends JdbcDaoSupport {
 			getJdbcTemplate().update(dsql, params);
 		}
 	}
+	
+	/**
+	 * for Address Info
+	 */
+	public String getAddressInfo() {
+		String sql = AddressInfoMapper.AD_SELECT_SQL;
+		Object[] params = new Object[] {};
+		try {
+			String name = (String) getJdbcTemplate().queryForObject(sql, params, String.class);
+			return name;
+		} catch (EmptyResultDataAccessException ex) {
+			return null;
+		}
+	}
+
+
+	public List<AddressInfo> findAddressInfoByPersonID(int aid) {
+		String asql = AddressInfoMapper.AD_SELECT_SQL + " where PersonID=?";
+
+		Object[] params = new Object[] { aid };
+		AddressInfoMapper mapper = new AddressInfoMapper();
+		try {
+			List<AddressInfo> list = this.getJdbcTemplate().query(asql, params, mapper);
+			return list;
+		} catch (EmptyResultDataAccessException ex) {
+			return null;
+		}
+	}
+
+	public AddressInfo findAddressInfoByAddressID(int aid) {
+		String asql = AddressInfoMapper.AD_SELECT_SQL + " where AddressID=?";
+
+		Object[] params = new Object[] { aid };
+		AddressInfoMapper mapper = new AddressInfoMapper();
+		try {
+
+			AddressInfo list = this.getJdbcTemplate().queryForObject(asql, params, mapper);
+			;
+
+			return list;
+		} catch (EmptyResultDataAccessException ex) {
+			return null;
+		}
+	}
+
+	
+	/**
+	 * for File Info
+	 */
+	public String findFileByPersonID(int pid) {
+		String sql = UploadFileMapper.file_Select_Sql;
+		Object[] params = new Object[] { pid };
+		try {
+			String name = (String) getJdbcTemplate().queryForObject(sql, params, String.class);
+			return name;
+		} catch (EmptyResultDataAccessException ex) {
+			return null;
+		}
+
+	}
+
+	public List<MyUploadForm> findFileListByPersonID(int pid) {
+		String sql = UploadFileMapper.file_Select_Sql + " where PersonID=?";
+		Object[] params = new Object[] { pid };
+		UploadFileMapper mapper = new UploadFileMapper();
+		try {
+			List<MyUploadForm> name = this.getJdbcTemplate().query(sql, params, mapper);
+			return name;
+		} catch (EmptyResultDataAccessException ex) {
+			return null;
+		}
+
+	}
+	
+	public void deleteFileByPersonID(int pid) {
+		List<MyUploadForm> list = findFileListByPersonID(pid);
+
+		for (int j = 0; j < list.size(); j++) {
+			File deleteFolder = new File(list.get(j).getServerFile());
+			deleteFolder.delete();
+		}
+
+		String FileSql = PersonInfoMapper.file_DELETE_SQL;
+		Object[] paramsFile = new Object[] { pid };
+		getJdbcTemplate().update(FileSql, paramsFile);
+	}
+
+	public void insertUploadFile(String uploadRootPath, String name, File serverFile, int pid) {
+		String sql = PersonInfoMapper.file_INSERT_SQL;
+		String serverfile = "" + serverFile;
+		Object[] params = new Object[] { pid, uploadRootPath, name, serverfile };
+		getJdbcTemplate().update(sql, params);
+
+	}
+
+	
+	
+
+	
 }
