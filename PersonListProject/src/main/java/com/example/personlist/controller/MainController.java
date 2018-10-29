@@ -134,6 +134,7 @@ public class MainController {
 	    modelAndView.addObject("adminMessage", "Content Available Only for Users with Admin Role");
 	    
 	    List<MongoInfo> info = mdao.SelectAll();
+	    
 	    List<Map<String, Object>> list = dao.getPersonInfoList(info);
 		m.addAttribute("personInfo", list);
 	    modelAndView.setViewName("dashboard");

@@ -55,7 +55,6 @@ public class MongoInfoDAO extends JdbcDaoSupport{
 		try
 		{
 		List<DBObject> myList = null;
-		MongoInfo mongoinfo = new MongoInfo();
 		List<MongoInfo> gList= new ArrayList<MongoInfo>();
 		mongoClient = new MongoClient();
 		DB db = mongoClient.getDB(database);
@@ -64,11 +63,15 @@ public class MongoInfoDAO extends JdbcDaoSupport{
 		
         DBCursor cursor = mongoTable.find();
         myList = cursor.toArray();
-        
-        mongoinfo.setId((int)(myList.get(0).get("_id")));
-        mongoinfo.setGender((String)(myList.get(0).get("gender")));
-        mongoinfo.setAge((int)(myList.get(0).get("age")));
-        gList.add(mongoinfo);
+        gList.add((MongoInfo) myList);
+    	for(int m=0; m<myList.size();m++) {
+    		MongoInfo mongoinfo = new MongoInfo();
+        	mongoinfo.setId((int)(myList.get(m).get("_id")));
+            mongoinfo.setGender((String)(myList.get(m).get("gender")));
+            mongoinfo.setAge((int)(myList.get(m).get("age")));
+            
+            gList.add(mongoinfo);
+        }
         return gList;
 		}
 		catch(Exception ex)
