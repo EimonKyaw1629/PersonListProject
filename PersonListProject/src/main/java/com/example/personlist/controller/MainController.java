@@ -73,25 +73,6 @@ public class MainController {
 	}
 
 
-	@RequestMapping(value = "/loginProcess", method = RequestMethod.POST)
-	public void BeginLogin(@Valid @ModelAttribute User user, HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
-
-		User u = userService.findUserByEmail(user.getEmail());
-
-		if (u != null) {
-			response.setStatus(HttpServletResponse.SC_OK);
-			response.sendRedirect("/personList");
-
-		} else {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			response.sendRedirect("/login");
-
-		}
-
-	}
-
-
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
 	public ModelAndView createNewUser(@Valid @ModelAttribute User user, BindingResult bindingResult) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -151,9 +132,9 @@ public class MainController {
 	    modelAndView.addObject("currentUser", user);
 	    modelAndView.addObject("email", "Welcome " + user.getEmail());
 	    modelAndView.addObject("adminMessage", "Content Available Only for Users with Admin Role");
-	    List<Map<String, Object>> list = dao.getPersonInfoList();
-		
-	
+	    
+	    List<MongoInfo> info = mdao.SelectAll();
+	    List<Map<String, Object>> list = dao.getPersonInfoList(info);
 		m.addAttribute("personInfo", list);
 	    modelAndView.setViewName("dashboard");
 	    return modelAndView;
@@ -366,9 +347,9 @@ public class MainController {
 		return this.doUpload(request, m, uploadingFiles, personinfo.getPersonID());
 	}
 
-	@RequestMapping(value = "/searchInfo", method = RequestMethod.POST)
+	@RequestMapping(value = "/searchInfo", method = RequestMethod.POST)//,//・・
 	public ModelAndView searchPersonInfo( @RequestParam(value = "fullname") String firstname,@RequestParam(value = "classname") String classname,
-			@RequestParam(value = "gender") String gender,Model m) {//@ModelAttribute("person") PersonInfo info, BindingResult result, Model m) {
+			Model m) {//@ModelAttribute("person") PersonInfo info, BindingResult result, Model m) {
 		
 		ModelAndView modelAndView = new ModelAndView();
 	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -376,13 +357,48 @@ public class MainController {
 	    modelAndView.addObject("currentUser", user);
 	    modelAndView.addObject("email", "Welcome " + user.getEmail());
 	    
-	    List<MongoInfo> info = repository.findBygender(gender);
-		List<Map<String, Object>> pinfo = dao.getSearchPersonInfo(firstname,classname,info);
-				m.addAttribute("personInfo", pinfo);
+	 //   List<MongoInfo> info = mdao.mongoFindGender(gender);//repository.findBygender(gender);
+	   
+	    	
+	    	List<Map<String, Object>> pinfo = dao.getSearchPersonInfo(firstname,classname);
+			m.addAttribute("personInfo", pinfo);
+	   
+		
 		 modelAndView.setViewName("dashboard");
 		    return modelAndView;
 	}
 
+	@RequestMapping(value = "/searchGender", method = RequestMethod.POST)//equestParam(value = "gender") String gender,//・・
+	public ModelAndView searchPersonInfo( @RequestParam(value = "gender") String gender,
+			Model m) {//@ModelAttribute("person") PersonInfo info, BindingResult result, Model m) {
+		
+		ModelAndView modelAndView = new ModelAndView();
+	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    User user = userService.findUserByEmail(auth.getName());
+	    modelAndView.addObject("currentUser", user);
+	    modelAndView.addObject("email", "Welcome " + user.getEmail());
+	    
+	   List<MongoInfo> info = mdao.mongoFindGender(gender);
+	   
+	   if(info != null)
+	   {
+		   List<Map<String, Object>> pinfo = dao.getSearchGenderInfo(info);
+			m.addAttribute("personInfo", pinfo);
+	   }
+	   else
+	   {
+		   List<Map<String, Object>> pinfo = new ArrayList<Map<String, Object>>();
+			m.addAttribute("personInfo", pinfo);
+	   }
+	    	
+	    	
+	   
+		
+		 modelAndView.setViewName("dashboard");
+		    return modelAndView;
+	}
+	
+	
 	@ResponseBody
 	@RequestMapping(value = "/photo/{name}", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
 	public byte[] testphoto(@PathVariable String name) throws IOException {
