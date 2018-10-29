@@ -13,12 +13,14 @@
 		<div class="container">
 			<div class="col-md-6 col-md-offset-3">
 				<form name="insert" id="insert" action="/insert" method="post"
-					enctype="multipart/form-data" onsubmit="return checkForm();">
+					enctype="multipart/form-data" th:object="${personInfo}">
 
 					<div class="form-group">
-						<label for="FullName">FullName</label> <input type="text"
-							class="form-control" name="FullName" placeholder="FullName" id="FullName">
+						<label for="FullName">FullName</label> 
+						<input type="text" class="form-control" placeholder="FullName" th:field="*{FullName}">
 					</div>
+					<span class="red" th:if="${#fields.hasErrors('FullName')}"
+                    		th:errors="*{FullName}"></span>
 
 					<div class="form-group">
 						<label for="FirstName">FirstName</label> <input type="text"
@@ -38,8 +40,11 @@
 					<div class="form-group">
 						<label for="Grade">Grade</label> 
 						<input type="text"
-							class="form-control" name="Grade" placeholder="Grade" maxlength="10">
+							class="form-control" th:field="*{Grade}" placeholder="Grade" maxlength="10">
 					</div>
+					<span class="red" th:if="${#fields.hasErrors('Grade')}"
+                    		th:errors="*{Grade}"></span>
+					
 
 					<div class="form-group">
 						<label for="Gender">gender</label>
@@ -53,7 +58,7 @@
 
 					<div class="form-group">
 						<label for="age">Age</label>
-							<input type="number" class="form-control" name="age" min="1" max="200" placeholder="age">
+							<input type="number" class="form-control" name="age"  placeholder="age">						
 					</div>
 
 					<br>

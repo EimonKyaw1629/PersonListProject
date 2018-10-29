@@ -1,7 +1,11 @@
 package com.example.personlist.model;
 
+import org.hibernate.validator.constraints.Length;
+
+
 public class ConbineModel {
 
+    @Length(min = 2, max = 8)
 	private  int PersonID;
 	private String FullName;
 	private String FirstName;
