@@ -19,7 +19,7 @@
 						<label for="FullName">FullName</label> 
 						<input type="text" class="form-control" placeholder="FullName" th:field="*{FullName}">
 					</div>
-					<span class="red" th:if="${#fields.hasErrors('FullName')}"
+					<span class="bg-danger" th:if="${#fields.hasErrors('FullName')}"
                     		th:errors="*{FullName}"></span>
 
 					<div class="form-group">
@@ -40,9 +40,9 @@
 					<div class="form-group">
 						<label for="Grade">Grade</label> 
 						<input type="text"
-							class="form-control" th:field="*{Grade}" placeholder="Grade" maxlength="10">
+							class="form-control" th:field="*{Grade}" placeholder="Grade" >
 					</div>
-					<span class="red" th:if="${#fields.hasErrors('Grade')}"
+					<span class="bg-danger" th:if="${#fields.hasErrors('Grade')}"
                     		th:errors="*{Grade}"></span>
 					
 

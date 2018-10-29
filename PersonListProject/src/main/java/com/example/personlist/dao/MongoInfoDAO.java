@@ -96,4 +96,5 @@ public class MongoInfoDAO extends JdbcDaoSupport{
 		
 		mongoTable.remove(deleteQuery);
 	}
+
 }
