@@ -59,9 +59,7 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 	
 		for(Map<String, Object> k : list)
 		{
-			if(k.containsKey("PersonID"))
-			{
-				for(MongoInfo j : i)
+			for(MongoInfo j : i)
 				{
 					
 						if(j.getId() == Integer.valueOf(k.get("PersonID").toString()))
@@ -69,13 +67,10 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 							k.put("gender", j.getGender());
 							
 						}
-					
 				}
 				
-				
-				
 				//k.put("gender", info.getGender());
-			}
+			
 			System.out.println(k);
 			
 		}
