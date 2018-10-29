@@ -39,7 +39,8 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 	
 	@Autowired
 	private MongoInfoRepository repository;
-	
+
+	private MongoInfoDAO dao;
 	public  List<PersonInfo> getPersonInfo()
 	{
 		String sql = PersonInfoMapper.BASE_SQL;
@@ -49,27 +50,31 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		return list;
 	}
 	
-	public List<Map<String, Object>>   getPersonInfoList()
+	public List<Map<String, Object>>   getPersonInfoList( List<MongoInfo> i)
 	{
 		String sql = AddressInfoMapper.XML_SELECT;
 		
 		List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sql);
-		List<MongoInfo> gender = repository.findAll();
-		
+	//	List<MongoInfo> gender =dao.get// repository.findAll();
+	
 		for(Map<String, Object> k : list)
 		{
-			for(MongoInfo m :gender)
+			if(k.containsKey("PersonID"))
 			{
-				if(k.containsKey("PersonID"))
+				for(MongoInfo j : i)
 				{
-				
-					if(m.getId() == Integer.valueOf(k.get("PersonID").toString()))
-					{
-						k.put("gender", m.getGender());
-						
-					}
+					
+						if(j.getId() == Integer.valueOf(k.get("PersonID").toString()))
+						{
+							k.put("gender", j.getGender());
+							
+						}
 					
 				}
+				
+				
+				
+				//k.put("gender", info.getGender());
 			}
 			System.out.println(k);
 			
@@ -242,7 +247,39 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		
 	}
 	
-	public List<Map<String, Object>> getSearchPersonInfo(String fullname,String classname, List<MongoInfo> pid)
+	public List<Map<String, Object>> getSearchGenderInfo( List<MongoInfo> pid)
+	{
+		
+		String sql=null;
+		List<Map<String, Object>> list=new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> r = new ArrayList<Map<String, Object>>();
+	for(MongoInfo i : pid)
+	{
+		sql = AddressInfoMapper.XML_SELECT  + " where (PersonID =IIF("+i.getId()+" IS NULL, PersonID, "+i.getId()+"))";
+		
+		try
+		{
+			list = this.getJdbcTemplate().queryForList(sql);
+			for(Map<String, Object> k : list)
+			{
+				k.put("gender", i.getGender());
+				r.add(k);
+			}
+			
+			
+			
+		}
+		catch(EmptyResultDataAccessException ex)
+		{
+			return null;
+		}
+		
+	}
+	return r;
+	
+		
+	}
+	public List<Map<String, Object>> getSearchPersonInfo(String fullname,String classname)
 	{
 		String sql=null;
 		
@@ -262,32 +299,8 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		try
 		{
 			List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sql);
-			List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
-			//Map<String, Object> map = new HashMap<String, Object>();
-			//map.put("foo", "bar");
+			return list;
 			
-			for(Map<String, Object> k : list)
-			{
-				for(MongoInfo m :pid)
-				{
-					if(k.containsKey("PersonID"))
-					{
-					
-						if(m.getId() == Integer.valueOf(k.get("PersonID").toString()))
-						{
-							k.put("gender", m.getGender());
-							result.add(k);
-						}
-						
-						
-					}
-				
-				}
-				System.out.println(k);
-				
-			}
-			System.out.println(result);
-			return result;
 		}
 		catch(EmptyResultDataAccessException ex)
 		{
