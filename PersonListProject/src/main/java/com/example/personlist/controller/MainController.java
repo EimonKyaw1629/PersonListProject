@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -38,7 +37,6 @@ import com.example.personlist.dao.PersonInfoDAO;
 import com.example.personlist.dao.UserService;
 import com.example.personlist.mapper.UserRepository;
 import com.example.personlist.model.AddressInfo;
-import com.example.personlist.model.ConbineModel;
 import com.example.personlist.model.MongoInfo;
 import com.example.personlist.model.MyUploadForm;
 import com.example.personlist.model.PersonInfo;
@@ -131,7 +129,7 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "/form", method = RequestMethod.GET)
-	public ModelAndView form(Model model) {
+	public ModelAndView form(Model model, PersonInfo personInfo) {
 		ModelAndView modelAndView = new ModelAndView();
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findUserByEmail(auth.getName());
@@ -163,17 +161,21 @@ public class MainController {
 
 	@RequestMapping(value = "/delete/pid={pid}")
 	public String deletePersonInfo(@PathVariable int pid, Model m) {
-		//repository.deleteById(pid);
 		dao.deleteInfo(pid);
 		mdao.mongoDelete(pid);
 		
 		return "redirect:/dashboard";
 	}
 
+
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
-    public String insertPersonInfo(PersonInfo personinfo, @RequestParam String addText,
-             @RequestParam(value = "files",required = false)MultipartFile[] files, @ModelAttribute MongoInfo mongoInfo, BindingResult bindingResult,
+    public String insertPersonInfo(@Valid PersonInfo personinfo,BindingResult bindingResult , @ModelAttribute MongoInfo mongoInfo, BindingResult mongoResult, @RequestParam String addText,
+             @RequestParam(value = "files",required = false)MultipartFile[] files,
              HttpServletRequest request, Model model) {
+		
+		if (bindingResult.hasErrors()) {
+            return "form";
+        }
 
 		List<String> addrlist = null;
 		addrlist = Arrays.asList(addText.split(","));
@@ -181,32 +183,9 @@ public class MainController {
 		
 		mongoInfo.setId(pid);
 		mdao.mongoInsert(mongoInfo);
-		//repository.save(mongoInfo);
 
 		return this.doUpload(request, model, files, pid);
     }
-	
-	/*@RequestMapping(value = "/insert", method = RequestMethod.POST)
-	public String insertPersonInfo(PersonInfo personinfo, @RequestParam String addText,
-
-			@RequestParam(value = "files", required = false) MultipartFile[] files, @ModelAttribute MongoInfo mongoInfo,
-			BindingResult bindingResult, HttpServletRequest request, Model model) {
-		
-
-	         @RequestParam(value = "files",required = false)MultipartFile[] files, @ModelAttribute MongoInfo mongoInfo, BindingResult bindingResult, 
-	         HttpServletRequest request, Model model) {
-
-		
-		List<String> addrlist = null;
-		addrlist = Arrays.asList(addText.split(","));
-		int pid = dao.insertInfo(personinfo, addrlist);
-		
-		mongoInfo.setId(pid);
-		mdao.mongoInsert(mongoInfo);
-		//repository.save(mongoInfo);
-
-		return this.doUpload(request, model, files, pid);
-	}*/
 
 	private static final String filePath = "C:\\99_TMPFiles\\images\\";
 
