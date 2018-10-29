@@ -41,7 +41,7 @@ public class UserService implements UserDetailsService{
 		u.setPassword(bCryptPasswordEncoder.encode(u.getPassword()));
 
 		 Role userRole = roleRepository.findByRole("ADMIN");
-		    u.setRoles(new HashSet<>(Arrays.asList(userRole)));
+		 u.setRoles(new HashSet<>(Arrays.asList(userRole)));
 
 		userRepository.save(u);
 	}

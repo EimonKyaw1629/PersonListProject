@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -37,6 +38,7 @@ import com.example.personlist.dao.PersonInfoDAO;
 import com.example.personlist.dao.UserService;
 import com.example.personlist.mapper.UserRepository;
 import com.example.personlist.model.AddressInfo;
+import com.example.personlist.model.ConbineModel;
 import com.example.personlist.model.MongoInfo;
 import com.example.personlist.model.MyUploadForm;
 import com.example.personlist.model.PersonInfo;
@@ -72,6 +74,7 @@ public class MainController {
 		return modelAndView;
 	}
 
+
 	@RequestMapping(value = "/loginProcess", method = RequestMethod.POST)
 	public void BeginLogin(@Valid @ModelAttribute User user, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
@@ -89,6 +92,7 @@ public class MainController {
 		}
 
 	}
+
 
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
 	public ModelAndView createNewUser(@Valid @ModelAttribute User user, BindingResult bindingResult) {
@@ -142,18 +146,19 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
-	public ModelAndView dashboard(Model m) throws JsonProcessingException {
-		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.findUserByEmail(auth.getName());
-		modelAndView.addObject("currentUser", user);
-		modelAndView.addObject("email", "Welcome " + user.getEmail());
-		modelAndView.addObject("adminMessage", "Content Available Only for Users with Admin Role");
-		List<Map<String, Object>> list = dao.getPersonInfoList();
-
+	public ModelAndView dashboard(Model m) throws JsonProcessingException{
+	    ModelAndView modelAndView = new ModelAndView();
+	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    User user = userService.findUserByEmail(auth.getName());
+	    modelAndView.addObject("currentUser", user);
+	    modelAndView.addObject("email", "Welcome " + user.getEmail());
+	    modelAndView.addObject("adminMessage", "Content Available Only for Users with Admin Role");
+	    List<Map<String, Object>> list = dao.getPersonInfoList();
+		
+	
 		m.addAttribute("personInfo", list);
-		modelAndView.setViewName("dashboard");
-		return modelAndView;
+	    modelAndView.setViewName("dashboard");
+	    return modelAndView;
 	}
 
 	@RequestMapping(value = "/delete/pid={pid}")
@@ -166,10 +171,31 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
+    public String insertPersonInfo(PersonInfo personinfo, @RequestParam String addText,
+             @RequestParam(value = "files",required = false)MultipartFile[] files, @ModelAttribute MongoInfo mongoInfo, BindingResult bindingResult,
+             HttpServletRequest request, Model model) {
+
+		List<String> addrlist = null;
+		addrlist = Arrays.asList(addText.split(","));
+		int pid = dao.insertInfo(personinfo, addrlist);
+		
+		mongoInfo.setId(pid);
+		mdao.mongoInsert(mongoInfo);
+		//repository.save(mongoInfo);
+
+		return this.doUpload(request, model, files, pid);
+    }
+	
+	/*@RequestMapping(value = "/insert", method = RequestMethod.POST)
 	public String insertPersonInfo(PersonInfo personinfo, @RequestParam String addText,
+
 			@RequestParam(value = "files", required = false) MultipartFile[] files, @ModelAttribute MongoInfo mongoInfo,
 			BindingResult bindingResult, HttpServletRequest request, Model model) {
 		
+
+	         @RequestParam(value = "files",required = false)MultipartFile[] files, @ModelAttribute MongoInfo mongoInfo, BindingResult bindingResult, 
+	         HttpServletRequest request, Model model) {
+
 		
 		List<String> addrlist = null;
 		addrlist = Arrays.asList(addText.split(","));
@@ -180,7 +206,7 @@ public class MainController {
 		//repository.save(mongoInfo);
 
 		return this.doUpload(request, model, files, pid);
-	}
+	}*/
 
 	private static final String filePath = "C:\\99_TMPFiles\\images\\";
 
@@ -362,15 +388,20 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "/searchInfo", method = RequestMethod.POST)
-	public String searchPersonInfo(@RequestParam(value = "fullname") String firstname,
-			@RequestParam(value = "classname") String classname, Model m) {// @ModelAttribute("person") PersonInfo info,
-																			// BindingResult result, Model m) {
-		System.out.println("latest" + firstname);
-		System.out.println("latest" + classname);
-		List<PersonInfo> pinfo = dao.getSearchPersonInfo(firstname, classname);
-
-		m.addAttribute("personInfo", pinfo);
-		return "personList";
+	public ModelAndView searchPersonInfo( @RequestParam(value = "fullname") String firstname,@RequestParam(value = "classname") String classname,
+			@RequestParam(value = "gender") String gender,Model m) {//@ModelAttribute("person") PersonInfo info, BindingResult result, Model m) {
+		
+		ModelAndView modelAndView = new ModelAndView();
+	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    User user = userService.findUserByEmail(auth.getName());
+	    modelAndView.addObject("currentUser", user);
+	    modelAndView.addObject("email", "Welcome " + user.getEmail());
+	    
+	    List<MongoInfo> info = repository.findBygender(gender);
+		List<Map<String, Object>> pinfo = dao.getSearchPersonInfo(firstname,classname,info);
+				m.addAttribute("personInfo", pinfo);
+		 modelAndView.setViewName("dashboard");
+		    return modelAndView;
 	}
 
 	@ResponseBody

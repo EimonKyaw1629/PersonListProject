@@ -1,6 +1,7 @@
 package com.example.personlist.dao;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,14 +13,17 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.StringUtils;
 
 import com.example.personlist.mapper.AddressInfoMapper;
 import com.example.personlist.mapper.ConbineModelMapper;
 import com.example.personlist.mapper.PersonInfoMapper;
 import com.example.personlist.mapper.UploadFileMapper;
 import com.example.personlist.model.AddressInfo;
+import com.example.personlist.model.MongoInfo;
 import com.example.personlist.model.MyUploadForm;
 import com.example.personlist.model.PersonInfo;
+import com.example.personlist.repository.MongoInfoRepository;
 
 
 @Component
@@ -33,6 +37,9 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		this.setDataSource(ds);
 	}
 	
+	@Autowired
+	private MongoInfoRepository repository;
+	
 	public  List<PersonInfo> getPersonInfo()
 	{
 		String sql = PersonInfoMapper.BASE_SQL;
@@ -44,10 +51,33 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 	
 	public List<Map<String, Object>>   getPersonInfoList()
 	{
-		String sql = AddressInfoMapper.XML_SELECT;//PersonInfoMapper.BASE_SQL;
+		String sql = AddressInfoMapper.XML_SELECT;
 		
-		ConbineModelMapper mapper = new ConbineModelMapper();
 		List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sql);
+		List<MongoInfo> gender = repository.findAll();
+		
+		for(Map<String, Object> k : list)
+		{
+			for(MongoInfo m :gender)
+			{
+				if(k.containsKey("PersonID"))
+				{
+				
+					if(m.getId() == Integer.valueOf(k.get("PersonID").toString()))
+					{
+						k.put("gender", m.getGender());
+						
+					}
+					
+				}
+			}
+			System.out.println(k);
+			
+		}
+		System.out.println(list);
+		
+		//change list<MongoInfo> to Map<String,Object>
+		
 		
 		return list;
 	}
@@ -212,36 +242,52 @@ public class PersonInfoDAO extends JdbcDaoSupport{
 		
 	}
 	
-	public List<PersonInfo> getSearchPersonInfo(String fullname,String classname)
+	public List<Map<String, Object>> getSearchPersonInfo(String fullname,String classname, List<MongoInfo> pid)
 	{
 		String sql=null;
 		
-		PersonInfoMapper mapper = new PersonInfoMapper();
-		//sql = PersonInfoMapper.BASE_SQL +" where (@a is null or  FullName=@a) and (ISNUlLL(@b) or ClassName=@b)" ;
-		if(fullname !="" && classname!="")
+		ConbineModelMapper mapper = new ConbineModelMapper();
+	
+		if(!StringUtils.isEmpty(fullname)  || !StringUtils.isEmpty(classname) )
 		{
-			sql=PersonInfoMapper.BASE_SQL +" where FullName like  '%"+fullname+"%' and ClassName like  '%"+classname+"%'";
-			
-		}
-		else if (fullname !="" && classname=="")
-		{
-			sql=PersonInfoMapper.BASE_SQL +" where FullName like  '%"+fullname+"%' ";
-			
-		}
-		else if(fullname =="" && classname!="")
-		{
-			sql=PersonInfoMapper.BASE_SQL +" where  ClassName like  '%"+classname+"%'";
-			
+			sql = AddressInfoMapper.XML_SELECT +" where ('"+fullname+"' is null or  FullName='"+fullname+"') or ('"+classname+"' is null or ClassName='"
+					+classname+"') ";//or (PersonID =IIF("+pid+" IS NULL, PersonID, "+pid+"))" ;
 		}
 		else
 		{
-			sql=PersonInfoMapper.BASE_SQL ;
-			
+			sql = AddressInfoMapper.XML_SELECT  ;
 		}
+		
+		
 		try
 		{
-			List<PersonInfo> info = this.getJdbcTemplate().query(sql,mapper);//(sql, params,mapper);
-			return info;
+			List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sql);
+			List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+			//Map<String, Object> map = new HashMap<String, Object>();
+			//map.put("foo", "bar");
+			
+			for(Map<String, Object> k : list)
+			{
+				for(MongoInfo m :pid)
+				{
+					if(k.containsKey("PersonID"))
+					{
+					
+						if(m.getId() == Integer.valueOf(k.get("PersonID").toString()))
+						{
+							k.put("gender", m.getGender());
+							result.add(k);
+						}
+						
+						
+					}
+				
+				}
+				System.out.println(k);
+				
+			}
+			System.out.println(result);
+			return result;
 		}
 		catch(EmptyResultDataAccessException ex)
 		{

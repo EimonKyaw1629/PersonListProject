@@ -17,6 +17,7 @@ public class ConbineModelMapper {
 		String className = rs.getString("ClassName");
 		String grade = rs.getString("Grade");
 		String address = rs.getString("Address");		
-		return new ConbineModel(personID, fullName, firstName, lastName, className, grade,address);
+		String gender = rs.getString("Gender");
+		return new ConbineModel(personID, fullName, firstName, lastName, className, grade,address,gender);
 	}
 }

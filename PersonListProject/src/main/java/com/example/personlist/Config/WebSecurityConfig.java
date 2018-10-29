@@ -36,20 +36,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	}
 	
 	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-	    http
-	        .authorizeRequests()
-	            .antMatchers("/", "/login", "/signup")
-	            .permitAll()
-	            .antMatchers("/personList/**", "/editPerson/**", "/form/**")
-	            .hasAuthority("ADMIN").anyRequest()
-	           
-	            .authenticated().and().csrf().disable().formLogin().successHandler(customizeAuthenticationSuccessHandler)
-	            .loginPage("/login").failureUrl("/login?error=true")
-	            .usernameParameter("email")
-	            .passwordParameter("password")
-	            .and().logout()
-	            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-	            .logoutSuccessUrl("/").and().exceptionHandling();
-	}
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+            .authorizeRequests()
+          
+                .antMatchers("/").permitAll()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/signup").permitAll()
+               .antMatchers("/edit/pid={pid}").permitAll()
+                .antMatchers("/personList/**").hasAuthority("ADMIN").anyRequest()
+              
+                .authenticated().and().csrf().disable().formLogin().successHandler(customizeAuthenticationSuccessHandler)
+                .loginPage("/login").failureUrl("/login?error=true")
+                .usernameParameter("email")
+                .passwordParameter("password")
+                .and().logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/").and().exceptionHandling();
+    }
 }
