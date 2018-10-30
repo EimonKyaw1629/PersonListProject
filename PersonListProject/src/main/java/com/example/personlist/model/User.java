@@ -20,7 +20,7 @@ public class User {
 	@Override
 	public String toString()
 	{
-		return "User{"+"id=" + id + ", Email=" +email + ", Password=" + password + '}';
+		return "{'_id' : " + id + ", 'email' : '" +email + "','password' : '" + password + "'}";
 	}
 	
 	public User()

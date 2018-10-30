@@ -44,7 +44,7 @@ public class LoginController {
 
 
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
-	public ModelAndView createLoginNewUser(@Valid @ModelAttribute User user, BindingResult bindingResult) {
+	public ModelAndView createLoginNewUser(@Valid @ModelAttribute User user, BindingResult bindingResult) throws JsonProcessingException {
 		ModelAndView modelAndView = new ModelAndView();
 		User userExists = userService.findUserByEmail(user.getEmail());
 		if (userExists != null) {
@@ -52,7 +52,7 @@ public class LoginController {
 					"There is already a user registered with the username provided");
 		}
 		if (bindingResult.hasErrors()) {
-			modelAndView.setViewName("signup");
+			modelAndView.setViewName("signUp");
 		} else {
 			userService.saveUser(user);
 			modelAndView.addObject("successMessage", "User has been registered successfully");
@@ -63,7 +63,7 @@ public class LoginController {
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "/signUp", method = RequestMethod.GET)
+	@RequestMapping(value = "/signup", method = RequestMethod.GET)
 	public ModelAndView signup() {
 		ModelAndView modelAndView = new ModelAndView();
 		User user = new User();

@@ -31,5 +31,11 @@ public class Role {
 		// TODO Auto-generated method stub
 		return role;
 	}
-
+	@Override
+	public String toString()
+	
+	{
+		return "DBRef('role' , ObjectId('" + id  + "'))";
+	}
+	
 }
