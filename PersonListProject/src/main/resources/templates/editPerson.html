@@ -81,6 +81,16 @@
 							</div>
 						</div>
 					</div>
+					
+					<div th:each="person,stat : ${person.mongoList}">
+						<div class="form-group">
+							<label for="job" class="col-sm-2 control-label">Job</label>
+							<div class="col-sm-7">
+								<input type="hidden" th:value="${person.job}" name="mongoJob" />
+								<input type="text" class="form-control" name="job" th:value="${person.job}">
+							</div>
+						</div>
+					</div>
 
 					<div th:each="person,stat : ${person.alist}">
 						<div class="form-group">

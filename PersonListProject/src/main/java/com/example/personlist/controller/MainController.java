@@ -130,7 +130,7 @@ public class MainController {
 		}
 		model.addAttribute("uploadedFiles", uploadedFiles);
 		model.addAttribute("failedFiles", failedFiles);
-		return "redirect:/dashboard";
+		return "redirect:/personList";
 	}
 
 	/*
@@ -150,7 +150,7 @@ public class MainController {
 		List<AddressInfo> ainfo = dao.findAddressInfoByPersonID(pid);
 		List<MyUploadForm> upfile = dao.findFileListByPersonID(pid);
 		
-		MongoInfo mongoInfo=mdao.mongoFindbyPersonID(pid);
+		MongoInfo mongoInfo = mdao.mongoFindbyPersonID(pid);
 
 		if (info != null) {
 			if (ainfo != null) {
@@ -182,6 +182,7 @@ public class MainController {
 				MongoInfo mon = new MongoInfo();
 				mon.setAge(mongoInfo.getAge());
 				mon.setGender(mongoInfo.getGender());
+				mon.setJob(mongoInfo.getJob());
 				info.mongoList.add(mon);
 			}
 
@@ -211,12 +212,12 @@ public class MainController {
 			@RequestParam(value = "uploadRootPath", required = false) String[] uploadRootPath,
 			@RequestParam(value = "serverFile", required = false) String[] serverFile,
 			@RequestParam(value = "name", required = false) String[] name, @RequestParam(value = "age") int age,
-			@RequestParam(value = "gender") String gender) {
+			@RequestParam(value = "gender") String gender, @RequestParam(value = "job") String job) {
 
 		PersonInfo personinfo = new PersonInfo(Integer.valueOf(pid), fullname, firstname, lastname, classname, grade);
 		List<MyUploadForm> uplist = new ArrayList<MyUploadForm>();
 		List<AddressInfo> alist = new ArrayList<AddressInfo>();
-		MongoInfo mongoInfo = new MongoInfo(Integer.valueOf(pid),gender,age);
+		MongoInfo mongoInfo = new MongoInfo(Integer.valueOf(pid),gender,age,job);
 
 		if (ar != null) {
 			for (int j = 0; j < ar.length; j++) {
@@ -268,13 +269,13 @@ public class MainController {
 		m.addAttribute("personInfo", pinfo);
 	   
 		
-		 modelAndView.setViewName("dashboard");
+		 modelAndView.setViewName("personList");
 		    return modelAndView;
 	}
 
 	@RequestMapping(value = "/searchGender", method = RequestMethod.POST)
 	public ModelAndView searchPersonGenderInfo( @RequestParam(value = "gender") String gender,
-			Model m) {
+			@RequestParam(value = "job") String job, Model m) {
 		
 		ModelAndView modelAndView = new ModelAndView();
 	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -282,7 +283,7 @@ public class MainController {
 	    modelAndView.addObject("currentUser", user);
 	    modelAndView.addObject("email", "Welcome " + user.getEmail());
 	    
-	   List<MongoInfo> info = mdao.mongoFindGender(gender);
+	   List<MongoInfo> info = mdao.mongoFindGender(gender, job);
 	   
 	   if(info != null)
 	   {
@@ -294,12 +295,9 @@ public class MainController {
 		   List<Map<String, Object>> pinfo = new ArrayList<Map<String, Object>>();
 			m.addAttribute("personInfo", pinfo);
 	   }
-	    	
-	    	
-	   
-		
-		 modelAndView.setViewName("dashboard");
-		    return modelAndView;
+
+		 modelAndView.setViewName("personList");
+		 return modelAndView;
 	}
 	
 	
