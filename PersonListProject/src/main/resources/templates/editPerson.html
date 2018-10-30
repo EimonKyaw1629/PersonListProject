@@ -5,12 +5,54 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+
+<script>
+	var counter = 1;
+	function AddRow() {
+		if (counter > 10) {
+			alert("Only 10 textboxes allow");
+			return false;
+		}
+
+		var newTextBoxDiv = $(document.createElement('div')).attr("id",
+				'TextBoxDiv' + counter);
+
+		newTextBoxDiv
+				.after()
+				.html(
+						'<div class="form-group" id="TextBoxDiv'+counter+'"><div><label class="col-sm-2 control-label">Address </label>'
+								+ '<div class="col-sm-7"><input type="text" class="form-control" name="a'
+                            + '"  th:value="" ></div>'
+								+ '<input type="button" value="Remove Button" id="removeButton'
+								+ counter
+								+ '" onclick="deleteControl('
+								+ counter + ')"></div></div>');
+
+		newTextBoxDiv.appendTo("#TextBoxesGroup");
+
+		counter++;
+	}
+
+	$("#upa").click(function() {
+
+		var msg = '';
+		for (i = 1; i < counter; i++) {
+			msg += "\n Textbox #" + i + " : " + $('#Address' + i).val();
+		}
+		alert(msg);
+	});
+
+	function deleteControl(counter) {
+		$("#TextBoxDiv" + counter).remove();
+	}
+</script>
+
 </head>
 <body>
-<div  class="form-horizontal" layout:fragment="content">
-          
-            <div class="container">
-            <div class="col-md-6 col-md-offset-3">
+	<div class="form-horizontal" layout:fragment="content">
+
+		<div class="container">
+			<div class="col-md-6 col-md-offset-3">
 				<h2>Person Info Edit</h2>
 				<form name="editpage" id="editpage" action="/edit" method="post"
 					th:object="${person}" enctype="multipart/form-data">
@@ -58,36 +100,41 @@
 
 					<div th:each="person,stat : ${person.mongoList}">
 						<div class="form-group">
-						<label for="Gender" class="col-sm-2 control-label">gender</label>
+							<label for="Gender" class="col-sm-2 control-label">gender</label>
 							<div th:switch="${person.gender}">
-								<p th:case="male"><a>&nbsp;&nbsp;&nbsp;</a>
-								male <input  type="radio" name="gender" th:value="male" checked>
-								woman<input  type="radio" name="gender" th:value="woman" ></p>
-								<p th:case="woman"><a>&nbsp;&nbsp;&nbsp;</a>
-								male<input  type="radio" name="gender" th:value="male" >
-								woman<input  type="radio" name="gender" th:value="woman" checked></p>
+								<p th:case="male">
+									<a>&nbsp;&nbsp;&nbsp;</a> male <input type="radio"
+										name="gender" th:value="male" checked> woman<input
+										type="radio" name="gender" th:value="woman">
+								</p>
+								<p th:case="woman">
+									<a>&nbsp;&nbsp;&nbsp;</a> male<input type="radio" name="gender"
+										th:value="male"> woman<input type="radio"
+										name="gender" th:value="woman" checked>
+								</p>
 							</div>
 						</div>
 					</div>
-					
-					
+
+
 					<div th:each="person,stat : ${person.mongoList}">
 						<div class="form-group">
 							<label for="age" class="col-sm-2 control-label">Age</label>
 							<div class="col-sm-7">
 								<input type="hidden" th:value="${person.age}" name="mongoAge" />
-								<input type="number" class="form-control" name="age" min="1" max="150"
-									 th:value="${person.age}">
+								<input type="number" class="form-control" name="age" min="1"
+									max="150" th:value="${person.age}">
 							</div>
 						</div>
 					</div>
-					
+
 					<div th:each="person,stat : ${person.mongoList}">
 						<div class="form-group">
 							<label for="job" class="col-sm-2 control-label">Job</label>
 							<div class="col-sm-7">
 								<input type="hidden" th:value="${person.job}" name="mongoJob" />
-								<input type="text" class="form-control" name="job" th:value="${person.job}">
+								<input type="text" class="form-control" name="job"
+									th:value="${person.job}">
 							</div>
 						</div>
 					</div>
@@ -112,19 +159,26 @@
 						<input type='button' value='Add Address' id='addButton'
 							onCLick="AddRow()">
 					</div>
-					
-					<div id="attachFileDiv"  class="form-group">
-                    <input type="button" value="追加" onclick="attachFile.add()" style="margin-left: 5px">
-                    </div>
+					<br />
+
+					<div class="form-group">
+						<label for="Gender" class="col-sm-2 control-label">Image</label> <input
+							type="file" class="multi with-preview" name="files" multiple />
+					</div>
+					<br />
+
 
 					<div th:each="person,stat : ${person.fileString}">
 						<div class="form-group">
 							<input type="hidden" th:value="${person.FileID}" name="image" />
-							<input type="hidden" th:value="${person.uploadRootPath}" name="uploadRootPath" /> 
-							<input type="hidden" th:value="${person.serverFile}" name="serverFile" />
-							<input type="hidden" th:value="${person.name}" name="name" />
-							<img id="ShowImage" th:src="'/photo/' + ${person.name}" height="100" width="100" name="name" th:value="${person.name}" /> 
-							<input type="button" onCLick="this.parentElement.remove();" value='Remove image' />
+							<input type="hidden" th:value="${person.uploadRootPath}"
+								name="uploadRootPath" /> <input type="hidden"
+								th:value="${person.serverFile}" name="serverFile" /> <input
+								type="hidden" th:value="${person.name}" name="name" /> <img
+								id="ShowImage" th:src="'/photo/' + ${person.name}" height="100"
+								width="100" name="name" th:value="${person.name}" /> <input
+								type="button" onCLick="this.parentElement.remove();"
+								value='Remove image' />
 						</div>
 					</div>
 

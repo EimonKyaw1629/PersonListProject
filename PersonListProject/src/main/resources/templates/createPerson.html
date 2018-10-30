@@ -6,6 +6,27 @@
 <head>
 <meta charset="utf-8">
 <title>Form Template</title>
+<script>
+	var oTbl;
+	//Row 追加
+	function insRow() {
+		oTbl = document.getElementById("addTable");
+		var oRow = oTbl.insertRow();
+		oRow.onmouseover = function() {
+			oTbl.clickedRowIndex = this.rowIndex
+		}; //clickedRowIndex - Rowの位置確認
+		var oCell = oRow.insertCell();
+
+		//Form Tag
+		var frmTag = "<input type=text name=addText style=width:350px; height:20px;> ";
+		frmTag += "<input type=button value='削除' onClick='removeRow()' style='cursor:hand'>";
+		oCell.innerHTML = frmTag;
+	}
+	//Row 削除
+	function removeRow() {
+		oTbl.deleteRow(oTbl.clickedRowIndex);
+	}
+</script>
 </head>
 
 <body>
@@ -16,11 +37,12 @@
 					enctype="multipart/form-data" th:object="${personInfo}">
 
 					<div class="form-group">
-						<label for="FullName">FullName</label> 
-						<input type="text" class="form-control" placeholder="FullName" th:field="*{FullName}">
+						<label for="FullName">FullName</label> <input type="text"
+							class="form-control" placeholder="FullName"
+							th:field="*{FullName}">
 					</div>
 					<span class="bg-danger" th:if="${#fields.hasErrors('FullName')}"
-                    		th:errors="*{FullName}"></span>
+						th:errors="*{FullName}"></span>
 
 					<div class="form-group">
 						<label for="FirstName">FirstName</label> <input type="text"
@@ -38,32 +60,30 @@
 					</div>
 
 					<div class="form-group">
-						<label for="Grade">Grade</label> 
-						<input type="text"
-							class="form-control" th:field="*{Grade}" placeholder="Grade" >
+						<label for="Grade">Grade</label> <input type="text"
+							class="form-control" th:field="*{Grade}" placeholder="Grade">
 					</div>
 					<span class="bg-danger" th:if="${#fields.hasErrors('Grade')}"
-                    		th:errors="*{Grade}"></span>
-					
+						th:errors="*{Grade}"></span>
+
 
 					<div class="form-group">
-						<label for="Gender">gender</label>
-							<label class="radio-inline">
-							<input type="radio" name="gender" id="optionsRadios1" value="male" checked>Male
-							</label> 
-							<label class="radio-inline">
-							<input type="radio" name="gender" id="optionsRadios2" value="woman">Woman
-							</label>
+						<label for="Gender">gender</label> <label class="radio-inline">
+							<input type="radio" name="gender" id="optionsRadios1"
+							value="male" checked>Male
+						</label> <label class="radio-inline"> <input type="radio"
+							name="gender" id="optionsRadios2" value="woman">Woman
+						</label>
 					</div>
 
 					<div class="form-group">
-						<label for="age">Age</label>
-							<input type="number" class="form-control" name="age"  placeholder="age">						
+						<label for="age">Age</label> <input type="number"
+							class="form-control" name="age" placeholder="age">
 					</div>
-					
+
 					<div class="form-group">
-						<label for="job">Job</label>
-							<input type="text" class="form-control" name="job"  placeholder="job">						
+						<label for="job">Job</label> <input type="text"
+							class="form-control" name="job" placeholder="job">
 					</div>
 
 					<br>
@@ -87,20 +107,15 @@
 														style="width: 350px; height: 20px;"></td>
 													<td align="left"></td>
 												</tr>
-											</table>
-											<br>
+											</table> <br>
 										</td>
 									</tr>
 								</table>
 							</td>
 						</tr>
-					</table><br>
- 					
- 					<div id="attachFileDiv"  class="form-group">
-					<input type="button" value="追加" onclick="attachFile.add()" style="margin-left: 5px">
-					</div>
-					
-					<br>
+					</table>
+					<br> <input type="file" class="multi with-preview"
+						name="files" multiple /> <br>
 					<button type="submit" class="btn btn-default">Create</button>
 					<input type="reset" value="cancel" class="btn btn-default">
 				</form>

@@ -16,14 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
 
 import com.example.personlist.mapper.AddressInfoMapper;
-import com.example.personlist.mapper.ConbineModelMapper;
 import com.example.personlist.mapper.PersonInfoMapper;
 import com.example.personlist.mapper.UploadFileMapper;
 import com.example.personlist.model.AddressInfo;
 import com.example.personlist.model.MongoInfo;
 import com.example.personlist.model.MyUploadForm;
 import com.example.personlist.model.PersonInfo;
-import com.example.personlist.repository.MongoInfoRepository;
 
 @Component
 @Repository
