@@ -136,6 +136,10 @@ public class PersonInfoDAO extends JdbcDaoSupport {
 		if (!StringUtils.isEmpty(fullname) || !StringUtils.isEmpty(classname)) {
 			sql = AddressInfoMapper.XML_SELECT + " where ('" + fullname + "' is null or  FullName='" + fullname
 					+ "') or ('" + classname + "' is null or ClassName='" + classname + "') ";
+			
+		}
+		else
+		{
 			sql = AddressInfoMapper.XML_SELECT;
 		}
 
