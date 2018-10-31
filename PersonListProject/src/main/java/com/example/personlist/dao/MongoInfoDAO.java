@@ -8,6 +8,10 @@ import javax.sql.DataSource;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -55,6 +59,41 @@ public class MongoInfoDAO extends JdbcDaoSupport {
 		
 		mongoTable.insert(dbObject);
 	}
+	
+	public void mongoUpdata(MongoInfo mongoinfo) {
+
+		mongoClient = new MongoClient();
+		DB db = mongoClient.getDB(database);
+		DBCollection mongoTable = db.getCollection("mongoInfo");
+		
+		String mongoData = mongoinfo+"";
+		DBObject dbObject = (DBObject)JSON.parse(mongoData);
+		mongoTable.save(dbObject);
+		
+		/*BasicDBObject updateQuery = new BasicDBObject()
+				.append("gender", mongoinfo.getGender())
+				.append("age",mongoinfo.getAge());
+
+		BasicDBObject searchQuery = new BasicDBObject()
+				.append("_id", mongoinfo.getId());
+
+		mongoTable.update(searchQuery, updateQuery);*/
+		
+		/*
+		 * 
+		 */
+		
+		/*MongoOperations mongoOps = new MongoTemplate(new MongoClient(), "mongoInfo");
+		Query query = new Query();
+		//query.addCriteria(Criteria.where("_id").is(mongoinfo.getId()), MongoInfo.class);
+		MongoInfo qp = mongoOps.findOne(query(where("_id").is(mongoinfo.getId())), MongoInfo.class);
+		
+		MongoInfo mongo = new MongoInfo();
+		mongo = (MongoInfo) mongoOps;
+		
+		System.out.println(mongo);
+		System.out.println(mongoOps);*/
+	}
 
 	public List<MongoInfo> SelectAllGender() {
 		try {
@@ -81,7 +120,6 @@ public class MongoInfoDAO extends JdbcDaoSupport {
 
 	public MongoInfo mongoFindbyPersonID(int pid) {
 
-		List<DBObject> myList = null;
 		MongoInfo mongoinfo = new MongoInfo();
 		mongoClient = new MongoClient();
 		DB db = mongoClient.getDB(database);
@@ -89,13 +127,21 @@ public class MongoInfoDAO extends JdbcDaoSupport {
 		DBCollection mongoTable = db.getCollection("mongoInfo");
 		BasicDBObject whereQuery = new BasicDBObject();
 		whereQuery.put("_id", pid);
+		
+		DBObject test = (DBObject) mongoTable.findOne(whereQuery);
+		mongoinfo.setId((int)test.get("_id"));
+		mongoinfo.setGender((String)test.get("gender"));
+		mongoinfo.setAge((int)test.get("age"));
+		mongoinfo.setJob((String)test.get("job"));
+		
+		/*List<DBObject> myList = null;
 		DBCursor cursor = mongoTable.find(whereQuery);
 		myList = cursor.toArray();
 
 		mongoinfo.setId((int) (myList.get(0).get("_id")));
 		mongoinfo.setGender((String) (myList.get(0).get("gender")));
 		mongoinfo.setAge((int) (myList.get(0).get("age")));
-		mongoinfo.setJob((String) (myList.get(0).get("job")));
+		mongoinfo.setJob((String) (myList.get(0).get("job")));*/
 
 		return mongoinfo;
 
@@ -126,39 +172,6 @@ public class MongoInfoDAO extends JdbcDaoSupport {
 		} catch (Exception ex) {
 			return null;
 		}
-	}
-
-	public void mongoUpdata(MongoInfo mongoinfo) {
-
-		mongoClient = new MongoClient();
-		DB db = mongoClient.getDB(database);
-		DBCollection mongoTable = db.getCollection("mongoInfo");
-		
-		String mongoData = mongoinfo+"";
-		DBObject dbObject = (DBObject)JSON.parse(mongoData);
-		mongoTable.save(dbObject);
-		
-		/*BasicDBObject updateQuery = new BasicDBObject()
-				.append("gender", mongoinfo.getGender())
-				.append("age",mongoinfo.getAge());
-
-		BasicDBObject searchQuery = new BasicDBObject()
-				.append("_id", mongoinfo.getId());
-
-		mongoTable.update(searchQuery, updateQuery);*/
-		
-		/*
-		 * 
-		 */
-		/*Query query = new Query();
-		query.addCriteria(Criteria.where("_id").is(mongoinfo.getId()));
-		Update update = new Update();
-		
-		update.set("gender", mongoinfo.getGender());
-		update.set("age", mongoinfo.getAge());
-		update.set("job",mongoinfo.getJob());
-		
-		mongoTable.update(query, update);*/
 	}
 
 	public void mongoDelete(int pid) {

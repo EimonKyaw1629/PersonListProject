@@ -202,7 +202,7 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
-	public String editPersonInfo(@RequestParam(value = "pid") String pid, Model m,
+	public String editPersonInfo(Model m, @RequestParam(value = "pid") String pid, 
 			@RequestParam(value = "fu") String fullname, @RequestParam(value = "fs") String firstname,
 			@RequestParam(value = "ls") String lastname, @RequestParam(value = "cs") String classname,
 			@RequestParam(value = "g") String grade, @RequestParam(value = "aid", required = false) String[] aid,
