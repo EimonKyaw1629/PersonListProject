@@ -43,10 +43,6 @@ public class UserService implements UserDetailsService{
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
-	@Value("${spring.data.mongodb.database}")
-	private String database;
-	private MongoClient mongoClient;
-	
 	public User findUserByEmail(String em)
 	{
 		return userRepository.findByEmail(em);

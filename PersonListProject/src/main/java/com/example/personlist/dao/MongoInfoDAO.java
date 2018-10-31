@@ -101,7 +101,7 @@ public class MongoInfoDAO extends JdbcDaoSupport {
 
 	}
 
-	public List<MongoInfo> mongoFindGender(String gender, String job) {
+	public List<MongoInfo> mongoFindGenderJob(String gender, String job) {
 
 		try {
 			MongoDatabase database = this.getMongoDatabase();
@@ -138,27 +138,7 @@ public class MongoInfoDAO extends JdbcDaoSupport {
 		DBObject dbObject = (DBObject)JSON.parse(mongoData);
 		mongoTable.save(dbObject);
 		
-		/*BasicDBObject updateQuery = new BasicDBObject()
-				.append("gender", mongoinfo.getGender())
-				.append("age",mongoinfo.getAge());
-
-		BasicDBObject searchQuery = new BasicDBObject()
-				.append("_id", mongoinfo.getId());
-
-		mongoTable.update(searchQuery, updateQuery);*/
 		
-		/*
-		 * 
-		 */
-		/*Query query = new Query();
-		query.addCriteria(Criteria.where("_id").is(mongoinfo.getId()));
-		Update update = new Update();
-		
-		update.set("gender", mongoinfo.getGender());
-		update.set("age", mongoinfo.getAge());
-		update.set("job",mongoinfo.getJob());
-		
-		mongoTable.update(query, update);*/
 	}
 
 	public void mongoDelete(int pid) {
