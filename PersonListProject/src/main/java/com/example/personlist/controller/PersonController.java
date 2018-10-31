@@ -141,12 +141,12 @@ public class PersonController {
 			throws IOException {
 
 		ModelAndView modelAndView = new ModelAndView();
-		/*
+		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findUserByEmail(auth.getName());
 		modelAndView.addObject("currentUser", user);
 		modelAndView.addObject("fullName", "Welcome " + user.getEmail());
-*/
+
 		PersonInfo info = dao.findPersonInfo(pid);
 		List<AddressInfo> ainfo = dao.findAddressInfoByPersonID(pid);
 		List<MyUploadForm> upfile = dao.findFileListByPersonID(pid);
@@ -261,12 +261,12 @@ public class PersonController {
 			Model m) {
 		
 		ModelAndView modelAndView = new ModelAndView();
-		/*
+		
 	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	    User user = userService.findUserByEmail(auth.getName());
 	    modelAndView.addObject("currentUser", user);
 	    modelAndView.addObject("email", "Welcome " + user.getEmail());
-	    */
+	    
 	    List<Map<String, Object>> pinfo = dao.getSearchPersonInfo(firstname,classname);
 		m.addAttribute("personInfo", pinfo);
 	   
@@ -280,12 +280,12 @@ public class PersonController {
 			@RequestParam(value = "job") String job, Model m) {
 		
 		ModelAndView modelAndView = new ModelAndView();
-	  /*
+	  
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	    User user = userService.findUserByEmail(auth.getName());
 	    modelAndView.addObject("currentUser", user);
 	    modelAndView.addObject("email", "Welcome " + user.getEmail());
-	    */
+	    
 	   List<MongoInfo> info = mdao.mongoFindGenderJob(gender, job);
 	   
 	   if(info != null)
