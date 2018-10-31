@@ -54,9 +54,11 @@ public class PersonInfoDAO extends JdbcDaoSupport {
 
 				if (j.getId() == Integer.valueOf(k.get("PersonID").toString())) {
 					k.put("gender", j.getGender());
+					k.put("job", j.getJob());
 				}
 			}
 		}
+		System.out.println(list);
 		return list;
 	}
 
@@ -118,6 +120,7 @@ public class PersonInfoDAO extends JdbcDaoSupport {
 				list = this.getJdbcTemplate().queryForList(sql);
 				for (Map<String, Object> k : list) {
 					k.put("gender", i.getGender());
+					k.put("job", i.getJob());
 					r.add(k);
 				}
 			} catch (EmptyResultDataAccessException ex) {

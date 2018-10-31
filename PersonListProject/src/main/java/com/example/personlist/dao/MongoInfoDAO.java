@@ -70,6 +70,7 @@ public class MongoInfoDAO extends JdbcDaoSupport {
 				mongoinfo.setId((int)gender.getInteger("_id"));
 				mongoinfo.setGender(gender.getString("gender"));
 				mongoinfo.setAge(gender.getInteger("age"));
+				mongoinfo.setJob(gender.getString("job"));
 				gList.add(mongoinfo);
 			}
 
