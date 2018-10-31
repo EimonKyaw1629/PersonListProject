@@ -5,7 +5,6 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import com.example.personlist.model.AddressInfo;
 import com.example.personlist.model.MyUploadForm;
 
 public class UploadFileMapper implements RowMapper<MyUploadForm>{

@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.example.personlist.model.ConbineModel;
-import com.example.personlist.model.PersonInfo;
 
 public class ConbineModelMapper {
 	public ConbineModel mapRow(ResultSet rs, int rowNum) throws SQLException {
