@@ -276,8 +276,7 @@ public class PersonController {
 	}
 
 	@RequestMapping(value = "/searchGenderJob", method = RequestMethod.POST)
-	public ModelAndView searchPersonGenderJobInfo( @RequestParam(value = "gender") String gender,
-			@RequestParam(value = "job") String job, Model m) {
+	public ModelAndView searchPersonGenderJobInfo(@ModelAttribute("mongo")MongoInfo minfo,Model m) {
 		
 		ModelAndView modelAndView = new ModelAndView();
 	  
@@ -286,7 +285,7 @@ public class PersonController {
 	    modelAndView.addObject("currentUser", user);
 	    modelAndView.addObject("email", "Welcome " + user.getEmail());
 	    
-	   List<MongoInfo> info = mdao.mongoFindGenderJob(gender, job);
+	   List<MongoInfo> info = mdao.mongoFindGenderJob(minfo);
 	   
 	   if(info != null)
 	   {
