@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 
 <script>
+
 	var counter = 1;
 	function AddRow() {
 		if (counter > 10) {
@@ -32,15 +33,6 @@
 
 		counter++;
 	}
-
-	$("#upa").click(function() {
-
-		var msg = '';
-		for (i = 1; i < counter; i++) {
-			msg += "\n Textbox #" + i + " : " + $('#Address' + i).val();
-		}
-		alert(msg);
-	});
 
 	function deleteControl(counter) {
 		$("#TextBoxDiv" + counter).remove();

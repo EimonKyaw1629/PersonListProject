@@ -42,7 +42,6 @@ public class LoginController {
 		return modelAndView;
 	}
 
-
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
 	public ModelAndView createLoginNewUser(@Valid @ModelAttribute User user, BindingResult bindingResult) throws JsonProcessingException {
 		ModelAndView modelAndView = new ModelAndView();
@@ -79,7 +78,6 @@ public class LoginController {
 		return modelAndView;
 	}
 
-	
 	@RequestMapping(value = "/personList", method = RequestMethod.GET)
 	public ModelAndView getListUser(Model m) throws JsonProcessingException{
 	    ModelAndView modelAndView = new ModelAndView();

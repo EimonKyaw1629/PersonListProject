@@ -8,10 +8,6 @@ public class MongoInfo {
 	private int age;
 	private String job;
 
-	
-	
-	
-
 	public MongoInfo() {
 		
 	}

@@ -42,7 +42,7 @@ import com.example.personlist.model.PersonInfo;
 import com.example.personlist.model.User;
 
 @Controller
-public class MainController {
+public class PersonController {
 
 	@Autowired
 	private MongoInfoDAO mdao;
@@ -51,24 +51,22 @@ public class MainController {
 	private PersonInfoDAO dao;
 	@Autowired
 	private UserService userService;
-
-
+	
 	@RequestMapping(value = "/delete/pid={pid}")
 	public String deletePersonInfo(@PathVariable int pid, Model m) {
 		dao.deletePersonInfo(pid);
 		mdao.mongoDelete(pid);
 		
-		return "redirect:/dashboard";
+		return "redirect:/personList";
 	}
-
-
+	
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
     public String insertPersonInfo(@Valid PersonInfo personinfo,BindingResult bindingResult , @ModelAttribute MongoInfo mongoInfo, BindingResult mongoResult, @RequestParam String addText,
              @RequestParam(value = "files",required = false)MultipartFile[] files,
              HttpServletRequest request, Model model) {
 		
 		if (bindingResult.hasErrors()) {
-            return "CreatePerson";
+            return "createPerson"; //this.CustomView(model, "createPerson");
         }
 
 		List<String> addrlist = null;
@@ -77,12 +75,12 @@ public class MainController {
 		
 		mongoInfo.setId(pid);
 		mdao.mongoInsert(mongoInfo);
-
-		return this.doUpload(request, model, files, pid);
+		doUpload(request, model, files, pid);
+		
+		return doUpload(request, model, files, pid); //this.CustomView(model, "personList");
     }
 
 	private static final String filePath = "C:\\99_TMPFiles\\images\\";
-
 	private String doUpload(HttpServletRequest request, Model model, 
 			MultipartFile[] myUploadForm, int pid) {
 
@@ -141,6 +139,7 @@ public class MainController {
 			throws IOException {
 
 		ModelAndView modelAndView = new ModelAndView();
+		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findUserByEmail(auth.getName());
 		modelAndView.addObject("currentUser", user);
@@ -202,7 +201,7 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
-	public String editPersonInfo(Model m, @RequestParam(value = "pid") String pid, 
+	public String editPersonInfo(@RequestParam(value = "pid") String pid, Model m,
 			@RequestParam(value = "fu") String fullname, @RequestParam(value = "fs") String firstname,
 			@RequestParam(value = "ls") String lastname, @RequestParam(value = "cs") String classname,
 			@RequestParam(value = "g") String grade, @RequestParam(value = "aid", required = false) String[] aid,
@@ -251,7 +250,6 @@ public class MainController {
 		dao.editPersonInfo(personinfo, alist, uplist);
 		
 		mdao.mongoUpdata(mongoInfo);
-
 		return this.doUpload(request, m, uploadingFiles, personinfo.getPersonID());
 	}
 
@@ -260,6 +258,7 @@ public class MainController {
 			Model m) {
 		
 		ModelAndView modelAndView = new ModelAndView();
+		
 	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	    User user = userService.findUserByEmail(auth.getName());
 	    modelAndView.addObject("currentUser", user);
@@ -269,21 +268,22 @@ public class MainController {
 		m.addAttribute("personInfo", pinfo);
 	   
 		
-		 modelAndView.setViewName("personList");
-		    return modelAndView;
+		modelAndView.setViewName("personList");
+		return modelAndView;
 	}
 
-	@RequestMapping(value = "/searchGender", method = RequestMethod.POST)
-	public ModelAndView searchPersonGenderInfo( @RequestParam(value = "gender") String gender,
+	@RequestMapping(value = "/searchGenderJob", method = RequestMethod.POST)
+	public ModelAndView searchPersonGenderJobInfo( @RequestParam(value = "gender") String gender,
 			@RequestParam(value = "job") String job, Model m) {
 		
 		ModelAndView modelAndView = new ModelAndView();
-	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	  
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	    User user = userService.findUserByEmail(auth.getName());
 	    modelAndView.addObject("currentUser", user);
 	    modelAndView.addObject("email", "Welcome " + user.getEmail());
 	    
-	   List<MongoInfo> info = mdao.mongoFindGender(gender, job);
+	   List<MongoInfo> info = mdao.mongoFindGenderJob(gender, job);
 	   
 	   if(info != null)
 	   {

@@ -17,9 +17,6 @@ public class PersonInfo extends AddressInfo{
 	private String FirstName;
 	private String LastName;
 	private String ClassName;
-	
-	@NotNull
-    @Size(min = 1, max = 10)
 	private String Grade;
 	private String Address;
 	

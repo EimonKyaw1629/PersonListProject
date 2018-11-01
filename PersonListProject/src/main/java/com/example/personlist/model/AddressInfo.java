@@ -1,6 +1,7 @@
 package com.example.personlist.model;
 
 public class AddressInfo {
+	
 	private int AddressID;
 	public int PersonID;
 	public String Address;

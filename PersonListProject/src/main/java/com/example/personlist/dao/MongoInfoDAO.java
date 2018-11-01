@@ -1,117 +1,93 @@
 package com.example.personlist.dao;
 
+import static com.mongodb.client.model.Filters.eq;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.personlist.model.MongoInfo;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.util.JSON;
 
 @Component
 @Repository
 @Transactional
 public class MongoInfoDAO extends JdbcDaoSupport {
 
+	private MongoClient client;
+
 	@Autowired
 	public MongoInfoDAO(DataSource ds) {
 		this.setDataSource(ds);
 	}
-
-	@Value("${spring.data.mongodb.database}")
-	private String database;
-	private MongoClient mongoClient;
 	
-	public MongoDatabase getMongoDatabase()
+	private MongoCollection<Document> getMongoDatabase()
 	{
-		MongoClient client = new MongoClient("localhost", 27017);
-		return client.getDatabase("MongoInfo");
+		client = new MongoClient("localhost", 27017);
+		MongoCollection<Document> collection = client.getDatabase("MongoInfo").getCollection("mongoInfo");
+		return collection;
 	}
-
+	
+	private Document mongoDoc(MongoInfo mongoinfo) {
+		ObjectMapper oMapper = new ObjectMapper();
+	    Map<String, Object> map = oMapper.convertValue(mongoinfo, new TypeReference<Map<String, Object>>() {});
+	    Document company = new Document(new HashMap<String, Object>());
+	    company.putAll(map);
+		return company;
+	}
+	
+	
 	public void mongoInsert(MongoInfo mongoinfo) {
-
-		mongoClient = new MongoClient();
-		DB db = mongoClient.getDB(database);
-
-		DBCollection mongoTable = db.getCollection("mongoInfo");
-		String mongoData = mongoinfo+"";
-		DBObject dbObject = (DBObject)JSON.parse(mongoData);
-		
-		mongoTable.insert(dbObject);
+        MongoCollection<Document> collection = this.getMongoDatabase();
+        Document mongodoc = this.mongoDoc(mongoinfo);
+        collection.insertOne(mongodoc);
 	}
 	
 	public void mongoUpdata(MongoInfo mongoinfo) {
-
-		mongoClient = new MongoClient();
-		DB db = mongoClient.getDB(database);
-		DBCollection mongoTable = db.getCollection("mongoInfo");
-		
-		String mongoData = mongoinfo+"";
-		DBObject dbObject = (DBObject)JSON.parse(mongoData);
-		mongoTable.save(dbObject);
-		
-		/*BasicDBObject updateQuery = new BasicDBObject()
-				.append("gender", mongoinfo.getGender())
-				.append("age",mongoinfo.getAge());
-
-		BasicDBObject searchQuery = new BasicDBObject()
-				.append("_id", mongoinfo.getId());
-
-		mongoTable.update(searchQuery, updateQuery);*/
-		
-		/*
-		 * 
-		 */
-		
-		/*MongoOperations mongoOps = new MongoTemplate(new MongoClient(), "mongoInfo");
-		Query query = new Query();
-		//query.addCriteria(Criteria.where("_id").is(mongoinfo.getId()), MongoInfo.class);
-		MongoInfo qp = mongoOps.findOne(query(where("_id").is(mongoinfo.getId())), MongoInfo.class);
-		
-		MongoInfo mongo = new MongoInfo();
-		mongo = (MongoInfo) mongoOps;
-		
-		System.out.println(mongo);
-		System.out.println(mongoOps);*/
+		MongoCollection<Document> collection = this.getMongoDatabase();
+		Document mongodoc = this.mongoDoc(mongoinfo);
+        BasicDBObject whereQuery = new BasicDBObject();
+        whereQuery.put("id", mongoinfo.getId());
+        collection.findOneAndReplace(whereQuery, mongodoc);
 	}
-
+	
+	public void mongoDelete(int pid) {
+		MongoCollection<Document> collection = this.getMongoDatabase();
+        BasicDBObject whereQuery = new BasicDBObject();
+        whereQuery.put("id",pid);
+        collection.findOneAndDelete(whereQuery);
+	}
+	
 	public List<MongoInfo> SelectAllGender() {
 		try {
-			
-			MongoDatabase database = this.getMongoDatabase();
-			MongoCollection<Document> collection = database.getCollection("mongoInfo");
-
+			MongoCollection<Document> collection = this.getMongoDatabase();
 			List<Document> listGender = (List<Document>) collection.find().into(new ArrayList<Document>());
 			List<MongoInfo> gList = new ArrayList<MongoInfo>();
+			
 			for (Document gender : listGender) {
-
 				MongoInfo mongoinfo = new MongoInfo();
-				mongoinfo.setId((int)gender.getInteger("_id"));
+				mongoinfo.setId((int)gender.getInteger("id"));
 				mongoinfo.setGender(gender.getString("gender"));
 				mongoinfo.setAge(gender.getInteger("age"));
+				mongoinfo.setJob(gender.getString("job"));
+				
 				gList.add(mongoinfo);
 			}
-
 			return gList;
 		} catch (Exception ex) {
 			return null;
@@ -119,39 +95,20 @@ public class MongoInfoDAO extends JdbcDaoSupport {
 	}
 
 	public MongoInfo mongoFindbyPersonID(int pid) {
+        try {
+        	MongoCollection<Document> collection = this.getMongoDatabase();
+            Document res = collection.find(eq("id", pid)).first();
+            MongoInfo info = new MongoInfo(res.getInteger("id"),res.getString("gender"),res.getInteger("age"),res.getString("job"));   
+            return info;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
 
-		MongoInfo mongoinfo = new MongoInfo();
-		mongoClient = new MongoClient();
-		DB db = mongoClient.getDB(database);
-
-		DBCollection mongoTable = db.getCollection("mongoInfo");
-		BasicDBObject whereQuery = new BasicDBObject();
-		whereQuery.put("_id", pid);
-		
-		DBObject test = (DBObject) mongoTable.findOne(whereQuery);
-		mongoinfo.setId((int)test.get("_id"));
-		mongoinfo.setGender((String)test.get("gender"));
-		mongoinfo.setAge((int)test.get("age"));
-		mongoinfo.setJob((String)test.get("job"));
-		
-		/*List<DBObject> myList = null;
-		DBCursor cursor = mongoTable.find(whereQuery);
-		myList = cursor.toArray();
-
-		mongoinfo.setId((int) (myList.get(0).get("_id")));
-		mongoinfo.setGender((String) (myList.get(0).get("gender")));
-		mongoinfo.setAge((int) (myList.get(0).get("age")));
-		mongoinfo.setJob((String) (myList.get(0).get("job")));*/
-
-		return mongoinfo;
-
-	}
-
-	public List<MongoInfo> mongoFindGender(String gender, String job) {
+	public List<MongoInfo> mongoFindGenderJob(String gender, String job) {
 
 		try {
-			MongoDatabase database = this.getMongoDatabase();
-			MongoCollection<Document> collection = database.getCollection("mongoInfo");
+			MongoCollection<Document> collection = this.getMongoDatabase();
 			BasicDBObject whereQuery = new BasicDBObject();
 		
 			whereQuery.put("job", java.util.regex.Pattern.compile(job));
@@ -160,9 +117,8 @@ public class MongoInfoDAO extends JdbcDaoSupport {
 			List<Document> employees = (List<Document>) collection.find(whereQuery).into(new ArrayList<Document>());
 			List<MongoInfo> gList = new ArrayList<MongoInfo>();
 			for (Document employee : employees) {
-
 				MongoInfo mongoinfo = new MongoInfo();
-				mongoinfo.setId(employee.getInteger("_id"));
+				mongoinfo.setId(employee.getInteger("id"));
 				mongoinfo.setGender(employee.getString("gender"));
 				mongoinfo.setAge(employee.getInteger("age"));
 				mongoinfo.setJob(employee.getString("job"));
@@ -172,16 +128,5 @@ public class MongoInfoDAO extends JdbcDaoSupport {
 		} catch (Exception ex) {
 			return null;
 		}
-	}
-
-	public void mongoDelete(int pid) {
-
-		mongoClient = new MongoClient();
-		DB db = mongoClient.getDB(database);
-		DBCollection mongoTable = db.getCollection("mongoInfo");
-
-		BasicDBObject deleteQuery = new BasicDBObject().append("_id", pid);
-
-		mongoTable.remove(deleteQuery);
 	}
 }

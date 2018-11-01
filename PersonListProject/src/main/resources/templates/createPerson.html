@@ -6,6 +6,11 @@
 <head>
 <meta charset="utf-8">
 <title>Form Template</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
+
+
 <script>
 	var oTbl;
 	//Row 追加
@@ -26,14 +31,39 @@
 	function removeRow() {
 		oTbl.deleteRow(oTbl.clickedRowIndex);
 	}
+
+	//validate
+	$(document).ready(function() {
+		$(function() {
+			$("form[name='registerForm']").validate({ 
+				rules : {
+					FirstName : "required",
+					LastName : {
+						required : true,
+						minlength : 3
+					},
+				},
+
+				messages : {
+					FirstName : "First Name Null",
+					LastName : "LastName minlength 3",
+				},
+				submitHandler : function(form) {
+					form.submit();
+				}
+			});
+
+		});
+	})
 </script>
+
 </head>
 
 <body>
 	<div layout:fragment="content">
-		<div class="container">
+		<div class="container form-validate">
 			<div class="col-md-6 col-md-offset-3">
-				<form name="insert" id="insert" action="/insert" method="post"
+				<form name="registerForm" action="/insert" method="post"
 					enctype="multipart/form-data" th:object="${personInfo}">
 
 					<div class="form-group">
@@ -41,17 +71,19 @@
 							class="form-control" placeholder="FullName"
 							th:field="*{FullName}">
 					</div>
+					
 					<span class="bg-danger" th:if="${#fields.hasErrors('FullName')}"
 						th:errors="*{FullName}"></span>
 
 					<div class="form-group">
-						<label for="FirstName">FirstName</label> <input type="text"
-							class="form-control" name="FirstName" placeholder="FirstName">
+						<label for="FirstName">FirstName</label>
+						<input type="text" class="form-control" name="FirstName" id="FirstName" placeholder="FirstName" >
 					</div>
-
+		
+					
 					<div class="form-group">
 						<label for="LastName">LastName</label> <input type="text"
-							class="form-control" name="LastName" placeholder="LastName">
+							class="form-control" name="LastName" id="LastName" placeholder="LastName" >
 					</div>
 
 					<div class="form-group">
@@ -116,8 +148,9 @@
 					</table>
 					<br> <input type="file" class="multi with-preview"
 						name="files" multiple /> <br>
-					<button type="submit" class="btn btn-default">Create</button>
-					<input type="reset" value="cancel" class="btn btn-default">
+						
+					<button type="submit">Submit</button>
+					<!-- <input type="submit" class="btn btn-default" value="Create" /> -->
 				</form>
 			</div>
 		</div>
