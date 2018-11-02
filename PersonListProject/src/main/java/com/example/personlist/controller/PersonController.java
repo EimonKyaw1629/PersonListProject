@@ -233,7 +233,6 @@ public class PersonController {
 				alist.add(ainfo);
 			}
 		}
-
 		if (img != null) {
 			for (int k = 0; k < img.length; k++) {
 				MyUploadForm frm = new MyUploadForm();
