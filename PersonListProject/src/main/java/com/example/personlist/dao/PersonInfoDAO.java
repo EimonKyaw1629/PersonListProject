@@ -49,15 +49,19 @@ public class PersonInfoDAO extends JdbcDaoSupport {
 
 		List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sql);
 
-		for (Map<String, Object> k : list) {
-			for (MongoInfo j : i) {
+		if(!i.isEmpty() || i != null || i.size() >0)
+		{
+			for (Map<String, Object> k : list) {
+				for (MongoInfo j : i) {
 
-				if (j.getId() == Integer.valueOf(k.get("PersonID").toString())) {
-					k.put("gender", j.getGender());
-					k.put("job", j.getJob());
+					if (j.getId() == Integer.valueOf(k.get("PersonID").toString())) {
+						k.put("gender", j.getGender());
+						k.put("job", j.getJob());
+					}
 				}
 			}
 		}
+		
 		System.out.println(list);
 		return list;
 	}
@@ -130,12 +134,12 @@ public class PersonInfoDAO extends JdbcDaoSupport {
 		return r;
 	}
 
-	public List<Map<String, Object>> getSearchPersonInfo(String fullname, String classname) {
+	public List<Map<String, Object>> getSearchPersonInfo(PersonInfo info){//(String fullname, String classname) {
 		String sql = null;
 
-		if (!StringUtils.isEmpty(fullname) || !StringUtils.isEmpty(classname)) {
-			sql = AddressInfoMapper.XML_SELECT + " where ('" + fullname + "' is null or  FullName='" + fullname
-					+ "') or ('" + classname + "' is null or ClassName='" + classname + "') ";
+		if (!StringUtils.isEmpty(info.getFullName()) || !StringUtils.isEmpty(info.getClassName())) {
+			sql = AddressInfoMapper.XML_SELECT + " where ('" + info.getFullName() + "' is null or  FullName='" + info.getFullName()
+					+ "') or ('" + info.getClassName() + "' is null or ClassName='" + info.getClassName() + "') ";
 			
 		}
 		else

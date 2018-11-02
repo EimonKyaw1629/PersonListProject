@@ -257,8 +257,8 @@ public class PersonController {
 	}
 
 	@RequestMapping(value = "/searchInfo", method = RequestMethod.POST)
-	public ModelAndView searchPersonInfo( @RequestParam(value = "fullname") String firstname,@RequestParam(value = "classname") String classname,
-			Model m) {
+	public ModelAndView searchPersonInfo(@ModelAttribute("searchPerson")PersonInfo info,Model m) {//( @RequestParam(value = "fullname") String firstname,@RequestParam(value = "classname") String classname,
+			//Model m) {
 		
 		ModelAndView modelAndView = new ModelAndView();
 		
@@ -267,7 +267,7 @@ public class PersonController {
 	    modelAndView.addObject("currentUser", user);
 	    modelAndView.addObject("email", "Welcome " + user.getEmail());
 	    
-	    List<Map<String, Object>> pinfo = dao.getSearchPersonInfo(firstname,classname);
+	    List<Map<String, Object>> pinfo = dao.getSearchPersonInfo(info);
 		m.addAttribute("personInfo", pinfo);
 	   
 		
