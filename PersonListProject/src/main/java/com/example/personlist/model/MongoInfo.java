@@ -1,6 +1,7 @@
 package com.example.personlist.model;
 
 
+
 public class MongoInfo {
 	
 	private int id;

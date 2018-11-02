@@ -34,7 +34,10 @@ public class LoginController {
 	private MongoInfoDAO mdao;
 	@Autowired
 	private PersonInfoDAO dao;
+	@Autowired
+	private PersonController pcontrol;
 	
+		
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView loginUser() {
 		ModelAndView modelAndView = new ModelAndView();
@@ -80,33 +83,25 @@ public class LoginController {
 
 	@RequestMapping(value = "/personList", method = RequestMethod.GET)
 	public ModelAndView getListUser(Model m) throws JsonProcessingException{
-	    ModelAndView modelAndView = new ModelAndView();
-	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	    User user = userService.findUserByEmail(auth.getName());
-	    modelAndView.addObject("currentUser", user);
-	    modelAndView.addObject("email", "Welcome " + user.getEmail());
-	    modelAndView.addObject("adminMessage", "Content Available Only for Users with Admin Role");
+	   
 	    
 	    List<MongoInfo> info = mdao.SelectAllGender();
 	    
 	    List<Map<String, Object>> list = dao.getPersonInfoList(info);
 		m.addAttribute("personInfo", list);
-	    modelAndView.setViewName("personList");
+		 ModelAndView modelAndView = pcontrol.getLoginInfo("personList");
+	  
 	    return modelAndView;
 	}
 
 	@RequestMapping(value = "/createPerson", method = RequestMethod.GET)
 	public ModelAndView createPerson(Model model, PersonInfo personInfo) {
-		ModelAndView modelAndView = new ModelAndView();
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.findUserByEmail(auth.getName());
-		modelAndView.addObject("currentUser", user);
-		modelAndView.addObject("fullName", "Welcome " + user.getEmail());
+		
 		
 		MyUploadForm myUploadForm = new MyUploadForm();
 		model.addAttribute("myUploadForm", myUploadForm);
-
-		modelAndView.setViewName("createPerson");
+		 ModelAndView modelAndView = pcontrol.getLoginInfo("createPerson");
+		
 		return modelAndView;
 	}
 

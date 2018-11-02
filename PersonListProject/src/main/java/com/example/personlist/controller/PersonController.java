@@ -84,6 +84,7 @@ public class PersonController {
 	private String doUpload(HttpServletRequest request, Model model, 
 			MultipartFile[] myUploadForm, int pid) {
 
+		
 		// Root Directory.
 		String uploadRootPath = request.getServletContext().getRealPath("upload");
 
@@ -138,13 +139,7 @@ public class PersonController {
 	public ModelAndView editPageAppearPersonInfo(@PathVariable int pid, Model m, HttpServletResponse response)
 			throws IOException {
 
-		ModelAndView modelAndView = new ModelAndView();
-		
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User user = userService.findUserByEmail(auth.getName());
-		modelAndView.addObject("currentUser", user);
-		modelAndView.addObject("fullName", "Welcome " + user.getEmail());
-
+		  ModelAndView modelAndView = this.getLoginInfo("personList");
 		PersonInfo info = dao.findPersonInfo(pid);
 		List<AddressInfo> ainfo = dao.findAddressInfoByPersonID(pid);
 		List<MyUploadForm> upfile = dao.findFileListByPersonID(pid);
@@ -208,6 +203,7 @@ public class PersonController {
 			@RequestParam(value = "a", required = false) String[] ar,
 			@RequestParam(value = "uploadRootPath", required = false) String[] uploadRootPath,@RequestParam(value = "name", required = false) String[] name,
 			@RequestParam(value = "serverFile", required = false) String[] serverFile,Model m) {
+		
 		PersonInfo personinfo = new PersonInfo(info.getPersonID(),info.getFullName(),info.getFirstName(),info.getLastName(),info.getClassName(),info.getGrade());
 		List<MyUploadForm> uplist = new ArrayList<MyUploadForm>();
 		List<AddressInfo> alist = new ArrayList<AddressInfo>();
@@ -249,31 +245,19 @@ public class PersonController {
 
 	@RequestMapping(value = "/searchInfo", method = RequestMethod.POST)
 	public ModelAndView searchPersonInfo(@ModelAttribute("searchPerson")PersonInfo info,Model m) {
-		ModelAndView modelAndView = new ModelAndView();
+	
 		
-	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	    User user = userService.findUserByEmail(auth.getName());
-	    modelAndView.addObject("currentUser", user);
-	    modelAndView.addObject("email", "Welcome " + user.getEmail());
-	    
 	    List<Map<String, Object>> pinfo = dao.getSearchPersonInfo(info);
 		m.addAttribute("personInfo", pinfo);
-	   
-		
-		modelAndView.setViewName("personList");
+		 ModelAndView modelAndView  = this.getLoginInfo("personList");
+	
 		return modelAndView;
 	}
 
 	@RequestMapping(value = "/searchGenderJob", method = RequestMethod.POST)
 	public ModelAndView searchPersonGenderJobInfo(@ModelAttribute("mongo")MongoInfo minfo,Model m) {
 		
-		ModelAndView modelAndView = new ModelAndView();
-	  
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	    User user = userService.findUserByEmail(auth.getName());
-	    modelAndView.addObject("currentUser", user);
-	    modelAndView.addObject("email", "Welcome " + user.getEmail());
-	    
+		  
 	   List<MongoInfo> info = mdao.mongoFindGenderJob(minfo);
 	   
 	   if(info != null)
@@ -286,8 +270,8 @@ public class PersonController {
 		   List<Map<String, Object>> pinfo = new ArrayList<Map<String, Object>>();
 			m.addAttribute("personInfo", pinfo);
 	   }
-
-		 modelAndView.setViewName("personList");
+	   ModelAndView modelAndView = this.getLoginInfo("personList");
+	
 		 return modelAndView;
 	}
 	
@@ -301,4 +285,14 @@ public class PersonController {
 		return Files.readAllBytes(imgfile.toPath());
 	}
 
+	public ModelAndView getLoginInfo(String vname)
+	{
+		ModelAndView modelAndView = new ModelAndView();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    User user = userService.findUserByEmail(auth.getName());
+	    modelAndView.addObject("currentUser", user);
+	    modelAndView.addObject("email", "Welcome " + user.getEmail());
+	    modelAndView.setViewName(vname);
+	    return modelAndView;
+	}
 }
