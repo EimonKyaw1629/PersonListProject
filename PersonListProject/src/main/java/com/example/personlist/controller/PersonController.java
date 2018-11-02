@@ -201,27 +201,22 @@ public class PersonController {
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
-	public String editPersonInfo(@RequestParam(value = "pid") String pid, Model m,
-			@RequestParam(value = "fu") String fullname, @RequestParam(value = "fs") String firstname,
-			@RequestParam(value = "ls") String lastname, @RequestParam(value = "cs") String classname,
-			@RequestParam(value = "g") String grade, @RequestParam(value = "aid", required = false) String[] aid,
-			@RequestParam(value = "a", required = false) String[] ar,
+	public String editPersonInfo(@ModelAttribute("PersonInfo") PersonInfo info,@RequestParam(value = "age") int age,
+			@RequestParam(value = "gender") String gender, @RequestParam(value = "job") String job,
 			@RequestParam(value = "files") MultipartFile[] uploadingFiles, HttpServletRequest request,
-			@RequestParam(value = "image", required = false) int[] img,
-			@RequestParam(value = "uploadRootPath", required = false) String[] uploadRootPath,
-			@RequestParam(value = "serverFile", required = false) String[] serverFile,
-			@RequestParam(value = "name", required = false) String[] name, @RequestParam(value = "age") int age,
-			@RequestParam(value = "gender") String gender, @RequestParam(value = "job") String job) {
-
-		PersonInfo personinfo = new PersonInfo(Integer.valueOf(pid), fullname, firstname, lastname, classname, grade);
+			@RequestParam(value = "image", required = false) int[] img,@RequestParam(value = "aid", required = false) String[] aid,
+			@RequestParam(value = "a", required = false) String[] ar,
+			@RequestParam(value = "uploadRootPath", required = false) String[] uploadRootPath,@RequestParam(value = "name", required = false) String[] name,
+			@RequestParam(value = "serverFile", required = false) String[] serverFile,Model m) {
+		PersonInfo personinfo = new PersonInfo(info.getPersonID(),info.getFullName(),info.getFirstName(),info.getLastName(),info.getClassName(),info.getGrade());
 		List<MyUploadForm> uplist = new ArrayList<MyUploadForm>();
 		List<AddressInfo> alist = new ArrayList<AddressInfo>();
-		MongoInfo mongoInfo = new MongoInfo(Integer.valueOf(pid),gender,age,job);
+		MongoInfo mongoInfo = new MongoInfo(info.getPersonID(),gender,age,job);
 
 		if (ar != null) {
 			for (int j = 0; j < ar.length; j++) {
 				AddressInfo ainfo = new AddressInfo();
-				ainfo.setPersonID(Integer.valueOf(pid));
+				ainfo.setPersonID(info.getPersonID());
 				if (aid != null) {
 					int f = aid.length;
 					if (f > j && f > 0) {
@@ -253,9 +248,7 @@ public class PersonController {
 	}
 
 	@RequestMapping(value = "/searchInfo", method = RequestMethod.POST)
-	public ModelAndView searchPersonInfo(@ModelAttribute("searchPerson")PersonInfo info,Model m) {//( @RequestParam(value = "fullname") String firstname,@RequestParam(value = "classname") String classname,
-			//Model m) {
-		
+	public ModelAndView searchPersonInfo(@ModelAttribute("searchPerson")PersonInfo info,Model m) {
 		ModelAndView modelAndView = new ModelAndView();
 		
 	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();

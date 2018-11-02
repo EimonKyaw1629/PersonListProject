@@ -7,7 +7,6 @@
 <title>Insert title here</title>
 
 <script>
-
 	var counter = 1;
 	function AddRow() {
 		if (counter > 10) {
@@ -34,6 +33,15 @@
 		counter++;
 	}
 
+	$("#upa").click(function() {
+
+		var msg = '';
+		for (i = 1; i < counter; i++) {
+			msg += "\n Textbox #" + i + " : " + $('#Address' + i).val();
+		}
+		alert(msg);
+	});
+
 	function deleteControl(counter) {
 		$("#TextBoxDiv" + counter).remove();
 	}
@@ -47,13 +55,13 @@
 			<div class="col-md-6 col-md-offset-3">
 				<h2>Person Info Edit</h2>
 				<form name="editpage" id="editpage" action="/edit" method="post"
-					th:object="${person}" enctype="multipart/form-data">
-					<input type="hidden" th:value="${person.PersonID}" name="pid" />
+					th:object="${person}" enctype="multipart/form-data" modelAttribute="PersonInfo">
+					<input type="hidden" th:value="${person.PersonID}" name="PersonID" />
 
 					<div class="form-group">
 						<label for="FullName" class="col-sm-2 control-label">FullName</label>
 						<div class="col-sm-7">
-							<input type="text" class="form-control" name="fu"
+							<input type="text" class="form-control" name="FullName"
 								placeholder="FullName" th:value="${person.FullName}">
 						</div>
 					</div>
@@ -61,7 +69,7 @@
 					<div class="form-group">
 						<label for="FirstName" class="col-sm-2 control-label">FirstName</label>
 						<div class="col-sm-7">
-							<input type="text" class="form-control" name="fs"
+							<input type="text" class="form-control" name="FirstName"
 								placeholder="FirstName" th:value="${person.FirstName}">
 						</div>
 					</div>
@@ -69,7 +77,7 @@
 					<div class="form-group">
 						<label for="LastName" class="col-sm-2 control-label">LastName</label>
 						<div class="col-sm-7">
-							<input type="text" class="form-control" name="ls"
+							<input type="text" class="form-control" name="LastName"
 								placeholder="LastName" th:value="${person.LastName}">
 						</div>
 					</div>
@@ -77,7 +85,7 @@
 					<div class="form-group">
 						<label for="ClassName" class="col-sm-2 control-label">ClassName</label>
 						<div class="col-sm-7">
-							<input type="text" class="form-control" name="cs"
+							<input type="text" class="form-control" name="ClassName"
 								placeholder="ClassName" th:value="${person.ClassName}">
 						</div>
 					</div>
@@ -85,7 +93,7 @@
 					<div class="form-group">
 						<label for="Grade" class="col-sm-2 control-label">Grade</label>
 						<div class="col-sm-7">
-							<input type="text" class="form-control" name="g"
+							<input type="text" class="form-control" name="Grade"
 								placeholder="Grade" th:value="${person.Grade}" maxlength="10">
 						</div>
 					</div>
