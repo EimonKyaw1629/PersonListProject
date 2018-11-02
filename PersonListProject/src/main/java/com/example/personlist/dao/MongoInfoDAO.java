@@ -10,7 +10,6 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Component;
@@ -105,14 +104,14 @@ public class MongoInfoDAO extends JdbcDaoSupport {
         }
     }
 
-	public List<MongoInfo> mongoFindGenderJob(String gender, String job) {
+	public List<MongoInfo> mongoFindGenderJob(MongoInfo info){
 
 		try {
 			MongoCollection<Document> collection = this.getMongoDatabase();
 			BasicDBObject whereQuery = new BasicDBObject();
 		
-			whereQuery.put("job", java.util.regex.Pattern.compile(job));
-			whereQuery.put("gender", java.util.regex.Pattern.compile(gender));
+			whereQuery.put("job", java.util.regex.Pattern.compile(info.getJob()));
+			whereQuery.put("gender", java.util.regex.Pattern.compile(info.getGender()));
 			
 			List<Document> employees = (List<Document>) collection.find(whereQuery).into(new ArrayList<Document>());
 			List<MongoInfo> gList = new ArrayList<MongoInfo>();

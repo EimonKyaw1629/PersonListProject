@@ -137,7 +137,10 @@ public class PersonInfoDAO extends JdbcDaoSupport {
 			sql = AddressInfoMapper.XML_SELECT + " where ('" + fullname + "' is null or  FullName='" + fullname
 					+ "') or ('" + classname + "' is null or ClassName='" + classname + "') ";
 			
-		}else {
+		}
+		else
+		{
+
 			sql = AddressInfoMapper.XML_SELECT;
 		}
 
@@ -294,10 +297,5 @@ public class PersonInfoDAO extends JdbcDaoSupport {
 		Object[] params = new Object[] { pid, uploadRootPath, name, serverfile };
 		getJdbcTemplate().update(sql, params);
 
-	}
-
-	
-	
-
-	
+	}	
 }

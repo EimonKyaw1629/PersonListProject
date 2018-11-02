@@ -29,9 +29,10 @@
 
 					<button type="submit" class="btn btn-default">Search</button>
 				</form><br/>
-			
 
-				<form id="sampleForm" action="searchGenderJob" method="post">
+
+				<form id="sampleForm" action="searchGenderJob" method="post" modelAttribute="mongo">
+
 				<div class="form-group">
 						<label for="Gender">job</label>
 						<input type="text" name="job" class="form-control">
@@ -65,13 +66,8 @@
 						<td th:each="entry : ${person}" th:text="${entry.value}"></td>
 						<td><a th:href="${'/edit/pid='+person.PersonID}">Edit</a></td>
 						<td><a th:href="${'/delete/pid='+person.PersonID}">Delete</a></td>
-
 					</tr>
-
-
 				</table>
-
-
 			</div>
 		</div>
 	</div>
