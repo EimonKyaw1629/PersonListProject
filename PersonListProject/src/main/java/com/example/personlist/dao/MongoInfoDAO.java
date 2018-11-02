@@ -79,11 +79,7 @@ public class MongoInfoDAO extends JdbcDaoSupport {
 			List<MongoInfo> gList = new ArrayList<MongoInfo>();
 			
 			for (Document gender : listGender) {
-				MongoInfo mongoinfo = new MongoInfo();
-				mongoinfo.setId((int)gender.getInteger("id"));
-				mongoinfo.setGender(gender.getString("gender"));
-				mongoinfo.setAge(gender.getInteger("age"));
-				mongoinfo.setJob(gender.getString("job"));
+				MongoInfo mongoinfo = new MongoInfo((int)gender.getInteger("id"),gender.getString("gender"),gender.getInteger("age"),gender.getString("job"));
 				
 				gList.add(mongoinfo);
 			}
@@ -113,14 +109,10 @@ public class MongoInfoDAO extends JdbcDaoSupport {
 			whereQuery.put("job", java.util.regex.Pattern.compile(info.getJob()));
 			whereQuery.put("gender", java.util.regex.Pattern.compile(info.getGender()));
 			
-			List<Document> employees = (List<Document>) collection.find(whereQuery).into(new ArrayList<Document>());
+			List<Document> findList = (List<Document>) collection.find(whereQuery).into(new ArrayList<Document>());
 			List<MongoInfo> gList = new ArrayList<MongoInfo>();
-			for (Document employee : employees) {
-				MongoInfo mongoinfo = new MongoInfo();
-				mongoinfo.setId(employee.getInteger("id"));
-				mongoinfo.setGender(employee.getString("gender"));
-				mongoinfo.setAge(employee.getInteger("age"));
-				mongoinfo.setJob(employee.getString("job"));
+			for (Document lst : findList) {
+				MongoInfo mongoinfo = new MongoInfo(lst.getInteger("id"),lst.getString("gender"),lst.getInteger("age"),lst.getString("job"));
 				gList.add(mongoinfo);
 			}
 			return gList;
